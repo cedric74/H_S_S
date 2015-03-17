@@ -1,0 +1,2 @@
+16_03_2015, Version 1.6 :	
+	* Add Daily rapport
