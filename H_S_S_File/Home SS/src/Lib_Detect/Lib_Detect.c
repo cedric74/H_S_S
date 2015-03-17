@@ -35,7 +35,7 @@
 #define OFF_INTERRUPT		1
 #define ON_INTERRUPT		0
 
-#define DELAYS_TO_DISABLE	10
+#define DELAYS_TO_DISABLE	30		// 30 Sec
 #define DELAYS_TO_ENABLE	(60*2)	// 2 MIN
 
 /*******************************************
@@ -93,7 +93,7 @@ void main_Detect(){
 			// ....
 
 			// Delays to Disable System with Interrupter
-			printf(" DELAYS_TO_DISABLE 10 s\n");
+			printf(" DELAYS_TO_DISABLE\n");
 			sleep(DELAYS_TO_DISABLE);
 			if (stateInterrupter == STATE_OFF){
 				iSystemOn = OFF;
@@ -184,9 +184,10 @@ void Read_Interrupter(){
 				if( iCountInter >= COUNT_INTERRUPTER){
 
 					// Delays 2 MIN before system switch to ON
+					printf(" DELAYS_TO_ENABLE \n");
 					sleep(DELAYS_TO_ENABLE);
 
-					//printf(" System ON, INTERRUPTER \n");
+					printf(" System ON, INTERRUPTER \n");
 					File_Log("System switch to ON, ", 23);
 
 					// Change State
@@ -292,6 +293,9 @@ void Init_Lib_Detect(){
 
 	// Thread Execute Read Captor
 	pthread_create (&thread_id, NULL, &Thread_Read_Input, NULL);
+
+	// Thread Execute Send Daily Raport
+	pthread_create (&thread_id_Daily, NULL, &Thread_DailyRaport, NULL);
 
 	// Init Captor Input
 	beh_BBB_gpio_conf_dir(CAPTOR, INPUT_PULL_UP_EN);	//INPUT_PULL_UP_EN

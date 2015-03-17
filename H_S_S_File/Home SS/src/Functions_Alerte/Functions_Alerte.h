@@ -31,9 +31,6 @@
 #define PHONE_AURELIE		1
 #define NO_PHONE			0
 
-#define ADRESSE_IP_CEDRIC	"192.168.0.200"
-#define ADRESSE_IP_AURELIE	"192.168.0.201"
-
 #define NO_SMS				0
 #define SMS_OK				1
 
@@ -48,10 +45,12 @@
 ********************************************/
 int 	isystemON;
 FILE * 	fpLog;
+pthread_t thread_id_Daily;
 
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+void * Thread_DailyRaport();
 void Send_Report_File_Log();
 void File_Log(char * string, int iLength);
 int Ping_Phone();

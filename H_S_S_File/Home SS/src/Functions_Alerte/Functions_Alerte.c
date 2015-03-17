@@ -13,6 +13,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
+#define WAIT_1_DAYS		86400			//86400
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -25,6 +26,15 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+void * Thread_DailyRaport(){
+
+	while(1){
+		sleep(WAIT_1_DAYS);
+		Send_Report_File_Log();
+	}
+
+	return NULL;
+}
 /*
  ============================================
  Function     : Send_Report_File_Log()
@@ -35,7 +45,15 @@
  */
 void Send_Report_File_Log(){
 
+    int iReturn = system("mpack -s \"Daily Raport\" /home/debian/Desktop/outfile.txt cedric.toncanier@gmail.com");
+     if(iReturn == ERROR){
+    	 perror("Failed to invoke mpack");
+     }else{
+    	 system("rm /home/debian/Desktop/outfile.txt");
 
+    	 // Create File Log With Version
+    	 File_Log("Version 1.6, 16 march, ", 21);
+     }
 }
 
 /*
@@ -177,7 +195,7 @@ int send_Alerte(int iSmsok){
  */
 int sendmail(const char *to, const char *from, const char *subject, const char *message)
 {
-     int iReturn = system("mpack -s \"test\" /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
+     int iReturn = system("mpack -s \"Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
      if(iReturn == ERROR){
     	 perror("Failed to invoke mpack");
      }
