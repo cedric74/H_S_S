@@ -68,7 +68,7 @@ void Init(){
 	watch_dog_start();
 
 	// Create File Log With Version
-	File_Log("Version 1.6, 16 march, ", 21);
+	File_Log(START_FILE, SIZE_STRING);
 
 	// Init Gpio Lib
 	beh_BBB_gpio_init();

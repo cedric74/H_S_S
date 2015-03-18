@@ -13,7 +13,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define WAIT_1_DAYS		86400			//86400
+#define WAIT_1_DAYS		86400
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -26,11 +26,25 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+/*
+ ============================================
+ Function     : Thread_DailyRaport()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
 void * Thread_DailyRaport(){
 
 	while(1){
 		sleep(WAIT_1_DAYS);
-		Send_Report_File_Log();
+		int iret = Connection_OK();
+		if( iret == ERROR){
+			File_Log("PROBLEM_SEND_DAILY RAPPORT, ", 28);
+			File_Log("NO_CONNECTION, ", 15);
+		}else{
+			Send_Report_File_Log();
+		}
 	}
 
 	return NULL;
@@ -52,7 +66,7 @@ void Send_Report_File_Log(){
     	 system("rm /home/debian/Desktop/outfile.txt");
 
     	 // Create File Log With Version
-    	 File_Log("Version 1.6, 16 march, ", 21);
+    	 File_Log(START_FILE, SIZE_STRING);
      }
 }
 
@@ -74,10 +88,6 @@ void File_Log(char string[50], int iLength){
 
 	 time ( &rawtime );
 	 timeinfo = localtime ( &rawtime );
-	  //printf ( "Current local time and date: %s", asctime (timeinfo) );
-
-	 //string[iLength] = ',';
-	  //string[iLength+1] = '\0';
 
 	fwrite(string , 1 , iLength , fpLog );
 	fwrite(asctime (timeinfo) , 1 , 25 , fpLog );
@@ -143,8 +153,8 @@ int Connection_OK(){
 /*
  ============================================
  Function     : send_Alerte()
- Parameter    :
- Return Value : void
+ Parameter    : int iSmsok
+ Return Value : int
  Description  :
  ============================================
  */
@@ -162,7 +172,8 @@ int send_Alerte(int iSmsok){
 	}
 
 	// Send Alerte by mail
-	iVal = sendmail("cedric.toncanier@gmail.com", "cedric.toncanier.bbb@gmail.com", "Home Security Alerte", "Test Home Security System\n");
+	//iVal = sendmail("cedric.toncanier@gmail.com", "cedric.toncanier.bbb@gmail.com", "Home Security Alerte", "Test Home Security System\n");
+	iVal = sendEmail();
 	if( iVal == ERROR){
 		File_Log("PROBLEM_SEND_ALERTE, ", 21);
 		File_Log("FAILED_SEND_MAIL, ", 18);
@@ -172,7 +183,8 @@ int send_Alerte(int iSmsok){
 
 	if(iSmsok == SMS_OK){
 		// Send Alerte by sms
-		iVal = sendmail("5145749606@sms.fido.ca", "cedric.toncanier.bbb@gmail.com", "Home Security Alerte", "Coucou\n");
+		//iVal = sendmail("", "cedric.toncanier.bbb@gmail.com", "Home Security Alerte", "Coucou\n");
+		iVal = sendSMS();
 		if( iVal == ERROR){
 			File_Log("PROBLEM_SEND_ALERTE, ", 21);
 			File_Log("FAILED_SEND_SMS, ", 17);
@@ -193,12 +205,32 @@ int send_Alerte(int iSmsok){
  Description  :
  ============================================
  */
-int sendmail(const char *to, const char *from, const char *subject, const char *message)
+int sendSMS(){
+    int iReturn = system("mpack -s \"Alerte Intrusion\" 5145749606@sms.fido.ca");
+
+    if(iReturn == ERROR){
+   	 perror("Failed to invoke mpack");
+    }
+
+    return OK;
+}
+
+
+/*
+ ============================================
+ Function     : sendmail()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int sendEmail()
 {
      int iReturn = system("mpack -s \"Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
      if(iReturn == ERROR){
     	 perror("Failed to invoke mpack");
      }
+
 //	int retval = ERROR;
 //    FILE *mailpipe = popen("/usr/lib/sendmail -t", "w");
 //    if (mailpipe != NULL) {
@@ -219,5 +251,5 @@ int sendmail(const char *to, const char *from, const char *subject, const char *
 
      //return retval;
 
-     return 0;
+     return OK;
 }

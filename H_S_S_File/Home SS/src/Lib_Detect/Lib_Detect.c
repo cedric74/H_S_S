@@ -109,7 +109,7 @@ void main_Detect(){
 				// Alerte OK
 				printf(" Alerte OK \n");
 				// Send Alerte By Mail & Sms
-				send_Alerte(NO_SMS);
+				send_Alerte(SMS_OK );		//	NO_SMS
 
 				// Siren ON.
 				File_Log("Siren  ON , ", 12);
@@ -188,7 +188,7 @@ void Read_Interrupter(){
 					sleep(DELAYS_TO_ENABLE);
 
 					printf(" System ON, INTERRUPTER \n");
-					File_Log("System switch to ON, ", 23);
+					File_Log("System switch to ON, ", 21);
 
 					// Change State
 					stateInterrupter = STATE_ON ;
@@ -208,8 +208,9 @@ void Read_Interrupter(){
 			if( readEntry == OFF_INTERRUPT){
 				iCountInter++;
 				if( iCountInter >= COUNT_INTERRUPTER){
-					//printf(" System OFF, INTERRUPTER \n");
-					File_Log("System switch to OFF, ", 24);
+
+					printf(" System OFF, INTERRUPTER \n");
+					File_Log("System switch to OFF, ", 22);
 
 					// Change State
 					stateInterrupter = STATE_OFF ;

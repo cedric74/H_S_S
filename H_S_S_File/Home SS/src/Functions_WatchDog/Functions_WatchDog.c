@@ -75,7 +75,7 @@ void watch_dog_start(void){
  */
 void watch_dog_clear(void){
 	ioctl(fWatchdog, WDIOC_KEEPALIVE, NULL);
-	printf("Clear WTDG\n");
+	//printf("Clear WTDG\n");
 }
 
 /*
