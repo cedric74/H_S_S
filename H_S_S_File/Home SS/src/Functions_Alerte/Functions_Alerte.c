@@ -231,25 +231,10 @@ int sendEmail()
     	 perror("Failed to invoke mpack");
      }
 
-//	int retval = ERROR;
-//    FILE *mailpipe = popen("/usr/lib/sendmail -t", "w");
-//    if (mailpipe != NULL) {
-//        fprintf(mailpipe, "To: %s\n", to);
-//        fprintf(mailpipe, "From: %s\n", from);
-//        fprintf(mailpipe, "Subject: %s\n\n", subject);
-//        fprintf(mailpipe, "Subject: %s\n\n", subject);
-//        fwrite(message, 1, strlen(message), mailpipe);
-//        fwrite(".\n", 1, 2, mailpipe);
-//        pclose(mailpipe);
-//        retval = 0;
+//     iReturn = system("mpack -s \"Test Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
 //
-//        //printf("\n\n Send mail OK\n");
+//     if(iReturn == ERROR){
+//    	 perror("Failed to invoke mpack");
 //     }
-//     else {
-//         perror("Failed to invoke sendmail");
-//     }
-
-     //return retval;
-
      return OK;
 }
