@@ -123,7 +123,7 @@ void main_Detect(){
 
 	}else{
 		//printf("\n No Detect ");
-		File_Log("No Detect, ", 11);
+		//File_Log("No Detect, ", 11);
 	}
 
 	// Start Section critic

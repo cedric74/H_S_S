@@ -41,15 +41,18 @@ int main(int argc, char *argv[])
 	// Init
 	Init();
 
-	// Main Loop
-	do{
-		// Main Function Detect
-		main_Detect();
+	// Test
+	WarningSystemOn();
 
-		// Sleep
-		sleep(TICK_LOOP_MAIN);
-
-	}while(1);
+//	// Main Loop
+//	do{
+//		// Main Function Detect
+//		main_Detect();
+//
+//		// Sleep
+//		sleep(TICK_LOOP_MAIN);
+//
+//	}while(1);
 
 	return 0;
 }

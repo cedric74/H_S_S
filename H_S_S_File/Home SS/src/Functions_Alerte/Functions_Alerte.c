@@ -172,7 +172,6 @@ int send_Alerte(int iSmsok){
 	}
 
 	// Send Alerte by mail
-	//iVal = sendmail("cedric.toncanier@gmail.com", "cedric.toncanier.bbb@gmail.com", "Home Security Alerte", "Test Home Security System\n");
 	iVal = sendEmail();
 	if( iVal == ERROR){
 		File_Log("PROBLEM_SEND_ALERTE, ", 21);
@@ -183,7 +182,6 @@ int send_Alerte(int iSmsok){
 
 	if(iSmsok == SMS_OK){
 		// Send Alerte by sms
-		//iVal = sendmail("", "cedric.toncanier.bbb@gmail.com", "Home Security Alerte", "Coucou\n");
 		iVal = sendSMS();
 		if( iVal == ERROR){
 			File_Log("PROBLEM_SEND_ALERTE, ", 21);
@@ -199,7 +197,7 @@ int send_Alerte(int iSmsok){
 
 /*
  ============================================
- Function     : sendmail()
+ Function     : sendSMS()
  Parameter    :
  Return Value : void
  Description  :
@@ -231,10 +229,12 @@ int sendEmail()
     	 perror("Failed to invoke mpack");
      }
 
-//     iReturn = system("mpack -s \"Test Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
-//
-//     if(iReturn == ERROR){
-//    	 perror("Failed to invoke mpack");
-//     }
+     iReturn = system("mpack -s \"Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
+
+     if(iReturn == ERROR){
+    	 perror("Failed to invoke mpack");
+     }
+
+
      return OK;
 }

@@ -14,6 +14,10 @@
 *               D E F I N E                *
 ********************************************/
 #define TIME_SIREN		5
+
+#define TIME_WARNING	10
+#define FREQ_BUZZER		1000   // In us , Pas mal 1000
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -25,6 +29,17 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+void WarningSystemOn(){
+	int i;
+
+	for(i = 0; i <TIME_WARNING ; i ++){
+		beh_BBB_gpio_WritePin(BUZZER, SIREN_ON );
+		usleep(FREQ_BUZZER);
+		beh_BBB_gpio_WritePin(BUZZER, SIREN_OFF );
+		usleep(FREQ_BUZZER);
+	}
+}
+
 /*
  ============================================
  Function     : Thread_Siren()
@@ -86,6 +101,9 @@ void Stop_Siren(){
  ============================================
  */
 void Init_Siren(){
+
+	// Init Buzzer
+	beh_BBB_gpio_conf_dir(BUZZER, OUTPUT);
 
 	// Init Siren Ouput
 	beh_BBB_gpio_conf_dir(SIREN, OUTPUT);
