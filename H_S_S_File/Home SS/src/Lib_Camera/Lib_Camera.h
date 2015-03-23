@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
+#include <pthread.h>
 
 /*******************************************
 *               D E F I N E                *
@@ -31,7 +32,9 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-void Take_Picture();
-void Save_Pic();
+void	Start_Thread_Pic();
+void * 	ThreadPic();
+void 	Take_Picture();
+void 	Save_Pic();
 
 #endif /* LIB_CAMERA_H_ */

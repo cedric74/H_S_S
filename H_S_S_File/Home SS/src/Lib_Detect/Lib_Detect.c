@@ -85,12 +85,12 @@ void main_Detect(){
 		// Check If System Is ON
 		if(iSystemOn == ON){
 
+			// Sound Alerte that System ON
+			Start_Thread_Warning();
+
 			// Take A pic
 			File_Log("Take A Pic, ", 12);
-			Take_Picture();
-
-			// Sound Alerte that System ON
-			// ....
+			Start_Thread_Pic();
 
 			// Delays to Disable System with Interrupter
 			printf(" DELAYS_TO_DISABLE\n");
@@ -186,6 +186,9 @@ void Read_Interrupter(){
 					// Delays 2 MIN before system switch to ON
 					printf(" DELAYS_TO_ENABLE \n");
 					sleep(DELAYS_TO_ENABLE);
+
+					// Sound System ON
+					Start_Thread_Warning();
 
 					printf(" System ON, INTERRUPTER \n");
 					File_Log("System switch to ON, ", 21);

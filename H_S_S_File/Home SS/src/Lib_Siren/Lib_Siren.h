@@ -22,7 +22,9 @@
 #define SIREN_OFF		1
 
 #define SIREN			P9_15
-#define BUZZER			P9_15
+#define BUZZER			P9_11
+
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -34,6 +36,8 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+void    Start_Thread_Warning();
+void *  Thread_WarningSytemON();
 void 	WarningSystemOn();
 void* 	Thread_Siren();
 void 	Start_Siren();

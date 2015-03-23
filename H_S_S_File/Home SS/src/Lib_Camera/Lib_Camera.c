@@ -26,10 +26,40 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+/*
+ ============================================
+ Function     : Start_Thread_Pic()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void Start_Thread_Pic(){
+	// Declarations Variables
+	pthread_t thread_id;
+
+	// Thread Execute Read Captor
+	pthread_create (&thread_id, NULL, &ThreadPic, NULL);
+}
+/*
+ ============================================
+ Function     : ThreadPic()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void * ThreadPic(){
+
+	Take_Picture();
+
+	return NULL;
+
+}
 
 /*
  ============================================
- Function     : sendmail()
+ Function     : Take_Picture()
  Parameter    :
  Return Value : void
  Description  :

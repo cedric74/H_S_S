@@ -37,6 +37,6 @@
 void Init_Motor(){
 
 	// Init Siren Ouput
-	beh_BBB_gpio_conf_dir(MOTOR_CAMERA, OUTPUT);
+	//beh_BBB_gpio_conf_dir(MOTOR_CAMERA, OUTPUT);
 
 }

@@ -15,8 +15,10 @@
 ********************************************/
 #define TIME_SIREN		5
 
-#define TIME_WARNING	10
-#define FREQ_BUZZER		1000   // In us , Pas mal 1000
+#define TIME_WARNING	500
+#define FREQ_BUZZER		100   // In us , Pas mal 1000 , trop 50000
+#define NBE_BIP			8
+
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -29,9 +31,54 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+/*
+ ============================================
+ Function     : Start_Thread_Warning()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void Start_Thread_Warning(){
+
+	// Declarations Variables
+	pthread_t thread_id;
+
+	// Thread Execute Read Captor
+	pthread_create (&thread_id, NULL, &Thread_WarningSytemON, NULL);
+
+}
+
+/*
+ ============================================
+ Function     : Thread_WarningSytemON()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void * Thread_WarningSytemON(){
+	int i;
+	int iTimeDelay = 1000000/2;
+
+	for( i = 0 ; i < NBE_BIP; i++){
+		WarningSystemOn();
+		usleep(iTimeDelay);
+		//iTimeDelay = iTimeDelay ;
+	}
+	return NULL;
+}
+
+/*
+ ============================================
+ Function     : WarningSystemOn()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
 void WarningSystemOn(){
 	int i;
-
 	for(i = 0; i <TIME_WARNING ; i ++){
 		beh_BBB_gpio_WritePin(BUZZER, SIREN_ON );
 		usleep(FREQ_BUZZER);
