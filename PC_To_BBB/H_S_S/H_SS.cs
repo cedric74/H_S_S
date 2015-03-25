@@ -49,8 +49,8 @@ namespace H_S_S
         // Label Test
         const string LABEL_ADRESS_SERVER    = "Adress : "; 
         const string LABEL_PORT_SERVER      = "Port   : ";
-        const string LABEL_Captor_1         = "Captor 1   : ";
-        const string LABEL_Captor_2         = "Captor 2   : ";
+        const string LABEL_Captor_1         = "Main Door  : ";
+        const string LABEL_Captor_2         = "Back Door  : ";
         const string LABEL_Inter_1          = "Interrupter: ";
         const string LABEL_Temperature      = "Temperature: ";
         const string LABEL_Humidity         = "Humidity   : ";
@@ -294,10 +294,36 @@ namespace H_S_S
         private void sPrintData()
         {
             // Init Label
-            labelCaptor_1.Text = LABEL_Captor_1 + Char.ConvertFromUtf32(bData[0]);
-            labelCaptor_2.Text = LABEL_Captor_2 + Char.ConvertFromUtf32(bData[1]);
-            labelInterrupter.Text = LABEL_Inter_1 + Char.ConvertFromUtf32(bData[2]);
+            // Captor Main door
+            if(bData[0] == 0x31)
+            {
+                labelCaptor_1.Text = LABEL_Captor_1 + " ON";
+            }
+            else {
+                labelCaptor_1.Text = LABEL_Captor_1 + " OFF";
+            }
 
+            if (bData[1] == 0x31)
+            {
+                labelCaptor_2.Text = LABEL_Captor_2 + " ON";
+            }
+            else
+            {
+                labelCaptor_2.Text = LABEL_Captor_2 + " OFF";
+            }
+
+            if ( bData[2] == 0x31)
+            {
+                labelInterrupter.Text = LABEL_Inter_1 + " ON";
+            }
+            else
+            {
+                labelInterrupter.Text = LABEL_Inter_1 + " OFF";     
+            }
+            //labelCaptor_1.Text = LABEL_Captor_1 + Char.ConvertFromUtf32(bData[0]);
+            //labelCaptor_2.Text = LABEL_Captor_2 + Char.ConvertFromUtf32(bData[1]);
+            //labelInterrupter.Text = LABEL_Inter_1 + Char.ConvertFromUtf32(bData[2]);
+         
             labelTemperature.Text = LABEL_Temperature +  Char.ConvertFromUtf32(bData[3]) + Char.ConvertFromUtf32(bData[4]) 
                                                       + Char.ConvertFromUtf32(bData[5] ) + Char.ConvertFromUtf32(bData[6] )  + Char.ConvertFromUtf32(bData[7] ) + " *C";
             labelHumidity.Text = LABEL_Humidity + Char.ConvertFromUtf32(bData[8]) + Char.ConvertFromUtf32(bData[9]) 

@@ -38,20 +38,20 @@
             this.labelPortServer = new System.Windows.Forms.Label();
             this.LightStatusConnection = new System.Windows.Forms.Button();
             this.labelAdressIPServer = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxCapture = new System.Windows.Forms.GroupBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBoxInfo = new System.Windows.Forms.TextBox();
             this.buttonSetting = new System.Windows.Forms.Button();
             this.groupBoxInputs = new System.Windows.Forms.GroupBox();
+            this.labelHumidity = new System.Windows.Forms.Label();
+            this.labelTemperature = new System.Windows.Forms.Label();
             this.labelInterrupter = new System.Windows.Forms.Label();
             this.labelCaptor_2 = new System.Windows.Forms.Label();
             this.labelCaptor_1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.labelTemperature = new System.Windows.Forms.Label();
-            this.labelHumidity = new System.Windows.Forms.Label();
             this.groupBoxControl.SuspendLayout();
             this.groupBoxConnection.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.groupBoxCapture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBoxInputs.SuspendLayout();
             this.SuspendLayout();
@@ -66,7 +66,7 @@
             this.groupBoxControl.Margin = new System.Windows.Forms.Padding(2);
             this.groupBoxControl.Name = "groupBoxControl";
             this.groupBoxControl.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBoxControl.Size = new System.Drawing.Size(130, 136);
+            this.groupBoxControl.Size = new System.Drawing.Size(130, 192);
             this.groupBoxControl.TabIndex = 0;
             this.groupBoxControl.TabStop = false;
             this.groupBoxControl.Text = "Controls Outpus";
@@ -168,17 +168,17 @@
             this.labelAdressIPServer.TabIndex = 3;
             this.labelAdressIPServer.Text = "Adress : ";
             // 
-            // groupBox2
+            // groupBoxCapture
             // 
-            this.groupBox2.Controls.Add(this.pictureBox1);
-            this.groupBox2.Location = new System.Drawing.Point(144, 34);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Size = new System.Drawing.Size(695, 468);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.groupBoxCapture.Controls.Add(this.pictureBox1);
+            this.groupBoxCapture.Location = new System.Drawing.Point(144, 34);
+            this.groupBoxCapture.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBoxCapture.Name = "groupBoxCapture";
+            this.groupBoxCapture.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBoxCapture.Size = new System.Drawing.Size(695, 468);
+            this.groupBoxCapture.TabIndex = 1;
+            this.groupBoxCapture.TabStop = false;
+            this.groupBoxCapture.Text = "Video Capture ";
             // 
             // pictureBox1
             // 
@@ -220,14 +220,36 @@
             this.groupBoxInputs.Controls.Add(this.labelCaptor_1);
             this.groupBoxInputs.Enabled = false;
             this.groupBoxInputs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxInputs.Location = new System.Drawing.Point(9, 284);
+            this.groupBoxInputs.Location = new System.Drawing.Point(9, 339);
             this.groupBoxInputs.Margin = new System.Windows.Forms.Padding(2);
             this.groupBoxInputs.Name = "groupBoxInputs";
             this.groupBoxInputs.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBoxInputs.Size = new System.Drawing.Size(130, 213);
+            this.groupBoxInputs.Size = new System.Drawing.Size(130, 158);
             this.groupBoxInputs.TabIndex = 8;
             this.groupBoxInputs.TabStop = false;
             this.groupBoxInputs.Text = "State Inputs";
+            // 
+            // labelHumidity
+            // 
+            this.labelHumidity.AutoSize = true;
+            this.labelHumidity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHumidity.Location = new System.Drawing.Point(9, 123);
+            this.labelHumidity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelHumidity.Name = "labelHumidity";
+            this.labelHumidity.Size = new System.Drawing.Size(69, 13);
+            this.labelHumidity.TabIndex = 4;
+            this.labelHumidity.Text = "labelHumidity";
+            // 
+            // labelTemperature
+            // 
+            this.labelTemperature.AutoSize = true;
+            this.labelTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTemperature.Location = new System.Drawing.Point(9, 98);
+            this.labelTemperature.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelTemperature.Name = "labelTemperature";
+            this.labelTemperature.Size = new System.Drawing.Size(89, 13);
+            this.labelTemperature.TabIndex = 3;
+            this.labelTemperature.Text = "labelTemperature";
             // 
             // labelInterrupter
             // 
@@ -267,28 +289,6 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // labelTemperature
-            // 
-            this.labelTemperature.AutoSize = true;
-            this.labelTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTemperature.Location = new System.Drawing.Point(9, 98);
-            this.labelTemperature.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelTemperature.Name = "labelTemperature";
-            this.labelTemperature.Size = new System.Drawing.Size(89, 13);
-            this.labelTemperature.TabIndex = 3;
-            this.labelTemperature.Text = "labelTemperature";
-            // 
-            // labelHumidity
-            // 
-            this.labelHumidity.AutoSize = true;
-            this.labelHumidity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelHumidity.Location = new System.Drawing.Point(9, 123);
-            this.labelHumidity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelHumidity.Name = "labelHumidity";
-            this.labelHumidity.Size = new System.Drawing.Size(69, 13);
-            this.labelHumidity.TabIndex = 4;
-            this.labelHumidity.Text = "labelHumidity";
-            // 
             // H_SS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -297,7 +297,7 @@
             this.Controls.Add(this.groupBoxInputs);
             this.Controls.Add(this.buttonSetting);
             this.Controls.Add(this.textBoxInfo);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBoxCapture);
             this.Controls.Add(this.groupBoxConnection);
             this.Controls.Add(this.groupBoxControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -307,7 +307,7 @@
             this.groupBoxControl.ResumeLayout(false);
             this.groupBoxConnection.ResumeLayout(false);
             this.groupBoxConnection.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
+            this.groupBoxCapture.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBoxInputs.ResumeLayout(false);
             this.groupBoxInputs.PerformLayout();
@@ -324,7 +324,7 @@
         private System.Windows.Forms.Label labelPortServer;
         private System.Windows.Forms.Button LightStatusConnection;
         private System.Windows.Forms.Label labelAdressIPServer;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBoxCapture;
         private System.Windows.Forms.TextBox textBoxInfo;
         private System.Windows.Forms.Button buttonSetting;
         private System.Windows.Forms.Button buttonPicture;
