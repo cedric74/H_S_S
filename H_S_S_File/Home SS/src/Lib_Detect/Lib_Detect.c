@@ -16,35 +16,14 @@
 /*******************************************
 *               D E F I N E                *			
 ********************************************/
-#define DETECT_OK			0
-#define INTRUSION_OK		1
 
-#define STATE_NO_DETECTION	0
-#define STATE_DETECTION		1
-
-#define	STATE_OFF			0
-#define STATE_ON			1
-
-#define COUNT_DETECTION		100
-
-#define COUNT_INTERRUPTER	500
-
-#define OFF					0
-#define ON					1
-
-#define OFF_INTERRUPT		1
-#define ON_INTERRUPT		0
-
-#define DELAYS_TO_DISABLE	30		// 30 Sec
-#define DELAYS_TO_ENABLE	(60*2)	// 2 MIN
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *			
 ********************************************/
 unsigned char 	u8DetectOn 			= 0;
-int 			iCount 				= 0;
 int 			iCountInter 		= 0;
-	
+
 /*******************************************
 *	 P R O T O T Y P E   F U N C T I O N   *			
 ********************************************/
@@ -66,11 +45,15 @@ void main_Detect(){
 	int old_cancel_state;
 	int iSystemOn = ON;
 
-	// Process Father
-	if( u8DetectOn == INTRUSION_OK){
+	// Check If Intrusion
+	if( u8DetectOn != INTRUSION_NO){
 
-		//printf("\n Detect OK");
-		File_Log("Detect OK, ", 11);
+		// Add info in Daily Report
+		if(u8DetectOn == ptrCaptorMainDoor->ePinCaptor){
+			File_Log("Detect OK, Main Door, ", 22);
+		}else{
+			File_Log("Detect OK, Back Door, ", 22);
+		}
 
 		// Ping_Phone
 		//iSystemOn = Ping_Phone();
@@ -148,13 +131,14 @@ void* Thread_Read_Input(){
 	while(1){
 		
 		// Read Captor
-		Read_Captor();
+		Read_Captor(ptrCaptorMainDoor);
+		Read_Captor(ptrCaptorBackDoor);
 
 		// Read Interrupter
 		Read_Interrupter();
 
 		// Delays
-		usleep(1000);	// Each 1 ms
+		usleep(WAIT_1MS);	// Each 1 ms
 	}
 	return NULL;
 }
@@ -237,7 +221,7 @@ void Read_Interrupter(){
  Description  :
  ============================================
  */
-void Read_Captor(){
+void Read_Captor(structCaptor * sCaptor){
 
 	// Declarations Variables
 	unsigned char readEntry = 0 ;
@@ -246,29 +230,36 @@ void Read_Captor(){
 	// Instructions
 
 	// Read Input Captor
-	readEntry = beh_BBB_gpio_ReadPin(CAPTOR);
+	readEntry = beh_BBB_gpio_ReadPin(sCaptor->ePinCaptor);
 
 	// State Machine Captor
-	switch(stateCapteur){
+	//printf(" Before Inside Captor %d", sCaptor.stateCapt);
+	switch(sCaptor->stateCapt){
 		case STATE_NO_DETECTION :
 			if( readEntry == DETECT_OK){
 				// Change State
-				stateCapteur = STATE_DETECTION ;
-				printf(" press Ok, ");
+				pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
+
+				sCaptor->stateCapt = STATE_DETECTION ;
+				/* Fin de la section critique. */
+				pthread_setcancelstate (old_cancel_state, NULL);
+				printf(" Press Ok, Captor %s", sCaptor->sMessage);
 			} 
 		break ;
 		
 		case STATE_DETECTION :
 			if( readEntry == DETECT_OK){
-				iCount++; 
+				sCaptor->icountDete++;
 			}else{
 				// Change State
-				stateCapteur = STATE_NO_DETECTION;
-				if( iCount >= COUNT_DETECTION){
-					printf(" Release Ok nb %d",  iCount);
-					iCount = 0;
+				sCaptor->stateCapt = STATE_NO_DETECTION;
+				if( sCaptor->icountDete >= COUNT_DETECTION){
+					printf(" Release Ok, Count: %d, Captor %s",  sCaptor->icountDete , sCaptor->sMessage);
+					sCaptor->icountDete = 0;
+
 					pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
-					u8DetectOn = 1;
+
+					u8DetectOn = (unsigned char)sCaptor->ePinCaptor;
 
 					/* Fin de la section critique. */
 					pthread_setcancelstate (old_cancel_state, NULL);
@@ -276,6 +267,8 @@ void Read_Captor(){
 			}	 
 		break;
 	}
+
+	//return sCaptor;
 }
 
 /*
@@ -291,20 +284,30 @@ void Init_Lib_Detect(){
 	// Declarations Variables
 	pthread_t thread_id;
 
-	// Init Global Variables
-	stateCapteur = STATE_NO_DETECTION ;
-	stateInterrupter = STATE_OFF;
+	// Init Captor Main Door
+	ptrCaptorMainDoor = &sCaptorMainDoor;
+	ptrCaptorMainDoor->ePinCaptor = CAPTOR_MAIN_DOOR;
+	ptrCaptorMainDoor->icountDete = 0;
+	ptrCaptorMainDoor->stateCapt = STATE_NO_DETECTION ;
+	ptrCaptorMainDoor->sMessage = "MAIN\n";
+	beh_BBB_gpio_conf_dir(CAPTOR_MAIN_DOOR, INPUT_PULL_UP_EN);	//INPUT_PULL_UP_EN
+
+	// Init Captor Back Door
+	ptrCaptorBackDoor = &sCaptorBackDoor;
+	ptrCaptorBackDoor->ePinCaptor = CAPTOR_BACK_DOOR;
+	ptrCaptorBackDoor->icountDete = 0;
+	ptrCaptorBackDoor->stateCapt = STATE_NO_DETECTION ;
+	ptrCaptorBackDoor->sMessage = "BACK\n";
+	beh_BBB_gpio_conf_dir(CAPTOR_BACK_DOOR, OUTPUT);
+	beh_BBB_gpio_conf_dir(CAPTOR_BACK_DOOR, INPUT_PULL_UP_EN);	//INPUT_PULL_UP_EN
+
+	// Init Interrupter	Input
+	beh_BBB_gpio_conf_dir(INTER_ON_OFF, INPUT_PULL_UP_EN );  	//INPUT_PULL_UP_EN
 
 	// Thread Execute Read Captor
 	pthread_create (&thread_id, NULL, &Thread_Read_Input, NULL);
 
-	// Thread Execute Send Daily Raport
+	// Thread Execute Send Daily Report
 	pthread_create (&thread_id_Daily, NULL, &Thread_DailyRaport, NULL);
-
-	// Init Captor Input
-	beh_BBB_gpio_conf_dir(CAPTOR, INPUT_PULL_UP_EN);	//INPUT_PULL_UP_EN
-
-	// Init Interrupter	Input
-	beh_BBB_gpio_conf_dir(INTER_ON_OFF, INPUT_PULL_UP_EN );  //INPUT_PULL_UP_EN
 
 }

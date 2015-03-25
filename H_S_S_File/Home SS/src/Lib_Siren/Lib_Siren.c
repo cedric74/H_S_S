@@ -13,10 +13,10 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define TIME_SIREN		5
+#define TIME_SIREN		20		// In Second
 
 #define TIME_WARNING	500
-#define FREQ_BUZZER		100   // In us , Pas mal 1000 , trop 50000
+#define FREQ_BUZZER		100   	// In us , Pas mal 1000 , trop 50000
 #define NBE_BIP			8
 
 
@@ -97,9 +97,14 @@ void WarningSystemOn(){
  */
 void* Thread_Siren(){
 
-	// Delays before Stop siren
-	sleep(TIME_SIREN);
+	int iLoop = 0;
+	// Delays before Stop siren , Or Switch Interrupter to Off to Kill the siren
+	do{
+		sleep(1);
+		iLoop++;
+	}while((iLoop < TIME_SIREN )&&(stateInterrupter != STATE_OFF));
 
+	// Stop Siren
 	Stop_Siren();
 
 	return NULL;

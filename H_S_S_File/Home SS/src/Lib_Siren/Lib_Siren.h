@@ -14,6 +14,7 @@
 #include <pthread.h>
 
 #include "../Lib_Gpio/beh_BBB_gpio.h"
+#include "../Lib_Detect/Lib_Detect.h"
 
 /*******************************************
 *               D E F I N E                *

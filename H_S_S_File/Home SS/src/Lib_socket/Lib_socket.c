@@ -169,7 +169,6 @@ void send_binary(int newsockfd, char *file_name)
         send( newsockfd, buff, result, 0 );
     }
 
-
     /*
     if (result > 0){
         if(feof(pFile)){
@@ -180,7 +179,7 @@ void send_binary(int newsockfd, char *file_name)
         }
     }
     */
-
     fclose(pFile);
-
 }
+
+

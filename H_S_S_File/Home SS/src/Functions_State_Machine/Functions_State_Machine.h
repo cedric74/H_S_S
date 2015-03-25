@@ -27,6 +27,7 @@
 #include "../Lib_Camera/Lib_Camera.h"
 #include "../Lib_Siren/Lib_Siren.h"
 #include "../Lib_Sensor/Lib_Sensor.h"
+#include "../Lib_Com/Lib_Com.h"
 
 /*******************************************
 *               D E F I N E                *
@@ -55,12 +56,9 @@ void* 			Thread_Read_Command();
 void* 	 		Thread_Send_Data_PC();
 void 			StopThread_Send_Data();
 void 			StartThread_Send_Data();
-
 void* 			Thread_ReadSensor();
 void 			StartThread_ReadSensor();
 
-// ----------------- TEST ---------
-void 			tests_Socket(void);
 
 
 #endif /* FUNCTIONS_STATE_MACHINE_H_ */

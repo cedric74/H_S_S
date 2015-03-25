@@ -31,25 +31,63 @@
 /*******************************************
 *               D E F I N E                *			
 ********************************************/
-#define CAPTOR			P9_12
-#define INTER_ON_OFF	P9_13
+#define CAPTOR_MAIN_DOOR		P9_12
+#define CAPTOR_BACK_DOOR		P9_14
+#define INTER_ON_OFF			P9_13
 
+
+#define	STATE_OFF			0
+#define STATE_ON			1
+
+#define DETECT_OK			0
+#define INTRUSION_OK		1
+#define INTRUSION_NO		0
+
+#define COUNT_DETECTION		100
+
+#define COUNT_INTERRUPTER	500
+
+#define OFF					0
+#define ON					1
+
+#define OFF_INTERRUPT		1
+#define ON_INTERRUPT		0
+
+#define DELAYS_TO_DISABLE	5		// 30 Sec
+#define DELAYS_TO_ENABLE	10		// TEST	//(60*2)	// 2 MIN
+
+#define SIZE_MESS_CAPTOR	4
+
+#define WAIT_1MS	1000
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *			
 ********************************************/
+typedef enum {STATE_NO_DETECTION = 0, STATE_DETECTION  = 1}stateCaptor;
+
+typedef struct {
+	stateCaptor stateCapt;
+	int 		icountDete;
+	GPIO_Pins	ePinCaptor;
+	char*		sMessage;
+}structCaptor;
 
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *			
 ********************************************/
-unsigned char 	stateCapteur;
 unsigned char   stateInterrupter;
+
+structCaptor 	sCaptorMainDoor;
+structCaptor 	sCaptorBackDoor;
+
+structCaptor 	* ptrCaptorMainDoor;
+structCaptor 	* ptrCaptorBackDoor;
 
 /*******************************************
 *	        F U N C T I O N S   	       *			
 ********************************************/
 void	main_Detect();
 
-void 	Read_Captor();
+void 	Read_Captor(structCaptor * sCaptor);
 void 	Read_Interrupter();
 void 	Init_Lib_Detect();
 

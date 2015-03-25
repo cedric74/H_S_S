@@ -46,3 +46,4 @@ void 			send_binary(int  newsockfd, char *file_name);
 
 void 			close_socket(int sockfd, int newsockfd);
 void 			error(const char *msg);
+

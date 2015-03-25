@@ -13,9 +13,12 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define SLEEP_100_MS	100000
+#define SLEEP_100_MS			100000
 
-#define STOP_THREAD		1
+#define STOP_THREAD				1
+
+#define	SEND_INFO_EACH_SEC		5	// In Second
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -159,47 +162,6 @@ unsigned char state_machine(void){
 
 /*
  ============================================
- Function     : tests_Socket()
- Parameter    :
- Return Value : void
- Description  :
- ============================================
- */
-void tests_Socket(void){
-//	pthread_t thread_id;
-//
-//	printf("\n\n ******* Start Socket ******* \n\n");
-
-	// Create Socket Server
-//	create_Socket();
-//	accept_client_connection();
-//
-//	// Thread Execute Read Command
-//	pthread_create (&thread_id, NULL, &Thread_Read_Command, NULL);
-//
-//	send_binary("/home/debian/Desktop/BeagleBone_Black_dog.JPG");
-//
-///*--------------------------------
-//	// Loop
-//	do{
-//		// State Machine
-//		u8Retval = state_machine();
-//
-//		// Sleep 10 ms
-//		usleep(10000);
-//	}while(u8Retval != STOP_CMD);
-//-------------------------------------*/
-//
-//	// close Thread
-//	pthread_join(thread_id, NULL);
-//	close_socket();
-//
-//
-//	printf("\n\n ******* End Socket ******* \n\n");
-}
-
-/*
- ============================================
  Function     : Thread_Read_Command()
  Parameter    :
  Return Value : void
@@ -228,8 +190,8 @@ void* Thread_Read_Command(){
  */
 void* Thread_Send_Data_PC(){
 
-	char sMess[15];
-	readSensor();
+	//char sMess[15] = {0};
+	//readSensor();
 	//temperature;
 	//humidity;
 
@@ -240,12 +202,15 @@ void* Thread_Send_Data_PC(){
 			StopThread_Send_Data();
 		}
 
+		strInputStatus Mess;
+		libcom_InputStatus(&Mess, ptrCaptorMainDoor->stateCapt, ptrCaptorBackDoor->stateCapt, stateInterrupter, temperature,humidity);
+		printf( " Message : %s , size : %d\n" , Mess.sMess,  Mess.bsize);
+		write_socket(newSockData, Mess.sMess, 15);	// Problem with the size of the message
 
-		sprintf(sMess , "%1d%1d%1d%2.2f%2.2f", (stateCapteur & 0x1),(stateCapteur & 0x1),(stateInterrupter & 0x1),  temperature, humidity);
-		//printf(" %s\n", sMess);
-		write_socket(newSockData, sMess, 20);
-		//printf(" Send Data\n");
-		sleep(10);
+		//write_socket(newSockData, ptrMes->sMess, ptrMes->bsize);
+//		sprintf(sMess , "%1d%1d%1d%2.2f%2.2f", ptrCaptorMainDoor->stateCapt, ptrCaptorBackDoor->stateCapt, stateInterrupter,  temperature, humidity);
+//		write_socket(newSockData, sMess, 20);
+		sleep(SEND_INFO_EACH_SEC);
 	}
 
 	pthread_exit(&thread_Send_Data);
@@ -317,8 +282,8 @@ void StartThread_ReadSensor(){
  */
 void* Thread_ReadSensor(){
 	while(iStopCommand != 1){
-//		int iret = readSensor();
-//		if(iret != DHT_SUCCESS){
+//		int iret = readSensor();	NO SENSOR AVAIBLE
+//		if(iret != DHT_SUCCESS){	NO SENSOR AVAIBLE
 			temperature	= 0;
 			humidity = 0;
 //		}
