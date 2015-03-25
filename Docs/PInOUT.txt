@@ -1,0 +1,9 @@
+P9_11 ->	Out, Buzzer	// AdaFruit Sensor 
+P9_12 ->	In,Captor Main Door
+P9_13 ->	In, Interrupter
+P9_14 ->	In, Captor Back Door	(External Pull Up)
+P9_15 ->	Out, Siren
+P9_16 ->	
+P9_17 ->	
+P9_18 ->	
+	

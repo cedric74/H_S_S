@@ -1,4 +1,8 @@
-30_03_2015, Version 1.7 :
+25_03_2015, Version 1.8 :
+	* Add Off Siren with Interrupter instead to wait for 5 minutes
+	* Add logic with many Captors(example : Main Door and Back Door captors)
+	* Add Lib Com (Structure to Send message)
+18_03_2015, Version 1.7 :
 	* CleanUp the Daily Rapport to reduce the size of outfile.txt
 	* Add Buzzer functions in Lib Siren
 16_03_2015, Version 1.6 :	
