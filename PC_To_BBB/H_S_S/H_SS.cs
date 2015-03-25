@@ -295,7 +295,14 @@ namespace H_S_S
         {
             // Init Label
             // Captor Main door
-            if(bData[0] == 0x31)
+            int i = 0;
+            byte[] bvalue= new byte[15];
+            for (i = 0; i < 15; i++)
+            {
+                bvalue[i] = (byte)(bData[i] - 0x30);
+            }
+           
+            if (bvalue[0] == 0x31)
             {
                 labelCaptor_1.Text = LABEL_Captor_1 + " ON";
             }
@@ -303,7 +310,7 @@ namespace H_S_S
                 labelCaptor_1.Text = LABEL_Captor_1 + " OFF";
             }
 
-            if (bData[1] == 0x31)
+            if (bvalue[1] == 0x31)
             {
                 labelCaptor_2.Text = LABEL_Captor_2 + " ON";
             }
@@ -312,7 +319,7 @@ namespace H_S_S
                 labelCaptor_2.Text = LABEL_Captor_2 + " OFF";
             }
 
-            if ( bData[2] == 0x31)
+            if (bvalue[2] == 0x31)
             {
                 labelInterrupter.Text = LABEL_Inter_1 + " ON";
             }
@@ -364,7 +371,7 @@ namespace H_S_S
                     iCount = sock.ReceiveDataFromServer(bData);
                 }
                 // 250 ms
-                Thread.Sleep(250);
+                Thread.Sleep(500);  //250
 
             }while(true);
         }
