@@ -46,14 +46,17 @@ namespace H_S_S
         // Path Xml file
         const string PATH_XML = "profile.xml";
 
+        // Path Pic Home
+        const string PIC_HOME = "Pics/pic_home.jpg";
+
         // Label Test
         const string LABEL_ADRESS_SERVER    = "Adress : "; 
         const string LABEL_PORT_SERVER      = "Port   : ";
-        const string LABEL_Captor_1         = "Main Door  : ";
-        const string LABEL_Captor_2         = "Back Door  : ";
-        const string LABEL_Inter_1          = "Interrupter: ";
+        const string LABEL_Captor_1         = "Main Door   : ";
+        const string LABEL_Captor_2         = "Back Door   : ";
+        const string LABEL_Inter_1          = "Interrupter    : ";
         const string LABEL_Temperature      = "Temperature: ";
-        const string LABEL_Humidity         = "Humidity   : ";
+        const string LABEL_Humidity         = "Humidity       : ";
 
         // Message Info
         const string ERROR_CONNECTION = "Error Connection with BBB socket";
@@ -61,6 +64,7 @@ namespace H_S_S
         // Socket Data
         public const string IP_ADDRESS_DEFAULT  = "192.168.7.2";
         public const int IP_PORT_DEFAULT        = 51717;
+        public const int IP_PORT_VIDEO          = 51222;
 
         // State Connection
         const bool CONNECTED    =   true;
@@ -73,6 +77,14 @@ namespace H_S_S
         const int DISCONNECT_CMD    = 3;
         const int STOP_CMD          = 4;
 
+        // WAIT BEFORTE EACH READ INPUTS STATUS
+        const int WAIT_MS_500       = 500; 
+
+        // SIZE INPUTS STATUS MESSSAGE
+        const int SIZE_INPUTS_STATUS = 15;
+
+        const int SIZE_MIN_PIC = 10000;       
+
 		#endregion 
 
 		#region VARIABLES
@@ -84,12 +96,13 @@ namespace H_S_S
 
         // Object
         Lib_socket.Class_socket sock;
-        Thread t = null;
+        Lib_socket.Class_socket sockVideo = null;
+        Thread threadInputsStatus = null;
 
         // Variables 
         public string ipAdress;
         public int ipPort;
-        byte[] bData = new byte[20];
+        InputsData sInputsData;
 
 		#endregion 
 
@@ -175,41 +188,7 @@ namespace H_S_S
         }
         private void buttonPicture_Click(object sender, EventArgs e)
         {
-            t.Abort();
-            timer1.Enabled = false;
-            
-            sock.Send_Bytes(PICTURE_CMD);
-            printTextBoxInfo("Sent PICTURE Command");
-
-            #region **** TEST ******
-                byte[] buffer = new byte[1000000];
-                
-                // Waiting for The pic
-                //int iRecv = 0 ;
-                //while (iRecv == 0)
-                //{
-                //    iRecv = sock.ReceiveDataFromServer(buffer);
-                //}
-
-                Thread.Sleep(15000);
-                sock.ReceiveDataFromServer(buffer);
-                printTextBoxInfo("Received success");
-
-                FileStream fs = File.Create("test_photo.jpg");
-                fs.Write(buffer, 0, buffer.Length);
-                fs.Close();
-
-                // Print jpg
-                //Image myImg = Image.FromFile("test_photo.jpg");
-                //PictureBox p =new PictureBox();
-                pictureBox1.ImageLocation = "test_photo.jpg";
-                pictureBox1.Location = new Point(21, 27);
-                //this.Controls.Add(pictureBox1);
-           
-                Launch_thread();
-                timer1.Enabled = true;
-
-            #endregion
+            ReceivePic();
         }
         private void buttonStopCmd_Click(object sender, EventArgs e)
         {
@@ -258,7 +237,7 @@ namespace H_S_S
             else
             {
                 // Stop Thread Read Data
-                t.Abort();
+                threadInputsStatus.Abort();
 
                 // Send Stop Command
                 sock.Send_Bytes(DISCONNECT_CMD);
@@ -269,6 +248,7 @@ namespace H_S_S
                 
                 // Close Connection
                 sock.Disconnect();
+                sockVideo.Disconnect();
 
                 // Change the Connection State
                 bStateConnection = DISCONNECTED;
@@ -293,50 +273,108 @@ namespace H_S_S
 
         private void sPrintData()
         {
-            // Init Label
-            // Captor Main door
-            int i = 0;
-            byte[] bvalue= new byte[15];
-            for (i = 0; i < 15; i++)
+            if (sInputsData != null)
             {
-                bvalue[i] = (byte)(bData[i] - 0x30);
-            }
-           
-            if (bvalue[0] == 0x31)
-            {
-                labelCaptor_1.Text = LABEL_Captor_1 + " ON";
-            }
-            else {
-                labelCaptor_1.Text = LABEL_Captor_1 + " OFF";
-            }
+                if (sInputsData.bCaptor_Main_Door == 1)
+                {
+                    labelCaptor_1.Text = LABEL_Captor_1 + " ON";
+                }
+                else
+                {
+                    labelCaptor_1.Text = LABEL_Captor_1 + " OFF";
+                }
 
-            if (bvalue[1] == 0x31)
-            {
-                labelCaptor_2.Text = LABEL_Captor_2 + " ON";
-            }
-            else
-            {
-                labelCaptor_2.Text = LABEL_Captor_2 + " OFF";
-            }
+                if (sInputsData.bCaptor_Back_Door == 1)
+                {
+                    labelCaptor_2.Text = LABEL_Captor_2 + " ON";
+                }
+                else
+                {
+                    labelCaptor_2.Text = LABEL_Captor_2 + " OFF";
+                }
 
-            if (bvalue[2] == 0x31)
-            {
-                labelInterrupter.Text = LABEL_Inter_1 + " ON";
+                if (sInputsData.bInterrupter == 1)
+                {
+                    labelInterrupter.Text = LABEL_Inter_1 + " ON";
+                }
+                else
+                {
+                    labelInterrupter.Text = LABEL_Inter_1 + " OFF";
+                }
+
+                labelTemperature.Text = LABEL_Temperature + sInputsData.fTemp;
+
+                labelHumidity.Text = LABEL_Humidity + sInputsData.fHum;
+
             }
-            else
-            {
-                labelInterrupter.Text = LABEL_Inter_1 + " OFF";     
-            }
-            //labelCaptor_1.Text = LABEL_Captor_1 + Char.ConvertFromUtf32(bData[0]);
-            //labelCaptor_2.Text = LABEL_Captor_2 + Char.ConvertFromUtf32(bData[1]);
-            //labelInterrupter.Text = LABEL_Inter_1 + Char.ConvertFromUtf32(bData[2]);
-         
-            labelTemperature.Text = LABEL_Temperature +  Char.ConvertFromUtf32(bData[3]) + Char.ConvertFromUtf32(bData[4]) 
-                                                      + Char.ConvertFromUtf32(bData[5] ) + Char.ConvertFromUtf32(bData[6] )  + Char.ConvertFromUtf32(bData[7] ) + " *C";
-            labelHumidity.Text = LABEL_Humidity + Char.ConvertFromUtf32(bData[8]) + Char.ConvertFromUtf32(bData[9]) 
-                                                + Char.ConvertFromUtf32(bData[10]) + Char.ConvertFromUtf32(bData[11])  + Char.ConvertFromUtf32(bData[12]) + " %";
+      
+            //  Char.ConvertFromUtf32(bData[3]) + Char.ConvertFromUtf32(bData[4]) 
+            //                                          + Char.ConvertFromUtf32(bData[5] ) + Char.ConvertFromUtf32(bData[6] )  + Char.ConvertFromUtf32(bData[7] ) + " *C";
+            //Char.ConvertFromUtf32(bData[8]) + Char.ConvertFromUtf32(bData[9]) 
+            //                                    + Char.ConvertFromUtf32(bData[10]) + Char.ConvertFromUtf32(bData[11])  + Char.ConvertFromUtf32(bData[12]) + " %";
         }
              
+        private void ReceivePic(){
+       
+            // Send Command Picture
+            sock.Send_Bytes(PICTURE_CMD); 
+            printTextBoxInfo("Sent PICTURE Command");
+
+            // Launch thread Read Inputs Status & In tick timer to print data
+            //Launch_thread();
+            //timer1.Enabled = true;
+
+            // Create Object socket Video if Not create 
+            if (sockVideo == null)
+            {           
+                sockVideo = new Class_socket(ipAdress, IP_PORT_VIDEO);
+                // Connection
+                if (sockVideo.Connect() == false)
+                {
+                    printTextBoxInfo(ERROR_CONNECTION);
+                    return;
+                }
+            }
+                    
+            #region **** TEST ******
+            byte[] bPicture = new byte[50000];
+                
+                // Waiting for The pic
+                int iRecv = 0;
+                int icount = 0;
+                int iSize = 0;
+                do{
+                    byte[] buffer = new byte[50000];
+                    iRecv = sockVideo.ReceiveDataFromServer(buffer);
+                    Array.Copy(buffer, 0, bPicture, iSize, iRecv);
+                    iSize += iRecv;
+                    Thread.Sleep(250);
+
+                     // TimeOut 10s
+                    if (iRecv == 0)
+                    {
+                        icount++;
+                        if (icount > 20)
+                        {
+                            printTextBoxInfo("Error to Receive Picture");
+                            return;
+                        }
+                    }
+                } while ((iRecv != 0) || (iSize < SIZE_MIN_PIC)); // 21243
+                printTextBoxInfo("Received Pic Success, " + " Size :" + iSize.ToString("D") + " bits");
+
+                // build Image From binary Value
+                FileStream fs = File.Create(PIC_HOME);
+                fs.Write(bPicture, 0, bPicture.Length);
+                fs.Close();
+
+                // Print jpg     
+                pictureBox1.ImageLocation = PIC_HOME;
+                pictureBox1.Location = new Point(21, 27);
+           
+            #endregion
+        }
+        
         #endregion
 
 
@@ -344,25 +382,18 @@ namespace H_S_S
 
         public void Launch_thread(){
             //  Create My Thread
-            t = new Thread(new ParameterizedThreadStart(MyThread));
+            threadInputsStatus = new Thread(new ParameterizedThreadStart(Thread_Read_InputsStatus));
             // Launch Thread
-            t.Start();
+            threadInputsStatus.Start();
 
             // Loop until worker thread activates.
-            while (!t.IsAlive) ;
-
-            // allow the thread to do some work:
-            //Thread.Sleep(5);
-
-            // Use the Join method to block the current thread 
-            // until the object's thread terminates.
-            //t.Join();
-
-            //timer1.Enabled = false;
+            while (!threadInputsStatus.IsAlive) ;
         }
 
-        public void MyThread(Object buf)
-        {     
+        public void Thread_Read_InputsStatus(Object buf)
+        {
+            byte[] bData = new byte[20];
+
             do{
                 int iCount = 0;
 
@@ -370,8 +401,28 @@ namespace H_S_S
                 {
                     iCount = sock.ReceiveDataFromServer(bData);
                 }
-                // 250 ms
-                Thread.Sleep(500);  //250
+
+                // Check If length are OK
+                if (iCount != SIZE_INPUTS_STATUS)
+                {
+                    sInputsData = null;
+                    return;
+                }
+
+                // Check If Data's are OK
+                InputsStatus classInputsStatus = new InputsStatus(bData);
+                if (classInputsStatus.bCHKSUM == true)
+                {
+                    // Get Data   
+                    sInputsData = new InputsData(classInputsStatus);
+                }
+                else { 
+                    // Data not Dot
+                    sInputsData = null;
+                }
+
+                // Sleep
+                Thread.Sleep(WAIT_MS_500);  // In MS
 
             }while(true);
         }
@@ -430,8 +481,6 @@ namespace H_S_S
         }
 
         #endregion
-
-
 
     }
 }
