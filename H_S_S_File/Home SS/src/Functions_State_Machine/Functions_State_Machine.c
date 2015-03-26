@@ -19,6 +19,8 @@
 
 #define	SEND_INFO_EACH_SEC		5	// In Second
 
+#define VIDEO_OK				1
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -36,6 +38,8 @@ int 			socketData;
 int 			socketVideo;
 int				newSockData;
 int				newSockVideo;
+
+unsigned char	bVideo;
 
 /*******************************************
 *	        F U N C T I O N S   	       *
@@ -55,6 +59,9 @@ void Init_State_Machine(){
 	// Thread Execute Read Command
 	pthread_create (&threadId_StateMachine, NULL, &Thread_State_Machine, NULL);
 
+	// Init socketVideo
+	bVideo = 0;
+
 }
 
 /*
@@ -68,13 +75,12 @@ void Init_State_Machine(){
 void Thread_State_Machine(){
 
 	// Declarations Variables
-	//unsigned char	u8StMachine;
 	pthread_t threadId_ReadCommand;
 
 	do{
 		printf(" ******* Start Socket ******* \n\n");
 		// Create Socket Server
-		socketData 	= create_Socket();
+		socketData 	= create_Socket(PORT_NUM);
 		newSockData = accept_client_connection(socketData);
 
 		// Thread Execute Read Command
@@ -84,7 +90,7 @@ void Thread_State_Machine(){
 		StartThread_Send_Data();
 
 		// Thread Execute Read Sensor
-		//StartThread_ReadSensor();
+		//StartThread_ReadSensor();			NO SENSOR AVAIBLE
 
 		// Loop State Machine
 		do{
@@ -103,11 +109,14 @@ void Thread_State_Machine(){
 		pthread_join(thread_Send_Data, NULL);
 
 		// Close Thread Read Sensor
-		//pthread_join(threadId_Sensor, NULL);
+		//pthread_join(threadId_Sensor, NULL);      NO SENSOR AVAIBLE
 
-
-		// Close Socket
+		// Close Socket Data
 		close_socket(socketData, newSockData);
+
+		// Close socket video
+		close_socket(socketVideo, newSockVideo);
+		bVideo = 0;
 
 		printf("\n\n ******* End Socket ******* \n\n");
 
@@ -138,12 +147,28 @@ unsigned char state_machine(void){
 
 		case VIDEO_CMD:
 			printf( " VIDEO CMD \n");
-			Take_Picture();
-			//send_binary(newSockData, "/home/debian/Desktop/Intrusion.jpeg");
-			iStopthread = STOP_THREAD;
-			sleep(10);
+			if(bVideo != VIDEO_OK){
+				// Socket not yet Create
+				socketVideo 	= create_Socket(PORT_VIDEO);			//PORT_NUM
+				newSockVideo = accept_client_connection(socketVideo);
+				bVideo = VIDEO_OK;
+			}
 
-			StartThread_Send_Data();
+
+			#ifdef DEBUG
+				printf("DEBUG: Send Picture\n");
+				send_binary(newSockVideo, "/home/debian/Desktop/Intrusion.jpeg");
+				//sleep(10);
+			#else
+				Take_Picture();
+				send_binary(newSockData, "/home/debian/Desktop/Intrusion.jpeg");
+				iStopthread = STOP_THREAD;
+				sleep(10);
+
+				// Restart Thread Send Inputs Status
+				StartThread_Send_Data();
+			#endif
+
 
 		break;
 
@@ -190,8 +215,7 @@ void* Thread_Read_Command(){
  */
 void* Thread_Send_Data_PC(){
 
-	//char sMess[15] = {0};
-	//readSensor();
+	//readSensor();			NO SENSOR AVAIBLE
 	//temperature;
 	//humidity;
 
@@ -204,12 +228,8 @@ void* Thread_Send_Data_PC(){
 
 		strInputStatus Mess;
 		libcom_InputStatus(&Mess, ptrCaptorMainDoor->stateCapt, ptrCaptorBackDoor->stateCapt, stateInterrupter, temperature,humidity);
-		printf( " Message : %s , size : %d\n" , Mess.sMess,  Mess.bsize);
 		write_socket(newSockData, Mess.sMess, 15);	// Problem with the size of the message
 
-		//write_socket(newSockData, ptrMes->sMess, ptrMes->bsize);
-//		sprintf(sMess , "%1d%1d%1d%2.2f%2.2f", ptrCaptorMainDoor->stateCapt, ptrCaptorBackDoor->stateCapt, stateInterrupter,  temperature, humidity);
-//		write_socket(newSockData, sMess, 20);
 		sleep(SEND_INFO_EACH_SEC);
 	}
 
@@ -229,9 +249,7 @@ void* Thread_Send_Data_PC(){
 void StopThread_Send_Data()
 {
 	printf(" Stop thread Send Data \n");
-	//pthread_mutex_lock(&mutex_stock);
-    //pthread_cond_wait(&cond_stock, &mutex_stock);
-
+	//  Stop Thread Send Data
 	pthread_exit(&thread_Send_Data);
 
 }
@@ -250,8 +268,6 @@ void StartThread_Send_Data()
 	// Thread Execute Send Data
 	pthread_create (&thread_Send_Data, NULL, &Thread_Send_Data_PC, NULL);
 
-	//pthread_cond_signal(&cond_stock);
-    //pthread_mutex_unlock(&mutex_stock);
 }
 
 /*

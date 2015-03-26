@@ -8,7 +8,7 @@
 /*******************************************
 *			  I N C L U D E 			   *
 ********************************************/
-#include "Functions_Alerte.h"
+#include "Functions_Alert.h"
 
 /*******************************************
 *               D E F I N E                *
@@ -18,7 +18,7 @@
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
-
+const char * dailyReportFile = "/home/debian/Desktop/dailyReportFile.txt";
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
@@ -28,13 +28,13 @@
 ********************************************/
 /*
  ============================================
- Function     : Thread_DailyRaport()
+ Function     : Thread_DailyReport()
  Parameter    :
  Return Value : void
  Description  :
  ============================================
  */
-void * Thread_DailyRaport(){
+void * Thread_DailyReport(){
 
 	while(1){
 		sleep(WAIT_1_DAYS);
@@ -59,7 +59,7 @@ void * Thread_DailyRaport(){
  */
 void Send_Report_File_Log(){
 
-    int iReturn = system("mpack -s \"Daily Raport\" /home/debian/Desktop/outfile.txt cedric.toncanier@gmail.com");
+    int iReturn = system("mpack -s \"Daily Report\" /home/debian/Desktop/dailyReportFile.txt cedric.toncanier@gmail.com");
      if(iReturn == ERROR){
     	 perror("Failed to invoke mpack");
      }else{
@@ -81,7 +81,7 @@ void Send_Report_File_Log(){
 void File_Log(char string[50], int iLength){
 
 	// Instructions
-	fpLog = fopen ("/home/debian/Desktop/outfile.txt", "a");
+	fpLog = fopen ( dailyReportFile, "a");
 
 	 time_t rawtime;
 	 struct tm * timeinfo;
@@ -158,7 +158,7 @@ int Connection_OK(){
  Description  :
  ============================================
  */
-int send_Alerte(int iSmsok){
+int send_Alert(int iSmsok){
 
 	// Declarations Variables
 	int iVal;
@@ -166,7 +166,7 @@ int send_Alerte(int iSmsok){
 	// Instructions
 	iVal = Connection_OK();
 	if( iVal == ERROR){
-		File_Log("PROBLEM_SEND_ALERTE, ", 21);
+		File_Log("PROBLEM_SEND_ALERT, ", 20);
 		File_Log("NO_CONNECTION, ", 15);
 		return ERROR;
 	}
@@ -174,7 +174,7 @@ int send_Alerte(int iSmsok){
 	// Send Alerte by mail
 	iVal = sendEmail();
 	if( iVal == ERROR){
-		File_Log("PROBLEM_SEND_ALERTE, ", 21);
+		File_Log("PROBLEM_SEND_ALERT, ", 20);
 		File_Log("FAILED_SEND_MAIL, ", 18);
 		return ERROR;
 	}
@@ -184,7 +184,7 @@ int send_Alerte(int iSmsok){
 		// Send Alerte by sms
 		iVal = sendSMS();
 		if( iVal == ERROR){
-			File_Log("PROBLEM_SEND_ALERTE, ", 21);
+			File_Log("PROBLEM_SEND_ALERT, ", 20);
 			File_Log("FAILED_SEND_SMS, ", 17);
 			return ERROR;
 		}
@@ -225,15 +225,15 @@ int sendSMS(){
 int sendEmail()
 {
      int iReturn = system("mpack -s \"Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
-     if(iReturn == ERROR){
+    /* if(iReturn == ERROR){
     	 perror("Failed to invoke mpack");
-     }
+     }*/
 
      iReturn = system("mpack -s \"Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
 
-     if(iReturn == ERROR){
-    	 perror("Failed to invoke mpack");
-     }
+//     if(iReturn == ERROR){
+//    	 perror("Failed to invoke mpack");
+//     }
 
 
      return OK;

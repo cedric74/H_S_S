@@ -24,9 +24,10 @@
 #include <netinet/in.h>
 
 #include "../Lib_Gpio/beh_BBB_gpio.h"
-#include "../Functions_Alerte/Functions_Alerte.h"
+#include "../Functions_Alert/Functions_Alert.h"
 #include "../Lib_Siren/Lib_Siren.h"
 #include "../Lib_Camera/Lib_Camera.h"
+#include "../Lib_main.h"
 
 /*******************************************
 *               D E F I N E                *			

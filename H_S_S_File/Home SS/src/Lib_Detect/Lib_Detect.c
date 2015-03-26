@@ -89,10 +89,10 @@ void main_Detect(){
 				printf(" System OFF \n");
 				File_Log("System OFF, ", 12);
 			}else{
-				// Alerte OK
-				printf(" Alerte OK \n");
-				// Send Alerte By Mail & Sms
-				send_Alerte(SMS_OK );		//	NO_SMS
+				// Alert OK
+				printf(" Alert OK \n");
+				// Send Alert By Mail & Sms
+				send_Alert(NO_SMS );		//	NO_SMS
 
 				// Siren ON.
 				File_Log("Siren  ON , ", 12);
@@ -103,10 +103,6 @@ void main_Detect(){
 			printf(" System OFF \n");
 			File_Log("System OFF, ", 12);
 		}
-
-	}else{
-		//printf("\n No Detect ");
-		//File_Log("No Detect, ", 11);
 	}
 
 	// Start Section critic
@@ -308,6 +304,6 @@ void Init_Lib_Detect(){
 	pthread_create (&thread_id, NULL, &Thread_Read_Input, NULL);
 
 	// Thread Execute Send Daily Report
-	pthread_create (&thread_id_Daily, NULL, &Thread_DailyRaport, NULL);
+	pthread_create (&thread_id_Daily, NULL, &Thread_DailyReport, NULL);
 
 }

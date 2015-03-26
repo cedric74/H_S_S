@@ -18,7 +18,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "Functions_Alerte/Functions_Alerte.h"
+#include "Functions_Alert/Functions_Alert.h"
 #include "Functions_WatchDog/Functions_WatchDog.h"
 #include "Functions_State_Machine/Functions_State_Machine.h"
 
@@ -28,8 +28,10 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Version 1.8, 25 march, "
+#define START_FILE			"Version 1.9, 26 march, "
 #define SIZE_STRING			23
+
+#define DEBUG				1
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *

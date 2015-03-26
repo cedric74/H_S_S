@@ -53,12 +53,12 @@ pthread_t 	thread_id_Daily;
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-void * 	Thread_DailyRaport();
+void * 	Thread_DailyReport();
 void 	Send_Report_File_Log();
 void 	File_Log(char * string, int iLength);
 int 	Ping_Phone();
 int 	Connection_OK();
-int 	send_Alerte(int iSmsok);
+int 	send_Alert(int iSmsok);
 int 	sendEmail();
 int 	sendSMS();
 

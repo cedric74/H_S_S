@@ -25,7 +25,7 @@
 ********************************************/
 #define PORT_NUM	51717
 
-#define	PORT_VIDEO  7777
+#define	PORT_VIDEO  51222
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *			
 ********************************************/
@@ -38,7 +38,7 @@
 /*******************************************
 *	        F U N C T I O N S   	       *			
 ********************************************/
-int 			create_Socket();
+int 			create_Socket(int iPort);
 int 			accept_client_connection(int sockfd);
 void 			write_socket(int  newsockfd, char * sMessage, int iSize);
 unsigned char 	read_socket(int  newsockfd);

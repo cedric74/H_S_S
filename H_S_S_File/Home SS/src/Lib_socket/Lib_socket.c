@@ -24,7 +24,7 @@
  Description  :
  ============================================
  */
-int create_Socket(){
+int create_Socket(int iPort){
 	int portno;
 	struct sockaddr_in serv_addr;
 
@@ -35,7 +35,7 @@ int create_Socket(){
 	}
 
     bzero((char *) &serv_addr, sizeof(serv_addr));
-    portno = PORT_NUM;
+    portno = 	iPort; //PORT_NUM;
 
 	serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
