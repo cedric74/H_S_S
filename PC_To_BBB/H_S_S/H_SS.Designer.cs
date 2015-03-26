@@ -303,6 +303,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "H_SS";
+            this.Text = "Home Security System  V 1.0";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.H_SS_FormClosed);
             this.groupBoxControl.ResumeLayout(false);
             this.groupBoxConnection.ResumeLayout(false);
