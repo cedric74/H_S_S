@@ -354,7 +354,7 @@ namespace H_S_S
                     if (iRecv == 0)
                     {
                         icount++;
-                        if (icount > 20)
+                        if (icount > 50)
                         {
                             printTextBoxInfo("Error to Receive Picture");
                             return;
