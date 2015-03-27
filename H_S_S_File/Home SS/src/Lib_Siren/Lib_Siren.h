@@ -19,8 +19,8 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define SIREN_ON		0
-#define SIREN_OFF		1
+#define SIREN_ON		1
+#define SIREN_OFF		0
 
 #define SIREN			P9_15
 #define BUZZER			P9_11
