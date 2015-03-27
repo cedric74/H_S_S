@@ -1,3 +1,8 @@
+BBB firmware : Home Security System
+
+26_03_2015, Version 1.9 :
+	* Added Socket Video communication to send Picture to the Supervisor application
+	* Fixed some English error ( Alerte -> Alert, raport -> report)
 25_03_2015, Version 1.8 :
 	* Add Off Siren with Interrupter instead to wait for 5 minutes
 	* Add logic with many Captors(example : Main Door and Back Door captors)
