@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B80307B1-6121-4446-9A03-5D8D7B6871ED}</ProjectGuid>
+    <ProjectGuid>{C07B97BB-8F20-46E0-B246-6D9E4BF742B8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>H_S_S</RootNamespace>
@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CmdAppli.cs" />
     <Compile Include="H_SS.cs">
       <SubType>Form</SubType>
     </Compile>
