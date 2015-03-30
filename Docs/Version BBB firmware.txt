@@ -1,5 +1,6 @@
 BBB firmware : Home Security System
-
+30_03_2015, Version 1.10 :
+	* Added Socket Report File communication to send Report File to the Supervisor application
 26_03_2015, Version 1.9 :
 	* Added Socket Video communication to send Picture to the Supervisor application
 	* Fixed some English error ( Alerte -> Alert, raport -> report)
