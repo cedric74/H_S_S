@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxControl = new System.Windows.Forms.GroupBox();
+            this.buttonVideo = new System.Windows.Forms.Button();
+            this.buttonReportFile = new System.Windows.Forms.Button();
             this.buttonStopCmd = new System.Windows.Forms.Button();
             this.buttonPicture = new System.Windows.Forms.Button();
             this.buttonSound = new System.Windows.Forms.Button();
@@ -38,7 +40,7 @@
             this.labelPortServer = new System.Windows.Forms.Label();
             this.LightStatusConnection = new System.Windows.Forms.Button();
             this.labelAdressIPServer = new System.Windows.Forms.Label();
-            this.groupBoxCapture = new System.Windows.Forms.GroupBox();
+            this.groupBoxOut = new System.Windows.Forms.GroupBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBoxInfo = new System.Windows.Forms.TextBox();
             this.buttonSetting = new System.Windows.Forms.Button();
@@ -49,11 +51,10 @@
             this.labelCaptor_2 = new System.Windows.Forms.Label();
             this.labelCaptor_1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.buttonReportFile = new System.Windows.Forms.Button();
-            this.buttonVideo = new System.Windows.Forms.Button();
+            this.textBoxReportFile = new System.Windows.Forms.TextBox();
             this.groupBoxControl.SuspendLayout();
             this.groupBoxConnection.SuspendLayout();
-            this.groupBoxCapture.SuspendLayout();
+            this.groupBoxOut.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBoxInputs.SuspendLayout();
             this.SuspendLayout();
@@ -74,6 +75,31 @@
             this.groupBoxControl.TabIndex = 0;
             this.groupBoxControl.TabStop = false;
             this.groupBoxControl.Text = "Controls Outpus";
+            // 
+            // buttonVideo
+            // 
+            this.buttonVideo.Enabled = false;
+            this.buttonVideo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonVideo.Location = new System.Drawing.Point(5, 92);
+            this.buttonVideo.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonVideo.Name = "buttonVideo";
+            this.buttonVideo.Size = new System.Drawing.Size(73, 28);
+            this.buttonVideo.TabIndex = 9;
+            this.buttonVideo.Text = "Video";
+            this.buttonVideo.UseVisualStyleBackColor = true;
+            this.buttonVideo.Click += new System.EventHandler(this.buttonVideo_Click);
+            // 
+            // buttonReportFile
+            // 
+            this.buttonReportFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonReportFile.Location = new System.Drawing.Point(5, 124);
+            this.buttonReportFile.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonReportFile.Name = "buttonReportFile";
+            this.buttonReportFile.Size = new System.Drawing.Size(73, 28);
+            this.buttonReportFile.TabIndex = 8;
+            this.buttonReportFile.Text = "Report File";
+            this.buttonReportFile.UseVisualStyleBackColor = true;
+            this.buttonReportFile.Click += new System.EventHandler(this.buttonReportFile_Click);
             // 
             // buttonStopCmd
             // 
@@ -172,17 +198,17 @@
             this.labelAdressIPServer.TabIndex = 3;
             this.labelAdressIPServer.Text = "Adress : ";
             // 
-            // groupBoxCapture
+            // groupBoxOut
             // 
-            this.groupBoxCapture.Controls.Add(this.pictureBox1);
-            this.groupBoxCapture.Location = new System.Drawing.Point(144, 34);
-            this.groupBoxCapture.Margin = new System.Windows.Forms.Padding(2);
-            this.groupBoxCapture.Name = "groupBoxCapture";
-            this.groupBoxCapture.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBoxCapture.Size = new System.Drawing.Size(695, 468);
-            this.groupBoxCapture.TabIndex = 1;
-            this.groupBoxCapture.TabStop = false;
-            this.groupBoxCapture.Text = "Video Capture ";
+            this.groupBoxOut.Controls.Add(this.textBoxReportFile);
+            this.groupBoxOut.Controls.Add(this.pictureBox1);
+            this.groupBoxOut.Location = new System.Drawing.Point(144, 34);
+            this.groupBoxOut.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBoxOut.Name = "groupBoxOut";
+            this.groupBoxOut.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBoxOut.Size = new System.Drawing.Size(695, 468);
+            this.groupBoxOut.TabIndex = 1;
+            this.groupBoxOut.TabStop = false;
             // 
             // pictureBox1
             // 
@@ -293,29 +319,17 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // buttonReportFile
+            // textBoxReportFile
             // 
-            this.buttonReportFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonReportFile.Location = new System.Drawing.Point(5, 124);
-            this.buttonReportFile.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonReportFile.Name = "buttonReportFile";
-            this.buttonReportFile.Size = new System.Drawing.Size(73, 28);
-            this.buttonReportFile.TabIndex = 8;
-            this.buttonReportFile.Text = "Report File";
-            this.buttonReportFile.UseVisualStyleBackColor = true;
-            this.buttonReportFile.Click += new System.EventHandler(this.buttonReportFile_Click);
-            // 
-            // buttonVideo
-            // 
-            this.buttonVideo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonVideo.Location = new System.Drawing.Point(5, 92);
-            this.buttonVideo.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonVideo.Name = "buttonVideo";
-            this.buttonVideo.Size = new System.Drawing.Size(73, 28);
-            this.buttonVideo.TabIndex = 9;
-            this.buttonVideo.Text = "Video";
-            this.buttonVideo.UseVisualStyleBackColor = true;
-            this.buttonVideo.Click += new System.EventHandler(this.buttonVideo_Click);
+            this.textBoxReportFile.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.textBoxReportFile.Location = new System.Drawing.Point(21, 27);
+            this.textBoxReportFile.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxReportFile.Multiline = true;
+            this.textBoxReportFile.Name = "textBoxReportFile";
+            this.textBoxReportFile.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxReportFile.Size = new System.Drawing.Size(624, 436);
+            this.textBoxReportFile.TabIndex = 9;
+            this.textBoxReportFile.Visible = false;
             // 
             // H_SS
             // 
@@ -325,7 +339,7 @@
             this.Controls.Add(this.groupBoxInputs);
             this.Controls.Add(this.buttonSetting);
             this.Controls.Add(this.textBoxInfo);
-            this.Controls.Add(this.groupBoxCapture);
+            this.Controls.Add(this.groupBoxOut);
             this.Controls.Add(this.groupBoxConnection);
             this.Controls.Add(this.groupBoxControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -336,7 +350,8 @@
             this.groupBoxControl.ResumeLayout(false);
             this.groupBoxConnection.ResumeLayout(false);
             this.groupBoxConnection.PerformLayout();
-            this.groupBoxCapture.ResumeLayout(false);
+            this.groupBoxOut.ResumeLayout(false);
+            this.groupBoxOut.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBoxInputs.ResumeLayout(false);
             this.groupBoxInputs.PerformLayout();
@@ -353,7 +368,7 @@
         private System.Windows.Forms.Label labelPortServer;
         private System.Windows.Forms.Button LightStatusConnection;
         private System.Windows.Forms.Label labelAdressIPServer;
-        private System.Windows.Forms.GroupBox groupBoxCapture;
+        private System.Windows.Forms.GroupBox groupBoxOut;
         private System.Windows.Forms.TextBox textBoxInfo;
         private System.Windows.Forms.Button buttonSetting;
         private System.Windows.Forms.Button buttonPicture;
@@ -369,6 +384,7 @@
         private System.Windows.Forms.Label labelTemperature;
         private System.Windows.Forms.Button buttonVideo;
         private System.Windows.Forms.Button buttonReportFile;
+        private System.Windows.Forms.TextBox textBoxReportFile;
     }
 }
 
