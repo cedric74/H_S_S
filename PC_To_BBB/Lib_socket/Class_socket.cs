@@ -152,16 +152,15 @@ namespace Lib_socket
             return true;
         }
 
-        public bool Send_Bytes(byte bMessage)
+        public bool Send_Bytes(byte[] bMessage, int iLength)
         {
             try
             {
-                byte[] msg = new byte[2];
-                msg[0] = bMessage;
-                int bytesSend = clientSocket.Send(msg);
+                byte[] msg = new byte[iLength];
+                int bytesSend = clientSocket.Send(bMessage);
             }
 
-            catch (Exception exc)
+            catch (Exception )
             {
                 return false;
             }
@@ -185,7 +184,7 @@ namespace Lib_socket
                     iCount = clientSocket.Receive(bByte);
                 }
             }
-            catch (Exception exc)
+            catch (Exception )
             {
                 //MessageBox.Show(exc.ToString());
                 return 0;
