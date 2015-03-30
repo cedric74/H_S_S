@@ -49,6 +49,9 @@ namespace H_S_S
         // Path Pic Home
         const string PIC_HOME = "Pics/pic_home.jpg";
 
+        //Path Report file
+        string PATH_REPORT_FILE = "Report file.txt";
+
         // Label Test
         const string LABEL_ADRESS_SERVER    = "Adress : "; 
         const string LABEL_PORT_SERVER      = "Port   : ";
@@ -59,25 +62,19 @@ namespace H_S_S
         const string LABEL_Humidity         = "Humidity       : ";
 
         // Message Info
-        const string ERROR_CONNECTION = "Error Connection with BBB socket";
+        const string ERROR_CONNECTION       = "Error Connection with BBB socket";
         
         // Socket Data
         public const string IP_ADDRESS_DEFAULT  = "192.168.7.2";
         public const int IP_PORT_DEFAULT        = 51717;
         public const int IP_PORT_VIDEO          = 51222;
+        public const int IP_PORT_FILE           = 51223;
 
         // State Connection
         const bool CONNECTED    =   true;
         const bool DISCONNECTED = false;
 
-        // COMMAND
-        const int NO_CMD            = 0;
-        const int SOUND_CMD         = 1;
-        const int PICTURE_CMD       = 2;
-        const int DISCONNECT_CMD    = 3;
-        const int STOP_CMD          = 4;
-        const int VIDEO_CMD         = 5;
-        const int REPORT_FILE_CMD   = 6;
+
 
         // WAIT BEFORTE EACH READ INPUTS STATUS
         const int WAIT_MS_500       = 500; 
@@ -99,13 +96,13 @@ namespace H_S_S
         // Object
         Lib_socket.Class_socket sock;
         Lib_socket.Class_socket sockVideo = null;
+        Lib_socket.Class_socket sockFile  = null;
         Thread threadInputsStatus = null;
 
         // Variables 
         public string ipAdress;
         public int ipPort;
         InputsData sInputsData;
-
 		#endregion 
 
 		#region CONSTRUCTOR
@@ -164,6 +161,7 @@ namespace H_S_S
         {
             swithConnectionState();
         }
+        
         private void buttonSetting_Click(object sender, EventArgs e)
         {
             settingForm setFrom = new settingForm( ipAdress , ipPort);
@@ -174,6 +172,7 @@ namespace H_S_S
                 ipPort = setFrom.ipPort_return;
             }
         }
+        
         private void H_SS_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (bStateConnection == CONNECTED){
@@ -183,32 +182,50 @@ namespace H_S_S
             // XML Save
             xmlSaveFile();
         }
+        
         private void buttonSound_Click(object sender, EventArgs e)
         {
-            sock.Send_Bytes(SOUND_CMD);
+            CmdAppli cmd = new CmdAppli(CmdAppli.cmd.SOUND_CMD, 0);
+
+            // Send Cmd
+            sock.Send_Bytes(cmd.bMessage, cmd.bSize);
             printTextBoxInfo("Sent SOUND Command");
         }
+       
         private void buttonPicture_Click(object sender, EventArgs e)
         {
+          
+            // Send Command Picture
+            CmdAppli cmd = new CmdAppli(CmdAppli.cmd.PICTURE_CMD, 0);
+            sock.Send_Bytes(cmd.bMessage, cmd.bSize); 
+            printTextBoxInfo("Sent PICTURE Command");
+
             ReceivePic();
         }
 
         private void buttonVideo_Click(object sender, EventArgs e)
         {
-            sock.Send_Bytes(VIDEO_CMD);
+            CmdAppli cmd = new CmdAppli(CmdAppli.cmd.VIDEO_CMD, 0);
+            sock.Send_Bytes(cmd.bMessage, cmd.bSize);
             printTextBoxInfo("Sent VIDEO Command");
         }
 
         private void buttonReportFile_Click(object sender, EventArgs e)
         {
+            // Send Cmd
+            CmdAppli cmd = new CmdAppli(CmdAppli.cmd.REPORT_FILE_CMD, 0);
+            sock.Send_Bytes(cmd.bMessage, cmd.bSize);
+            printTextBoxInfo("Sent REPORT FILE Command");
             Report_FileFunction();
         }
 
         private void buttonStopCmd_Click(object sender, EventArgs e)
         {
-            sock.Send_Bytes(STOP_CMD);
+            CmdAppli cmd = new CmdAppli(CmdAppli.cmd.STOP_CMD, 0);
+            sock.Send_Bytes(cmd.bMessage, cmd.bSize);
             printTextBoxInfo("Sent STOP Command");
         }
+        
 
         #endregion
 
@@ -254,7 +271,8 @@ namespace H_S_S
                 threadInputsStatus.Abort();
 
                 // Send Stop Command
-                sock.Send_Bytes(DISCONNECT_CMD);
+                CmdAppli cmd = new CmdAppli(CmdAppli.cmd.DISCONNECT_CMD, 0);
+                sock.Send_Bytes(cmd.bMessage, cmd.bSize);
                 printTextBoxInfo("Sent DISCONNECT Command");
 
                 // Disable Timer 1
@@ -331,13 +349,11 @@ namespace H_S_S
             //Char.ConvertFromUtf32(bData[8]) + Char.ConvertFromUtf32(bData[9]) 
             //                                    + Char.ConvertFromUtf32(bData[10]) + Char.ConvertFromUtf32(bData[11])  + Char.ConvertFromUtf32(bData[12]) + " %";
         }
-             
-        private void ReceivePic(){
-       
-            // Send Command Picture
-            sock.Send_Bytes(PICTURE_CMD); 
-            printTextBoxInfo("Sent PICTURE Command");
 
+        #region FUNCTION SEND BUTTON
+        
+        private void ReceivePic(){
+        
             // Create Object socket Video if Not create 
             if (sockVideo == null)
             {           
@@ -384,22 +400,36 @@ namespace H_S_S
                 // Print jpg     
                 pictureBox1.ImageLocation = PIC_HOME;
                 pictureBox1.Location = new Point(21, 27);
+
+                // GroupBox
+                groupBoxOut.Text = "Picture Capture";
+
+                // Set TextBox to not Visibile
+                textBoxReportFile.Visible = false;
+                pictureBox1.Show();
         
         }
 
         private void Report_FileFunction(){
-            // Send Cmd
-            sock.Send_Bytes(REPORT_FILE_CMD);
-            printTextBoxInfo("Sent REPORT FILE Command");
+
+            // Remove the previous file
+            if (File.Exists(PATH_REPORT_FILE))
+            {
+                string outputMessage = string.Format("{0:HH_mm_ss tt}", DateTime.Now);
+                outputMessage = outputMessage + PATH_REPORT_FILE;
+                System.IO.File.Move(PATH_REPORT_FILE, outputMessage);
+            }
+            textBoxReportFile.Text = "";
 
             // Create Object socket Video if Not create 
-            if (sockVideo == null)
+            if (sockFile == null)
             {
-                sockVideo = new Class_socket(ipAdress, IP_PORT_VIDEO);
+                sockFile = new Class_socket(ipAdress, IP_PORT_FILE);
                 // Connection
-                if (sockVideo.Connect() == false)
+                if (sockFile.Connect() == false)
                 {
                     printTextBoxInfo(ERROR_CONNECTION);
+                    sockFile = null;
                     return;
                 }
             }
@@ -411,7 +441,7 @@ namespace H_S_S
             do
             {
                 byte[] buffer = new byte[50000];
-                iRecv = sockVideo.ReceiveDataFromServer(buffer);
+                iRecv = sockFile.ReceiveDataFromServer(buffer);
                 Array.Copy(buffer, 0, bFile, iSize, iRecv);
                 iSize += iRecv;
                 Thread.Sleep(250);
@@ -430,15 +460,51 @@ namespace H_S_S
             printTextBoxInfo("Received Report File, " + " Size :" + iSize.ToString("D") + " bits");
 
             // build Image From binary Value
-            FileStream fs = File.Create("Report file.txt");
-            fs.Write(bFile, 0, bFile.Length);
+            FileStream fs = File.Create(PATH_REPORT_FILE);
+            fs.Write(bFile, 0, iSize);
             fs.Close();
+                
+            // Print file 
+            if (File.Exists(PATH_REPORT_FILE))
+            {
+                FileStream fsReportFile = File.OpenRead(PATH_REPORT_FILE);
+                byte[] b = new byte[10000];
+                UTF8Encoding temp = new UTF8Encoding(true);  
+                string buffer="";
+                while (fsReportFile.Read(b, 0, b.Length) > 0)
+                {
+                    buffer = temp.GetString(b);
+                   
+                }
+                buffer = buffer.Replace("\n", System.Environment.NewLine);
+                textBoxReportFile.AppendText(buffer);
+              
+                //Close Read File
+                fsReportFile.Close();
 
+                // Set TextBox Visibile & Image Off
+                textBoxReportFile.Visible = true;
+                pictureBox1.Hide();
+
+                // GroupBox
+                groupBoxOut.Text = "Report File";
+
+                // Close socket
+                if (sockFile != null)
+                {
+                    sockFile.Disconnect();
+                    sockFile = null;
+                }
+
+            }else { 
+                // Problem
+            }    
         }
-
 
         #endregion
 
+
+        #endregion
 
         #region MY THREAD
 
