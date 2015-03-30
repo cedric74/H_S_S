@@ -64,9 +64,6 @@ int main(int argc, char *argv[])
  */
 void Init(){
 
-	// Wait to Let BBB Start
-	sleep(5);
-
 	// Start WatchDog
 	watch_dog_start();
 

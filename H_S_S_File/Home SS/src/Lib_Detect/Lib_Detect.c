@@ -128,7 +128,7 @@ void* Thread_Read_Input(){
 		
 		// Read Captor
 		Read_Captor(ptrCaptorMainDoor);
-		//Read_Captor(ptrCaptorBackDoor);
+		Read_Captor(ptrCaptorBackDoor);
 
 		// Read Interrupter
 		Read_Interrupter();
@@ -289,15 +289,13 @@ void Init_Lib_Detect(){
 	beh_BBB_gpio_conf_dir(CAPTOR_MAIN_DOOR, INPUT_PULL_UP_EN);	//INPUT_PULL_UP_EN
 
 	// Init Captor Back Door
-	/*
 	ptrCaptorBackDoor = &sCaptorBackDoor;
 	ptrCaptorBackDoor->ePinCaptor = CAPTOR_BACK_DOOR;
 	ptrCaptorBackDoor->icountDete = 0;
 	ptrCaptorBackDoor->stateCapt = STATE_NO_DETECTION ;
 	ptrCaptorBackDoor->sMessage = "BACK\n";
-	beh_BBB_gpio_conf_dir(CAPTOR_BACK_DOOR, OUTPUT);
 	beh_BBB_gpio_conf_dir(CAPTOR_BACK_DOOR, INPUT_PULL_UP_EN);	//INPUT_PULL_UP_EN
-*/
+
 	// Init Interrupter	Input
 	beh_BBB_gpio_conf_dir(INTER_ON_OFF, INPUT_PULL_UP_EN );  	//INPUT_PULL_UP_EN
 

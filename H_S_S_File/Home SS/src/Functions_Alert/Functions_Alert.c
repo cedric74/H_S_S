@@ -60,13 +60,13 @@ void * Thread_DailyReport(){
 void Send_Report_File_Log(){
 
     int iReturn = system("mpack -s \"Daily Report\" /home/debian/Desktop/dailyReportFile.txt cedric.toncanier@gmail.com");
-     if(iReturn == ERROR){
+    if(iReturn == ERROR){
     	 perror("Failed to invoke mpack");
-     }else{
-    	 system("rm /home/debian/Desktop/outfile.txt");
+    }else{
+    	system("rm /home/debian/Desktop/dailyReportFile.txt");
 
-    	 // Create File Log With Version
-    	 File_Log(START_FILE, SIZE_STRING);
+    	// Create File Log With Version
+    	File_Log(START_FILE, SIZE_STRING);
      }
 }
 
@@ -204,8 +204,11 @@ int send_Alert(int iSmsok){
  ============================================
  */
 int sendSMS(){
-    int iReturn = system("mpack -s \"Alerte Intrusion\" 5145749606@sms.fido.ca");
+    //int iReturn = system("mpack -s \"Alerte Intrusion\" 5145749606@sms.fido.ca");
 
+    //int iReturn = system("mail -s \"Alert Intrusion\" 5145749606@sms.fido.ca");
+
+    int iReturn = system("ssmtp -s \"Test Email\" 5145749606@sms.fido.ca"); //
     if(iReturn == ERROR){
    	 perror("Failed to invoke mpack");
     }
@@ -224,16 +227,16 @@ int sendSMS(){
  */
 int sendEmail()
 {
-     int iReturn = system("mpack -s \"Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
-    /* if(iReturn == ERROR){
+     int iReturn = system("mpack -s \"Alert Intrusion\"  /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
+     if(iReturn == ERROR){
     	 perror("Failed to invoke mpack");
-     }*/
+     }
 
-     iReturn = system("mpack -s \"Alerte Intrusion\" /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
+     iReturn = system("mpack -s \"Alert Intrusion\"  /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
 
-//     if(iReturn == ERROR){
-//    	 perror("Failed to invoke mpack");
-//     }
+     if(iReturn == ERROR){
+    	 perror("Failed to invoke mpack");
+     }
 
 
      return OK;

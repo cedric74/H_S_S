@@ -32,8 +32,8 @@
 /*******************************************
 *               D E F I N E                *			
 ********************************************/
-#define CAPTOR_MAIN_DOOR		P9_12
-#define CAPTOR_BACK_DOOR		P9_14
+#define CAPTOR_MAIN_DOOR		P9_14
+#define CAPTOR_BACK_DOOR		P9_12
 #define INTER_ON_OFF			P9_13
 
 
@@ -54,8 +54,8 @@
 #define OFF_INTERRUPT		1
 #define ON_INTERRUPT		0
 
-#define DELAYS_TO_DISABLE	5		// 30 Sec
-#define DELAYS_TO_ENABLE	10		// TEST	//(60*2)	// 2 MIN
+#define DELAYS_TO_DISABLE	30		// 30 Sec
+#define DELAYS_TO_ENABLE	(60*2)		// TEST	//(60*2)	// 2 MIN
 
 #define SIZE_MESS_CAPTOR	4
 

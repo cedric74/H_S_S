@@ -115,8 +115,13 @@ void Thread_State_Machine(){
 		close_socket(socketData, newSockData);
 
 		// Close socket video
-		close_socket(socketVideo, newSockVideo);
-		bVideo = 0;
+		if(bVideo == VIDEO_OK){
+			close_socket(socketVideo, newSockVideo);
+			bVideo = 0;
+		}
+
+		// Sleep
+		sleep(3);
 
 		printf("\n\n ******* End Socket ******* \n\n");
 
@@ -154,21 +159,8 @@ unsigned char state_machine(void){
 				bVideo = VIDEO_OK;
 			}
 
-
-			#ifdef DEBUG
-				printf("DEBUG: Send Picture\n");
-				send_binary(newSockVideo, "/home/debian/Desktop/Intrusion.jpeg");
-				//sleep(10);
-			#else
-				Take_Picture();
-				send_binary(newSockData, "/home/debian/Desktop/Intrusion.jpeg");
-				iStopthread = STOP_THREAD;
-				sleep(10);
-
-				// Restart Thread Send Inputs Status
-				StartThread_Send_Data();
-			#endif
-
+			Take_Picture();
+			send_binary(newSockVideo, "/home/debian/Desktop/Intrusion.jpeg");
 
 		break;
 
