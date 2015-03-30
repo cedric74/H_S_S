@@ -24,8 +24,10 @@
 *               D E F I N E                *			
 ********************************************/
 #define PORT_NUM	51717
-
 #define	PORT_VIDEO  51222
+#define PORT_FILE	51223
+
+#define ERROR_SOCKET	-1
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *			
 ********************************************/
@@ -40,8 +42,8 @@
 ********************************************/
 int 			create_Socket(int iPort);
 int 			accept_client_connection(int sockfd);
-void 			write_socket(int  newsockfd, char * sMessage, int iSize);
-unsigned char 	read_socket(int  newsockfd);
+int 			write_socket(int  newsockfd, char * sMessage, int iSize);
+int 			read_socket(int newsockfd, int iLength , unsigned char * bData);
 void 			send_binary(int  newsockfd, char *file_name);
 
 void 			close_socket(int sockfd, int newsockfd);

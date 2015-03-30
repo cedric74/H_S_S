@@ -14,6 +14,7 @@
 *               D E F I N E                *
 ********************************************/
 #define SLEEP_100_MS			100000
+#define SLEEP_10_MS				10000
 
 #define STOP_THREAD				1
 
@@ -28,7 +29,7 @@
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
-unsigned char 	u8Command 			= NO_CMD;
+cmdApplication 	u8Command 			= NO_CMD;
 int 			ret_thread 			= 0;
 int 			thread_Send_Data 	= 0;
 int 			iStopthread         = 0;
@@ -78,7 +79,7 @@ void Thread_State_Machine(){
 	pthread_t threadId_ReadCommand;
 
 	do{
-		printf(" ******* Start Socket ******* \n\n");
+		///printf(" ******* Start Socket ******* \n\n");
 		// Create Socket Server
 		socketData 	= create_Socket(PORT_NUM);
 		newSockData = accept_client_connection(socketData);
@@ -119,11 +120,7 @@ void Thread_State_Machine(){
 			close_socket(socketVideo, newSockVideo);
 			bVideo = 0;
 		}
-
-		// Sleep
-		sleep(3);
-
-		printf("\n\n ******* End Socket ******* \n\n");
+		//printf("\n\n ******* End Main Socket ******* \n\n");
 
 		// Clear Stop Command
 		iStopCommand = 0;
@@ -147,28 +144,44 @@ unsigned char state_machine(void){
 		case SOUND_CMD:
 			printf( " SOUND CMD \n");
 			Start_Siren();
-
 		break;
 
-		case VIDEO_CMD:
-			printf( " VIDEO CMD \n");
+		case PICTURE_CMD:
+			printf( " PICTURE CMD \n");
 			if(bVideo != VIDEO_OK){
 				// Socket not yet Create
-				socketVideo 	= create_Socket(PORT_VIDEO);			//PORT_NUM
+				socketVideo 	= create_Socket(PORT_VIDEO);
 				newSockVideo = accept_client_connection(socketVideo);
 				bVideo = VIDEO_OK;
 			}
 
-			Take_Picture();
+			//Take_Picture(); FOR DEBUG
 			send_binary(newSockVideo, "/home/debian/Desktop/Intrusion.jpeg");
+		break;
+
+		case VIDEO_CMD:
+			printf( " VIDEO CMD \n");
 
 		break;
 
-		case DISCONN_CMD:
+		case REPORT_FILE_CMD:
+			printf( " REPORT FILE CMD \n");
+			Report_File_To_Supervisor();
+		break;
+
+		case TEST_CAPTOR:
+
+		break;
+
+		case DISCONNECT_CMD:
 			printf( " DISCONNECT CMD \n");
 			iStopCommand = 1;
-			//return STOP_CMD;
 		break ;
+
+		case STOP_CMD:
+			break ;
+		default :
+			break;
 	}
 
 	// Clear Command
@@ -186,11 +199,19 @@ unsigned char state_machine(void){
  ============================================
  */
 void* Thread_Read_Command(){
-	printf(" ******* Start Thread_Read_Command ******* \n");
-	while(u8Command != DISCONN_CMD){
-		u8Command = read_socket(newSockData);
+
+
+	//printf(" ******* Start Thread_Read_Command ******* \n");
+	while(u8Command != DISCONNECT_CMD){
+		unsigned char bData[SIZE_CMD_MESSAGE]= {0};
+		int n =read_socket(newSockData , SIZE_CMD_MESSAGE, bData);
+		if(n == SIZE_CMD_MESSAGE){
+			u8Command = libcom_cmdAppli(bData);
+		}
+		// Sleep
+		usleep(SLEEP_10_MS)	;
 	}
-	printf(" ******* End Thread_Read_Command ******* \n");
+	//printf(" ******* End Thread_Read_Command ******* \n");
 
 	pthread_exit(&ret_thread);
 
@@ -240,7 +261,7 @@ void* Thread_Send_Data_PC(){
  */
 void StopThread_Send_Data()
 {
-	printf(" Stop thread Send Data \n");
+	//printf(" Stop thread Send Data \n");
 	//  Stop Thread Send Data
 	pthread_exit(&thread_Send_Data);
 
@@ -256,7 +277,7 @@ void StopThread_Send_Data()
  */
 void StartThread_Send_Data()
 {
-	printf(" Start thread Send Data \n");
+	//printf(" Start thread Send Data \n");
 	// Thread Execute Send Data
 	pthread_create (&thread_Send_Data, NULL, &Thread_Send_Data_PC, NULL);
 

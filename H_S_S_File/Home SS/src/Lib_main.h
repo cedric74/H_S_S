@@ -28,8 +28,8 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Version 1.9, 26 march, "
-#define SIZE_STRING			23
+#define START_FILE			"Version 1.10, 30 march, "
+#define SIZE_STRING			24
 
 #define DEBUG				1
 

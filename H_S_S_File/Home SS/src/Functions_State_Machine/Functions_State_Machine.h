@@ -32,11 +32,6 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define NO_CMD		0
-#define SOUND_CMD	1
-#define VIDEO_CMD	2
-#define DISCONN_CMD	3
-//#define STOP_CMD	4
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *

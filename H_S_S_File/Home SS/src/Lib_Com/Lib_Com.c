@@ -25,6 +25,14 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+/*
+ ============================================
+ Function     : libcom_InputStatus()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
 void libcom_InputStatus(strInputStatus * ptr, unsigned char captor1, unsigned char captor2, unsigned char interrupter, float fTemp,float fHum){
 
 	ptr->bType = INPUTS_STATUS;
@@ -43,16 +51,29 @@ void libcom_InputStatus(strInputStatus * ptr, unsigned char captor1, unsigned ch
 
 }
 
-
 /*
  ============================================
- Function     : libcom_ChkSum()
+ Function     : libcom_cmdAppli()
  Parameter    :
  Return Value : void
  Description  :
  ============================================
  */
-void libcom_ChkSum(){
+cmdApplication 	libcom_cmdAppli(unsigned char  * cmd){
+	strCmdAppli  CmdAppli;
+	CmdAppli.bType		= cmd[0];
+	CmdAppli.bTypeCmd	= cmd[1];
+	CmdAppli.bParam		= cmd[2];
+	CmdAppli.bsize		= cmd[3];
+	CmdAppli.bChecksum	= cmd[4];
 
+	if(CmdAppli.bType == CMD_APPLI){
+		// check if Chksum ok
+		unsigned char bchksum = CmdAppli.bType+ CmdAppli.bTypeCmd+ CmdAppli.bParam + CmdAppli.bsize ;
+		if(bchksum == CmdAppli.bChecksum){
+			return CmdAppli.bTypeCmd;
+		}
+	}
 
+	return NO_CMD;
 }

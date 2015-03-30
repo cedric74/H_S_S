@@ -24,8 +24,9 @@
 #include <stddef.h>
 #include <pthread.h>
 
-
 #include "../Lib_main.h"
+#include "../Lib_socket/Lib_socket.h"
+
 /*******************************************
 *               D E F I N E                *
 ********************************************/
@@ -53,6 +54,7 @@ pthread_t 	thread_id_Daily;
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+void 	Report_File_To_Supervisor();
 void * 	Thread_DailyReport();
 void 	Send_Report_File_Log();
 void 	File_Log(char * string, int iLength);

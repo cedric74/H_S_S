@@ -28,6 +28,21 @@ const char * dailyReportFile = "/home/debian/Desktop/dailyReportFile.txt";
 ********************************************/
 /*
  ============================================
+ Function     : Report_File_To_Supervisor()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void Report_File_To_Supervisor(){
+	int socketFile 	= create_Socket(PORT_FILE);
+	int newSockFile = accept_client_connection(socketFile);
+	send_binary(newSockFile, dailyReportFile);
+	close_socket(socketFile, newSockFile);
+}
+
+/*
+ ============================================
  Function     : Thread_DailyReport()
  Parameter    :
  Return Value : void
@@ -88,7 +103,6 @@ void File_Log(char string[50], int iLength){
 
 	 time ( &rawtime );
 	 timeinfo = localtime ( &rawtime );
-
 	fwrite(string , 1 , iLength , fpLog );
 	fwrite(asctime (timeinfo) , 1 , 25 , fpLog );
 
@@ -152,7 +166,7 @@ int Connection_OK(){
 
 /*
  ============================================
- Function     : send_Alerte()
+ Function     : send_Alert()
  Parameter    : int iSmsok
  Return Value : int
  Description  :
@@ -204,15 +218,10 @@ int send_Alert(int iSmsok){
  ============================================
  */
 int sendSMS(){
-    //int iReturn = system("mpack -s \"Alerte Intrusion\" 5145749606@sms.fido.ca");
-
-    //int iReturn = system("mail -s \"Alert Intrusion\" 5145749606@sms.fido.ca");
-
     int iReturn = system("ssmtp -s \"Test Email\" 5145749606@sms.fido.ca"); //
     if(iReturn == ERROR){
    	 perror("Failed to invoke mpack");
     }
-
     return OK;
 }
 
@@ -237,7 +246,6 @@ int sendEmail()
      if(iReturn == ERROR){
     	 perror("Failed to invoke mpack");
      }
-
 
      return OK;
 }

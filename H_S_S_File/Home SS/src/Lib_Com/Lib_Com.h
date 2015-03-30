@@ -20,11 +20,26 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
+#define SIZE_CMD_MESSAGE	5
+
+/*******************************************
+*   T Y P E D E F   &  C O N S T A N T E   *
+********************************************/
 typedef enum{
 	CMD_APPLI		= 0 ,
 	INPUTS_STATUS	= 1 ,
 }enumTypeMess;
 
+typedef enum{
+    NO_CMD            = 0,
+    SOUND_CMD         = 1,
+    PICTURE_CMD       = 2,
+    VIDEO_CMD         = 3,
+    REPORT_FILE_CMD   = 4,
+    TEST_CAPTOR       = 5,
+    DISCONNECT_CMD    = 6,
+    STOP_CMD          = 7,
+}cmdApplication;
 
 
 typedef struct{
@@ -39,18 +54,11 @@ typedef struct{
 
 typedef struct{
 	enumTypeMess  	bType;
-	unsigned char 	bSubType;
+	cmdApplication 	bTypeCmd;
 	unsigned char 	bParam;
 	unsigned char   bsize;
 	unsigned char 	bChecksum;
 }strCmdAppli;
-
-
-
-
-/*******************************************
-*   T Y P E D E F   &  C O N S T A N T E   *
-********************************************/
 
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
@@ -59,9 +67,7 @@ typedef struct{
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-void libcom_InputStatus(strInputStatus * ptr, unsigned char captor1, unsigned char captor2, unsigned char interrupter, float fTemp,float fHum);
-void libcom_NewMessage();
-void libcom_ChkSum();
-
+void 			libcom_InputStatus(strInputStatus * ptr, unsigned char captor1, unsigned char captor2, unsigned char interrupter, float fTemp,float fHum);
+cmdApplication 	libcom_cmdAppli(unsigned char  * cmd);
 
 #endif /* SRC_LIB_COM_LIB_COM_H_ */
