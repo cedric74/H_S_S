@@ -76,6 +76,8 @@ namespace H_S_S
         const int PICTURE_CMD       = 2;
         const int DISCONNECT_CMD    = 3;
         const int STOP_CMD          = 4;
+        const int VIDEO_CMD         = 5;
+        const int REPORT_FILE_CMD   = 6;
 
         // WAIT BEFORTE EACH READ INPUTS STATUS
         const int WAIT_MS_500       = 500; 
@@ -190,6 +192,18 @@ namespace H_S_S
         {
             ReceivePic();
         }
+
+        private void buttonVideo_Click(object sender, EventArgs e)
+        {
+            sock.Send_Bytes(VIDEO_CMD);
+            printTextBoxInfo("Sent VIDEO Command");
+        }
+
+        private void buttonReportFile_Click(object sender, EventArgs e)
+        {
+            Report_FileFunction();
+        }
+
         private void buttonStopCmd_Click(object sender, EventArgs e)
         {
             sock.Send_Bytes(STOP_CMD);
@@ -248,7 +262,11 @@ namespace H_S_S
                 
                 // Close Connection
                 sock.Disconnect();
-                sockVideo.Disconnect();
+                if (sockVideo != null)
+                {
+                    sockVideo.Disconnect();
+                }
+                
 
                 // Change the Connection State
                 bStateConnection = DISCONNECTED;
@@ -320,10 +338,6 @@ namespace H_S_S
             sock.Send_Bytes(PICTURE_CMD); 
             printTextBoxInfo("Sent PICTURE Command");
 
-            // Launch thread Read Inputs Status & In tick timer to print data
-            //Launch_thread();
-            //timer1.Enabled = true;
-
             // Create Object socket Video if Not create 
             if (sockVideo == null)
             {           
@@ -336,7 +350,6 @@ namespace H_S_S
                 }
             }
                     
-            #region **** TEST ******
             byte[] bPicture = new byte[50000];
                 
                 // Waiting for The pic
@@ -371,10 +384,59 @@ namespace H_S_S
                 // Print jpg     
                 pictureBox1.ImageLocation = PIC_HOME;
                 pictureBox1.Location = new Point(21, 27);
-           
-            #endregion
-        }
         
+        }
+
+        private void Report_FileFunction(){
+            // Send Cmd
+            sock.Send_Bytes(REPORT_FILE_CMD);
+            printTextBoxInfo("Sent REPORT FILE Command");
+
+            // Create Object socket Video if Not create 
+            if (sockVideo == null)
+            {
+                sockVideo = new Class_socket(ipAdress, IP_PORT_VIDEO);
+                // Connection
+                if (sockVideo.Connect() == false)
+                {
+                    printTextBoxInfo(ERROR_CONNECTION);
+                    return;
+                }
+            }
+            // Waiting for The pic
+            int iRecv = 0;
+            int icount = 0;
+            int iSize = 0;
+            byte[] bFile = new byte[50000];
+            do
+            {
+                byte[] buffer = new byte[50000];
+                iRecv = sockVideo.ReceiveDataFromServer(buffer);
+                Array.Copy(buffer, 0, bFile, iSize, iRecv);
+                iSize += iRecv;
+                Thread.Sleep(250);
+
+                // TimeOut 10s
+                if (iRecv == 0)
+                {
+                    icount++;
+                    if (icount > 50)
+                    {
+                        printTextBoxInfo("Error to Receive Report File");
+                        return;
+                    }
+                }
+            } while ((iRecv != 0) || (iSize < 10)); // 21243
+            printTextBoxInfo("Received Report File, " + " Size :" + iSize.ToString("D") + " bits");
+
+            // build Image From binary Value
+            FileStream fs = File.Create("Report file.txt");
+            fs.Write(bFile, 0, bFile.Length);
+            fs.Close();
+
+        }
+
+
         #endregion
 
 
@@ -481,6 +543,7 @@ namespace H_S_S
         }
 
         #endregion
+
 
     }
 }

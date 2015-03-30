@@ -49,6 +49,8 @@
             this.labelCaptor_2 = new System.Windows.Forms.Label();
             this.labelCaptor_1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.buttonReportFile = new System.Windows.Forms.Button();
+            this.buttonVideo = new System.Windows.Forms.Button();
             this.groupBoxControl.SuspendLayout();
             this.groupBoxConnection.SuspendLayout();
             this.groupBoxCapture.SuspendLayout();
@@ -58,6 +60,8 @@
             // 
             // groupBoxControl
             // 
+            this.groupBoxControl.Controls.Add(this.buttonVideo);
+            this.groupBoxControl.Controls.Add(this.buttonReportFile);
             this.groupBoxControl.Controls.Add(this.buttonStopCmd);
             this.groupBoxControl.Controls.Add(this.buttonPicture);
             this.groupBoxControl.Controls.Add(this.buttonSound);
@@ -75,7 +79,7 @@
             // 
             this.buttonStopCmd.Enabled = false;
             this.buttonStopCmd.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStopCmd.Location = new System.Drawing.Point(4, 93);
+            this.buttonStopCmd.Location = new System.Drawing.Point(5, 156);
             this.buttonStopCmd.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStopCmd.Name = "buttonStopCmd";
             this.buttonStopCmd.Size = new System.Drawing.Size(73, 28);
@@ -289,6 +293,30 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // buttonReportFile
+            // 
+            this.buttonReportFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonReportFile.Location = new System.Drawing.Point(5, 124);
+            this.buttonReportFile.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonReportFile.Name = "buttonReportFile";
+            this.buttonReportFile.Size = new System.Drawing.Size(73, 28);
+            this.buttonReportFile.TabIndex = 8;
+            this.buttonReportFile.Text = "Report File";
+            this.buttonReportFile.UseVisualStyleBackColor = true;
+            this.buttonReportFile.Click += new System.EventHandler(this.buttonReportFile_Click);
+            // 
+            // buttonVideo
+            // 
+            this.buttonVideo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonVideo.Location = new System.Drawing.Point(5, 92);
+            this.buttonVideo.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonVideo.Name = "buttonVideo";
+            this.buttonVideo.Size = new System.Drawing.Size(73, 28);
+            this.buttonVideo.TabIndex = 9;
+            this.buttonVideo.Text = "Video";
+            this.buttonVideo.UseVisualStyleBackColor = true;
+            this.buttonVideo.Click += new System.EventHandler(this.buttonVideo_Click);
+            // 
             // H_SS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -339,6 +367,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label labelHumidity;
         private System.Windows.Forms.Label labelTemperature;
+        private System.Windows.Forms.Button buttonVideo;
+        private System.Windows.Forms.Button buttonReportFile;
     }
 }
 
