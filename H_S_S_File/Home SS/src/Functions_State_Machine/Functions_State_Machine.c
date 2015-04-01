@@ -155,7 +155,7 @@ unsigned char state_machine(void){
 				bVideo = VIDEO_OK;
 			}
 
-			//Take_Picture(); FOR DEBUG
+			Take_Picture();
 			send_binary(newSockVideo, "/home/debian/Desktop/Intrusion.jpeg");
 		break;
 

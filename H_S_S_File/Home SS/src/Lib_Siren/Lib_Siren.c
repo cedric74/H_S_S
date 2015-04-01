@@ -13,7 +13,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define TIME_SIREN		20		// In Second
+#define TIME_SIREN		(60*5)		// In Second
 
 #define TIME_WARNING	500
 #define FREQ_BUZZER		100   	// In us , Pas mal 1000 , trop 50000
