@@ -54,6 +54,24 @@ void Init_State_Machine(){
  */
 void * Thread_State_Machine(){
 
+	int i;
+	int iCount = 400000;
+
+	Lib_Servo_Control_Pwm(PERIOD_20_MS, iCount );
+
+	for( i = 0; iCount < 2400000 ; i++){
+		iCount+= 50000;
+		Lib_Servo_Control_Pwm(PERIOD_20_MS, iCount );
+		//sleep(1);
+		usleep(500000);
+	}
+
+	for( i = 0; iCount >= 400000 ; i++){
+		iCount-= 50000;
+		Lib_Servo_Control_Pwm(PERIOD_20_MS, iCount );
+		usleep(500000);
+	}
+
 	do{
 
 		// State Machine
