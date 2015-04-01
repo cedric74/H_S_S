@@ -34,41 +34,36 @@
  Description  :
  ============================================
  */
-int Lib_Servo_Control_Pwm(int iPeriod, int iDuty )
+void Lib_Servo_Sonar_Control(eServo_Sonar_Rotate valueRotate) // Create a typedef Enum
 {
-	// Declaration Variables
-	int fd;
-	char buffer[BUFFER_SIZE];
+	switch(valueRotate){
+		case CENTER :
+			Lib_pwm_control(PERIOD_20_MS, SERVO_CENTER);
+			iCurrentPosSonar = SERVO_CENTER;
+		break;
+		case FULL_LEFT:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_FULL_LEFT);
+			iCurrentPosSonar = SERVO_FULL_LEFT;
+		break;
+		case FULL_RIGHT:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_FULL_RIGHT);
+			iCurrentPosSonar = SERVO_FULL_RIGHT;
+			break;
+		case STEP_RIGHT:
+			if(iCurrentPosSonar < SERVO_FULL_RIGHT){
+				iCurrentPosSonar += SERVO_STEP;
+				Lib_pwm_control(PERIOD_20_MS, iCurrentPosSonar);
+			}
 
-	// Instructions
-	snprintf(buffer, BUFFER_SIZE, PATH_PERIOD);
-	fd = open(buffer, O_WRONLY);
-	if (fd < 0) {
-		printf("\n ERROR \n");
-		return ERROR_PWM_OPEN;
+			break;
+		case STEP_LEFT:
+			if(iCurrentPosSonar > SERVO_FULL_LEFT){
+				iCurrentPosSonar -= SERVO_STEP;
+				Lib_pwm_control(PERIOD_20_MS, iCurrentPosSonar);
+			}
+
+		break;
 	}
-
-	sprintf(buffer, "%d", iPeriod);
-	printf("iPeriod : %s, ", buffer);
-	write(fd, buffer, BUFFER_SIZE);
-
-	// Close descriptor File
-	close (fd);
-
-	snprintf(buffer, BUFFER_SIZE, PATH_DUTY);
-	fd = open(buffer, O_WRONLY);
-	if (fd < 0) {
-		printf("\n ERROR \n");
-		return ERROR_PWM_OPEN;
-	}
-	sprintf(buffer, "%d", iDuty);
-	printf("duty : %s\n", buffer);
-	write(fd, buffer, BUFFER_SIZE);
-
-	// Close descriptor File
-	close (fd);
-
-	return NO_ERROR_PWM;
 }
 /*
  ============================================
@@ -79,4 +74,7 @@ int Lib_Servo_Control_Pwm(int iPeriod, int iDuty )
  ============================================
  */
 void Lib_Servo_init(){
+
+	Lib_pwm_control(PERIOD_20_MS, SERVO_CENTER);
+	iCurrentPosSonar = SERVO_CENTER;
 }

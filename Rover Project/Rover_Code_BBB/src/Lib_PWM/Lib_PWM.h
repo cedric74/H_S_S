@@ -11,12 +11,32 @@
 /*******************************************
 *			  I N C L U D E 			   *
 ********************************************/
-#include 	"../Lib_Gpio/beh_BBB_gpio.h"
 
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define SONAR_PIN	P9_16
+/*******************************************
+*			  I N C L U D E 			   *
+********************************************/
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include "../Lib_Gpio/beh_BBB_gpio.h"
+
+/*******************************************
+*               D E F I N E                *
+********************************************/
+#define 	BUFFER_SIZE 	128
+#define 	PATH_PERIOD  	"/sys/devices/ocp.3/pwm_test_P9_14.12/period"
+#define 	PATH_DUTY    	"/sys/devices/ocp.3/pwm_test_P9_14.12/duty"
+#define     PATH_RUN		"/sys/devices/ocp.3/pwm_test_P9_14.12/run"
+
+#define 	NO_ERROR_PWM	 0
+#define 	ERROR_PWM_OPEN	-1
+#define 	ERROR_PWM_WRITE	-2
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -29,8 +49,7 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-void Lib_Sonar_Init();
-void Lib_Sonar_Ping();
-
+int Lib_pwm_control(int iPeriod, int iDuty );
+int Lib_pwm_stop();
 
 #endif /* LIB_SONSAR_H_ */

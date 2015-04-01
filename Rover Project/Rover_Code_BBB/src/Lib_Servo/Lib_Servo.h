@@ -12,34 +12,42 @@
 *			  I N C L U D E 			   *
 ********************************************/
 #include "../Lib_Gpio/beh_BBB_gpio.h"
+#include "../Lib_PWM/Lib_PWM.h"
 
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define 	BUFFER_SIZE 	128
-#define 	SERVO_SONAR		P9_14
+#define 	SERVO_SONAR			P9_14
+#define		PERIOD_20_MS		20000000
 
-#define 	PATH_PERIOD  "/sys/devices/ocp.3/pwm_test_P9_14.12/period"
-#define 	PATH_DUTY    "/sys/devices/ocp.3/pwm_test_P9_14.12/duty"
+// duty Value for Servo Sonar
+#define     SERVO_CENTER		1000000
+#define    	SERVO_FULL_LEFT		400000
+#define    	SERVO_FULL_RIGHT	2400000
+#define		SERVO_STEP			50000
 
-#define 	NO_ERROR_PWM	 0
-#define 	ERROR_PWM_OPEN	-1
-#define 	ERROR_PWM_WRITE	-2
-
-#define		PERIOD_20_MS	20000000
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
+typedef enum{
+	CENTER 		= 0,
+	FULL_LEFT 	= 1,
+	FULL_RIGHT 	= 2,
+	STEP_RIGHT	= 3,
+	STEP_LEFT	= 4,
+}eServo_Sonar_Rotate;
+
 
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
+int iCurrentPosSonar;
 
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-int 	Lib_Servo_Control_Pwm(int iPeriod, int iDuty);
+void 	Lib_Servo_Sonar_Control(eServo_Sonar_Rotate);
 void 	Lib_Servo_init();
 
 #endif /* LIB_MOTOR_H_ */

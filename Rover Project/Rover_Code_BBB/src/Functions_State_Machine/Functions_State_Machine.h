@@ -15,6 +15,7 @@
 
 #include 	"../Lib_Gpio/beh_BBB_gpio.h"
 #include	"../Lib_Servo/Lib_Servo.h"
+#include 	"../Lib_Sonar/Lib_Sonar.h"
 
 /*******************************************
 *               D E F I N E                *
