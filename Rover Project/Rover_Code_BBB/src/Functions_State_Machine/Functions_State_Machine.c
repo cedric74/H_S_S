@@ -54,36 +54,29 @@ void Init_State_Machine(){
  */
 void * Thread_State_Machine(){
 
+
 	//  ------  -------- ---- DEBUG TEST SERVO MOTEUR PWM
-/*	int i;
-	int iCount = 400000;
+	Lib_pwm_start();
+	Lib_Servo_Sonar_Control(CENTER);
+	//sleep(5);
+	printf(" Start  Test\n");
+	Lib_Servo_Sonar_Control(FULL_LEFT);
 
-	Lib_Servo_Sonar_Control(PERIOD_20_MS, iCount );
-
-	for( i = 0; iCount < 2400000 ; i++){
-		iCount+= 50000;
-		Lib_Servo_Sonar_Control(PERIOD_20_MS, iCount );
-		//sleep(1);
-		usleep(500000);
-	}
-
-	for( i = 0; iCount >= 400000 ; i++){
-		iCount-= 50000;
-		Lib_Servo_Sonar_Control(PERIOD_20_MS, iCount );
-		usleep(500000);
-	}*/
+	sleep(1);
+	Lib_Servo_Sonar_Control(FULL_RIGHT);
+	sleep(1);
+	Lib_Servo_Sonar_Control(CENTER);
+	sleep(1);
+	Lib_Servo_Sonar_Control(FULL_LEFT);
+	sleep(2);
+	Lib_Servo_Sonar_Control(FULL_RIGHT);
+	sleep(1);
+	Lib_Servo_Sonar_Control(CENTER);
+	printf(" End Test\n");
+	Lib_pwm_stop();
 	//------------------------ DEBUG TEST SONAR PING
 	//Lib_Sonar_Ping();
-	 sleep(5);
-	printf(" Start  Test\n");
-	 Lib_Servo_Sonar_Control(CENTER);
 
-	 sleep(5);
-
-	 Lib_Servo_Sonar_Control(FULL_LEFT);
-	 sleep(5);
-
-	 printf(" End Test\n");
 
 	do{
 

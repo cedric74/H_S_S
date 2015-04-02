@@ -21,7 +21,7 @@
 #define		PERIOD_20_MS		20000000
 
 // duty Value for Servo Sonar
-#define     SERVO_CENTER		1000000
+#define     SERVO_CENTER		1400000
 #define    	SERVO_FULL_LEFT		400000
 #define    	SERVO_FULL_RIGHT	2400000
 #define		SERVO_STEP			50000

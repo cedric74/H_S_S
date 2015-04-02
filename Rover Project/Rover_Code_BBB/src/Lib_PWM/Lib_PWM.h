@@ -30,9 +30,9 @@
 *               D E F I N E                *
 ********************************************/
 #define 	BUFFER_SIZE 	128
-#define 	PATH_PERIOD  	"/sys/devices/ocp.3/pwm_test_P9_14.12/period"
-#define 	PATH_DUTY    	"/sys/devices/ocp.3/pwm_test_P9_14.12/duty"
-#define     PATH_RUN		"/sys/devices/ocp.3/pwm_test_P9_14.12/run"
+#define 	PATH_PERIOD  	"/sys/devices/ocp.3/pwm_test_P9_14.11/period"
+#define 	PATH_DUTY    	"/sys/devices/ocp.3/pwm_test_P9_14.11/duty"
+#define     PATH_RUN		"/sys/devices/ocp.3/pwm_test_P9_14.11/run"
 
 #define 	NO_ERROR_PWM	 0
 #define 	ERROR_PWM_OPEN	-1
@@ -51,5 +51,6 @@
 ********************************************/
 int Lib_pwm_control(int iPeriod, int iDuty );
 int Lib_pwm_stop();
+int Lib_pwm_start();
 
 #endif /* LIB_SONSAR_H_ */
