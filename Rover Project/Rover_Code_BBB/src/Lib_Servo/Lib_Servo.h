@@ -5,8 +5,8 @@
  *      Author: cedric
  */
 
-#ifndef LIB_MOTOR_H_
-#define LIB_MOTOR_H_
+#ifndef LIB_SERVO_H_
+#define LIB_SERVO_H_
 
 /*******************************************
 *			  I N C L U D E 			   *
@@ -50,4 +50,4 @@ int iCurrentPosSonar;
 void 	Lib_Servo_Sonar_Control(eServo_Sonar_Rotate);
 void 	Lib_Servo_init();
 
-#endif /* LIB_MOTOR_H_ */
+#endif /* LIB_SERVO_H_ */

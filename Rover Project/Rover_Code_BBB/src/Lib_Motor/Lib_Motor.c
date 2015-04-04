@@ -25,18 +25,118 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-
 /*
  ============================================
- Function     : Lib_Motor_init()
+ Function     : Lib_motor_control()
  Parameter    :
  Return Value : void
  Description  :
  ============================================
  */
-void Lib_Motor_init(){
+void Lib_motor_control(eCtrlDirection direction){
+	eCmdMotor cmdMotorLeft = tabCtrlDirection[direction][MOTOR_LEFT];
+	drv_motor_ctrl(cmdMotorLeft, MOTOR_LEFT);
 
-	// Init Siren Ouput
-	//beh_BBB_gpio_conf_dir(MOTOR_CAMERA, OUTPUT);
+	eCmdMotor cmdMotorRight = tabCtrlDirection[direction][MOTOR_RIGHT];
+	drv_motor_ctrl(cmdMotorRight, MOTOR_RIGHT);
 
+}
+
+/*
+ ============================================
+ Function     : Lib_motor_init()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void Lib_motor_init(){
+
+	// Init Motor LEFT
+	drv_motor_init(MOTOR_LEFT);
+	drv_motor_stop(MOTOR_LEFT);
+
+	// Init Motor RIGHT
+	drv_motor_init(MOTOR_RIGHT);
+	drv_motor_stop(MOTOR_RIGHT);
+}
+
+/*
+ ============================================
+ Function     : drv_motor_init()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void drv_motor_ctrl(eCmdMotor cmd, eMotor Motor){
+	switch(cmd){
+		case  FRONT:
+			printf(" FRONT , Motor %d \n", Motor);
+			drv_motor_front(Motor);
+		break;
+		case  REAR:
+			printf(" REAR , Motor %d \n", Motor);
+			drv_motor_rear(Motor);
+		break;
+		case  STOP:
+			printf(" STOP , Motor %d \n", Motor);
+			drv_motor_stop(Motor);
+		break;
+
+	}
+}
+/*
+ ============================================
+ Function     : drv_motor_init()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void drv_motor_init(eMotor Motor){
+	beh_BBB_gpio_conf_dir(tabMotorPin[Motor][InA], OUTPUT);
+	beh_BBB_gpio_conf_dir(tabMotorPin[Motor][InB], OUTPUT);
+}
+
+/*
+ ============================================
+ Function     : drv_motor_stop()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void drv_motor_stop(eMotor Motor){
+	beh_BBB_gpio_WritePin(tabMotorPin[Motor][InA], tabCmdMotor[STOP][InA]);
+	beh_BBB_gpio_WritePin(tabMotorPin[Motor][InB], tabCmdMotor[STOP][InB]);
+
+	printf(" stop , PinA %d \n", tabMotorPin[Motor][InA]);
+	printf(" stop , PinB %d \n", tabMotorPin[Motor][InB]);
+}
+
+/*
+ ============================================
+ Function     : drv_motor_front()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void drv_motor_front(eMotor Motor){
+	beh_BBB_gpio_WritePin(tabMotorPin[Motor][InA], tabCmdMotor[FRONT][InA]);
+	beh_BBB_gpio_WritePin(tabMotorPin[Motor][InB], tabCmdMotor[FRONT][InB]);
+}
+
+/*
+ ============================================
+ Function     : drv_motor_rear()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void drv_motor_rear(eMotor MotorToInit){
+	beh_BBB_gpio_WritePin(tabMotorPin[MotorToInit][InA], tabCmdMotor[REAR][InA]);
+	beh_BBB_gpio_WritePin(tabMotorPin[MotorToInit][InB], tabCmdMotor[REAR][InB]);
 }

@@ -80,6 +80,9 @@
 #define ADRESS_BUS_NO_CONFIG	0
 #define ADRESS_BUS_CONFIG_OK	1
 
+#define HIGH				1
+#define LOW					0
+
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *			

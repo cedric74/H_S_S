@@ -18,6 +18,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "Functions_State_Machine/Functions_State_Machine.h"
 #include "Functions_WatchDog/Functions_WatchDog.h"
 #include "Lib_Gpio/beh_BBB_gpio.h"
 

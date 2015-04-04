@@ -5,8 +5,8 @@
  *      Author: cedric
  */
 
-#ifndef LIB_SONSAR_H_
-#define LIB_SONSAR_H_
+#ifndef LIB_PWM_H_
+#define LIB_PWM_H_
 
 /*******************************************
 *			  I N C L U D E 			   *
@@ -53,4 +53,4 @@ int Lib_pwm_control(int iPeriod, int iDuty );
 int Lib_pwm_stop();
 int Lib_pwm_start();
 
-#endif /* LIB_SONSAR_H_ */
+#endif /* LIB_PWM_H_ */

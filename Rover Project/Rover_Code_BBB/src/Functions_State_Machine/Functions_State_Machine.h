@@ -13,9 +13,9 @@
 ********************************************/
 #include <pthread.h>
 
-#include 	"../Lib_Gpio/beh_BBB_gpio.h"
 #include	"../Lib_Servo/Lib_Servo.h"
-#include 	"../Lib_Sonar/Lib_Sonar.h"
+#include 	"../Lib_Motor/Lib_Motor.h"
+#include 	"../Lib_socket/Lib_socket.h"
 
 /*******************************************
 *               D E F I N E                *
@@ -35,6 +35,8 @@
 void 			Init_State_Machine();
 unsigned char	state_machine(void);
 void * 			Thread_State_Machine();
+
+void* 			Thread_Read_Command();
 
 
 #endif /* FUNCTIONS_STATE_MACHINE_H_ */
