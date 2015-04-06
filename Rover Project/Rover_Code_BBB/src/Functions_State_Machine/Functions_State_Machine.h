@@ -35,7 +35,6 @@
 void 			Init_State_Machine();
 unsigned char	state_machine(void);
 void * 			Thread_State_Machine();
-
 void* 			Thread_Read_Command();
 
 

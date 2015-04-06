@@ -25,7 +25,6 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-
 /*
  ============================================
  Function     : Lib_Servo_Control_Pwm()
@@ -75,6 +74,13 @@ void Lib_Servo_Sonar_Control(eServo_Sonar_Rotate valueRotate) // Create a typede
  */
 void Lib_Servo_init(){
 
+	// Set Polarity to 0
+	Lib_pwm_init();
+
+	// Set Run to 1
+	Lib_pwm_start();
+
+	// Set Servo Sonar to Center Position
 	Lib_pwm_control(PERIOD_20_MS, SERVO_CENTER);
 	iCurrentPosSonar = SERVO_CENTER;
 }

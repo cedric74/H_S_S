@@ -13,6 +13,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
+#define SLEEP_500_MS			500000
 #define SLEEP_100_MS			100000
 #define SLEEP_10_MS				10000
 
@@ -23,7 +24,7 @@
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
-int 			u8Command 			= 0;
+eCtrlDirection 	CmdDirection 		;
 int 			ret_thread 			= 0;
 int 			thread_Send_Data 	= 0;
 int 			iStopthread         = 0;
@@ -48,6 +49,13 @@ void Init_State_Machine(){
 
 	pthread_t threadId_StateMachine;
 
+	// Init Motor
+	Lib_motor_init();
+	CmdDirection = NO_CMD;
+
+	// Init Servo Motor
+	Lib_Servo_init();
+
 	// Thread Execute StateMachine
 	pthread_create (&threadId_StateMachine, NULL, &Thread_State_Machine, NULL);
 
@@ -66,37 +74,39 @@ void * Thread_State_Machine(){
 	// Declarations Variables
 	pthread_t threadId_ReadCommand;
 
-	do{
-		///printf(" ******* Start Socket ******* \n\n");
-		// Create Socket Server
-		socketCmd 	= create_Socket(PORT_NUM);
-		newSockCmd = accept_client_connection(socketCmd);
+	test_program();
 
-		// Thread Execute Read Command
-		pthread_create (&threadId_ReadCommand, NULL, &Thread_Read_Command, NULL);
-
-		// Loop State Machine
-		do{
-			// State Machine
-			state_machine();
-
-			// Sleep 100 ms
-			usleep(SLEEP_100_MS);
-
-		}while(iStopCommand != 1);
-
-		// close Thread Read Command
-		pthread_join(threadId_ReadCommand, NULL);
-
-		// Close Socket Data
-		close_socket(socketCmd, newSockCmd);
-
-		//printf("\n\n ******* End Main Socket ******* \n\n");
-
-		// Clear Stop Command
-		iStopCommand = 0;
-
-	}while(1);
+//	do{
+//		///printf(" ******* Start Socket ******* \n\n");
+//		// Create Socket Server
+//		socketCmd 	= create_Socket(PORT_NUM);
+//		newSockCmd = accept_client_connection(socketCmd);
+//
+//		// Thread Execute Read Command
+//		pthread_create (&threadId_ReadCommand, NULL, &Thread_Read_Command, NULL);
+//
+//		// Loop State Machine
+//		do{
+//			// State Machine
+//			state_machine();
+//
+//			// Sleep 500 ms
+//			usleep(SLEEP_500_MS);
+//
+//		}while(iStopCommand != 1);
+//
+//		// close Thread Read Command
+//		pthread_join(threadId_ReadCommand, NULL);
+//
+//		// Close Socket Data
+//		close_socket(socketCmd, newSockCmd);
+//
+//		//printf("\n\n ******* End Main Socket ******* \n\n");
+//
+//		// Clear Stop Command
+//		iStopCommand = 0;
+//
+//	}while(1);
 
 	return NULL;
 }
@@ -111,6 +121,30 @@ void * Thread_State_Machine(){
  */
 unsigned char state_machine(void){
 
+	switch(CmdDirection){
+		case ROTATE_LEFT:
+			printf(" ROTATE_LEFT CMD\n");
+		break;
+		case ROTATE_RIGHT:
+			printf(" ROTATE_RIGHT CMD\n");
+		break;
+		case FORWARD:
+			printf(" FORWARD CMD\n");
+		break;
+		case BACKWARD:
+			printf(" BACKWARD CMD\n");
+		break;
+		case STOP_MOVE:
+			printf(" STOP_MOVE CMD\n");
+		break;
+
+		default:
+			break;
+
+	}
+	Lib_motor_control(CmdDirection);
+	CmdDirection = NO_CMD;
+
 	return 0;
 }
 
@@ -124,28 +158,21 @@ unsigned char state_machine(void){
  */
 void test_program(){
 	//  ------  -------- ---- DEBUG TEST SERVO MOTEUR PWM
-	//Lib_pwm_start();
-	//Lib_pwm_control(PERIOD_20_MS, SERVO_FULL_RIGHT);
-	Lib_motor_init();
-	sleep(2);
 	printf(" Sens 1 \n");
 	Lib_motor_control(FORWARD);
-	sleep(3);
+	sleep(2);
+	Lib_Servo_Sonar_Control(FULL_LEFT);
 	printf(" Stop \n");
 	Lib_motor_control(STOP_MOVE);
 	//sleep(2);
 	printf(" Sens 2 \n");
 	Lib_motor_control(BACKWARD);
 	sleep(2);
-	printf(" Stop \n");
-	Lib_motor_control(STOP_MOVE);
 	//sleep(2);
 	printf(" ROTATE_LEFT \n");
 	Lib_motor_control(ROTATE_LEFT);
+	Lib_Servo_Sonar_Control(FULL_RIGHT);
 	sleep(2);
-	printf(" Stop \n");
-	Lib_motor_control(STOP_MOVE);
-	//sleep(2);
 	printf(" ROTATE_RIGHT \n");
 	Lib_motor_control(ROTATE_RIGHT);
 
@@ -154,9 +181,18 @@ void test_program(){
 	Lib_motor_control(STOP_MOVE);
 
 	//Lib_pwm_stop();
+
+	Lib_Servo_Sonar_Control(CENTER);
+	sleep(3);
+
+
+
+
 	printf(" End Test\n");
 	//------------------------ DEBUG TEST SONAR PING
 	//Lib_Sonar_Ping();
+
+	Lib_pwm_stop();
 }
 
 /*
@@ -170,18 +206,18 @@ void test_program(){
 void* Thread_Read_Command(){
 
 	//printf(" ******* Start Thread_Read_Command ******* \n");
-	while(u8Command != 0){
-//		unsigned char bData[SIZE_CMD_MESSAGE]= {0};
-//		int n =read_socket(newSockData , SIZE_CMD_MESSAGE, bData);
-//		if(n == SIZE_CMD_MESSAGE){
-//			u8Command = libcom_cmdAppli(bData);
-//		}
-		// Sleep
-		usleep(SLEEP_10_MS)	;
-	}
-	//printf(" ******* End Thread_Read_Command ******* \n");
-
-	pthread_exit(&ret_thread);
+//	while(1){
+//		unsigned char bData[2]= {0};
+//		int n =read_socket(newSockCmd , 2, bData);
+//		//if(n == SIZE_CMD_MESSAGE){
+//		CmdDirection = bData[0];
+//		//}
+//		// Sleep
+//		usleep(SLEEP_10_MS)	;
+//	}
+//	//printf(" ******* End Thread_Read_Command ******* \n");
+//
+//	pthread_exit(&ret_thread);
 
 	return NULL;
 }

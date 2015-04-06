@@ -28,6 +28,38 @@
 ********************************************/
 /*
  ============================================
+ Function     : Lib_pwm_init()
+ Parameter    :
+ Return Value : int
+ Description  :
+ ============================================
+ */
+int Lib_pwm_init(){
+	// Declaration Variables
+	int fd;
+	char buffer[BUFFER_SIZE];
+
+	// Instructions
+
+	// ----- Echo 0 > POLARITY -----
+	snprintf(buffer, BUFFER_SIZE, PATH_POLARITY);
+	fd = open(buffer, O_WRONLY);
+	if (fd < 0) {
+		printf("\n ERROR \n");
+		return ERROR_PWM_OPEN;
+	}
+
+	sprintf(buffer, "%d", 0);
+	printf("run : %s, \n", buffer);
+	write(fd, buffer, BUFFER_SIZE);
+
+	// Close descriptor File
+	close (fd);
+
+	return 0;
+}
+/*
+ ============================================
  Function     : Lib_pwm_start()
  Parameter    :
  Return Value : int
@@ -57,6 +89,7 @@ int Lib_pwm_start(){
 
 	return 0;
 }
+
 /*
  ============================================
  Function     : Lib_pwm_control()

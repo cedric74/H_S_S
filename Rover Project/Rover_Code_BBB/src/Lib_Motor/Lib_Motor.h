@@ -43,13 +43,14 @@ typedef enum{
 	FORWARD			= 2,
 	BACKWARD		= 3,
 	STOP_MOVE		= 4,
+	NO_CMD			=255,
 }eCtrlDirection;
 
 
 static const GPIO_Pins 	tabMotorPin[2][3]={
 // 	        Motor,   PWM,     InA, 	  InB,
-{/*	 MOTOR_LEFT*/	 P9_14,	P9_11,	P9_13 },
-{/*	 MOTOR_RIGHT*/	 P9_16,	P9_15,  P9_12 },
+{/*	 MOTOR_LEFT*/	 P9_16,	P9_11,	P9_13 },
+{/*	 MOTOR_RIGHT*/	 P9_18,	P9_15,  P9_12 },
 };
 
 

@@ -30,6 +30,7 @@
 *               D E F I N E                *
 ********************************************/
 #define 	BUFFER_SIZE 	128
+#define 	PATH_POLARITY  	"/sys/devices/ocp.3/pwm_test_P9_14.11/polarity"
 #define 	PATH_PERIOD  	"/sys/devices/ocp.3/pwm_test_P9_14.11/period"
 #define 	PATH_DUTY    	"/sys/devices/ocp.3/pwm_test_P9_14.11/duty"
 #define     PATH_RUN		"/sys/devices/ocp.3/pwm_test_P9_14.11/run"
@@ -49,6 +50,7 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+int Lib_pwm_init();
 int Lib_pwm_control(int iPeriod, int iDuty );
 int Lib_pwm_stop();
 int Lib_pwm_start();

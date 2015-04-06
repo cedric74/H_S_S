@@ -72,15 +72,15 @@ void Lib_motor_init(){
 void drv_motor_ctrl(eCmdMotor cmd, eMotor Motor){
 	switch(cmd){
 		case  FRONT:
-			printf(" FRONT , Motor %d \n", Motor);
+			//printf(" FRONT , Motor %d \n", Motor);
 			drv_motor_front(Motor);
 		break;
 		case  REAR:
-			printf(" REAR , Motor %d \n", Motor);
+			//printf(" REAR , Motor %d \n", Motor);
 			drv_motor_rear(Motor);
 		break;
 		case  STOP:
-			printf(" STOP , Motor %d \n", Motor);
+			//printf(" STOP , Motor %d \n", Motor);
 			drv_motor_stop(Motor);
 		break;
 
@@ -110,9 +110,6 @@ void drv_motor_init(eMotor Motor){
 void drv_motor_stop(eMotor Motor){
 	beh_BBB_gpio_WritePin(tabMotorPin[Motor][InA], tabCmdMotor[STOP][InA]);
 	beh_BBB_gpio_WritePin(tabMotorPin[Motor][InB], tabCmdMotor[STOP][InB]);
-
-	printf(" stop , PinA %d \n", tabMotorPin[Motor][InA]);
-	printf(" stop , PinB %d \n", tabMotorPin[Motor][InB]);
 }
 
 /*
