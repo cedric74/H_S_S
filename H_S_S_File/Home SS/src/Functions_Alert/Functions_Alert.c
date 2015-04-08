@@ -13,12 +13,13 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define WAIT_1_DAYS		86400
+#define WAIT_1_DAYS		86400	// In Second
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
 const char * dailyReportFile = "/home/debian/Desktop/dailyReportFile.txt";
+
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
@@ -218,10 +219,11 @@ int send_Alert(int iSmsok){
  ============================================
  */
 int sendSMS(){
-    int iReturn = system("ssmtp -s \"Test Email\" 5145749606@sms.fido.ca"); //
+    int iReturn = system("ssmtp -s \"ALERT Email\" 5145749606@sms.fido.ca");
     if(iReturn == ERROR){
    	 perror("Failed to invoke mpack");
     }
+
     return OK;
 }
 

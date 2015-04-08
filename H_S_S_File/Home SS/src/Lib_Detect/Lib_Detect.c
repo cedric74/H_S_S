@@ -68,10 +68,10 @@ void main_Detect(){
 		// Check If System Is ON
 		if(iSystemOn == ON){
 
-			// Sound Alerte that System ON
+			// Sound Alert that System ON
 			Start_Thread_Warning();
 
-			// Take A pic
+			// Take A picture
 			File_Log("Take A Pic, ", 12);
 			Start_Thread_Pic();
 
@@ -92,7 +92,7 @@ void main_Detect(){
 				// Alert OK
 				printf(" Alert OK \n");
 				// Send Alert By Mail & Sms
-				send_Alert(NO_SMS );		//	NO_SMS
+				send_Alert(SMS_OK );		//	NO_SMS
 
 				// Siren ON.
 				File_Log("Siren  ON , ", 12);

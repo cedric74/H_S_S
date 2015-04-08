@@ -64,7 +64,11 @@ void * Thread_WarningSytemON(){
 	for( i = 0 ; i < NBE_BIP; i++){
 		WarningSystemOn();
 		usleep(iTimeDelay);
-		//iTimeDelay = iTimeDelay ;
+
+		// If The Interrupter is switch to OFF, Stop Buzzer
+		if (stateInterrupter == STATE_OFF){
+			break;
+		}
 	}
 	return NULL;
 }

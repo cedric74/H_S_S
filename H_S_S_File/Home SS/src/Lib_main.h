@@ -28,7 +28,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Version 1.10, 30 march, "
+#define START_FILE			"Version 1.11, 08 april, "
 #define SIZE_STRING			24
 
 #define DEBUG				1
