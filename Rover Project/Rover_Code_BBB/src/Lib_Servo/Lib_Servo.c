@@ -60,7 +60,6 @@ void Lib_Servo_Sonar_Control(eServo_Sonar_Rotate valueRotate) // Create a typede
 				iCurrentPosSonar -= SERVO_STEP;
 				Lib_pwm_control(PERIOD_20_MS, iCurrentPosSonar);
 			}
-
 		break;
 	}
 }
