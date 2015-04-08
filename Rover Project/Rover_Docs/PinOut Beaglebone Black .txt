@@ -15,6 +15,6 @@ Detection Captor :
 	* 3.3V -> P9_03, P9_04
 	* GND  -> P9_01, P9_02 
 Sonar :
-	* Input-> P9_28 (PRU READ), P9_29 (PRU WRITE)
+	* Input-> P9_28 (PRU READ), P9_27 (PRU WRITE)
 	* 5 V  -> P9_05, P9_06
 	* GND  -> P9_01, P9_02 
