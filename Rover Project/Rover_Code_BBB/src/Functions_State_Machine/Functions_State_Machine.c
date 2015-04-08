@@ -186,8 +186,6 @@ void test_program(){
 	sleep(3);
 
 
-
-
 	printf(" End Test\n");
 	//------------------------ DEBUG TEST SONAR PING
 	//Lib_Sonar_Ping();
