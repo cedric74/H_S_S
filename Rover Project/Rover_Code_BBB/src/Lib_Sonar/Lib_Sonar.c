@@ -9,9 +9,8 @@
 /*******************************************
 *			  I N C L U D E 			   *
 ********************************************/
-#include <stdlib.h>
-
 #include "Lib_Sonar.h"
+
 /*******************************************
 *               D E F I N E                *
 ********************************************/
@@ -51,17 +50,6 @@ void Lib_Sonar_Init(){
 void Lib_Sonar_Ping(){
 	printf( " Test Sonar Ping \n");
 
-	beh_BBB_gpio_conf_dir(SONAR_PIN, OUTPUT);
-	beh_BBB_gpio_WritePin(SONAR_PIN, 0);
-	usleep(2);
-
-	// Input Trigger Pulse
-	beh_BBB_gpio_WritePin(SONAR_PIN, 1);
-	usleep(5);
-	beh_BBB_gpio_WritePin(SONAR_PIN, 0);
-	beh_BBB_gpio_conf_dir(SONAR_PIN, INPUT);
-
-
-	//beh_BBB_gpio_ReadPin
+	// Launch Program myTest
 
 }

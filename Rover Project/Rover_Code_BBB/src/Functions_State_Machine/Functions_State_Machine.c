@@ -188,6 +188,7 @@ void test_program(){
 
 	printf(" End Test\n");
 	//------------------------ DEBUG TEST SONAR PING
+
 	//Lib_Sonar_Ping();
 
 	Lib_pwm_stop();

@@ -8,6 +8,10 @@
  ============================================================================
  */
 
+
+#ifndef LIB_SOCKET_H_
+#define LIB_SOCKET_H_
+
 /*******************************************
 *			  I N C L U D E 			   *			
 ********************************************/
@@ -48,3 +52,5 @@ void 			send_binary(int  newsockfd, char *file_name);
 void 			close_socket(int sockfd, int newsockfd);
 void 			error(const char *msg);
 
+
+#endif /* LIB_SOCKET_H_ */

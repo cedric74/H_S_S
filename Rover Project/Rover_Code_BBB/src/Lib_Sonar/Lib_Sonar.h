@@ -32,5 +32,4 @@
 void Lib_Sonar_Init();
 void Lib_Sonar_Ping();
 
-
 #endif /* LIB_SONSAR_H_ */
