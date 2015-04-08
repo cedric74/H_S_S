@@ -106,20 +106,6 @@ int Lib_pwm_control(int iPeriod, int iDuty )
 
 
 	// Instructions
-	// ----- Echo 1 > RUN
-//	snprintf(buffer, BUFFER_SIZE, PATH_RUN);
-//	fd = open(buffer, O_WRONLY);
-//	if (fd < 0) {
-//		printf("\n ERROR \n");
-//		return ERROR_PWM_OPEN;
-//	}
-//
-//	sprintf(buffer, "%d", 1);
-//	printf("run : %s, \n", buffer);
-//	write(fd, buffer, BUFFER_SIZE);
-//	// Close descriptor File
-//	close (fd);
-
 	// ----- Echo value > PERIOD
 	snprintf(buffer, BUFFER_SIZE, PATH_PERIOD);
 	fd = open(buffer, O_WRONLY);
@@ -148,20 +134,6 @@ int Lib_pwm_control(int iPeriod, int iDuty )
 
 	// Close descriptor File
 	close (fd);
-
-	// ----- Echo 0 > RUN
-/*	snprintf(buffer, BUFFER_SIZE, PATH_RUN);
-	fd = open(buffer, O_WRONLY);
-	if (fd < 0) {
-		printf("\n ERROR \n");
-		return ERROR_PWM_OPEN;
-	}
-
-	sprintf(buffer, "%d", 0);
-	printf("run : %s\n", buffer);
-	write(fd, buffer, BUFFER_SIZE);
-	// Close descriptor File
-	close (fd);*/
 
 	return NO_ERROR_PWM;
 }
