@@ -77,6 +77,7 @@ static const eCtrlDirection 			tabCtrlDirection[][2]={
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
+eCtrlDirection	CmdDirection;
 
 /*******************************************
 *	        F U N C T I O N S   	       *

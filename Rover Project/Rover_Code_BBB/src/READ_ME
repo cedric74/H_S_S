@@ -1,0 +1,42 @@
+Version 1.1, 9 april
+	* Standard libraries Working ( Lib motor, Lib Servo, Lib Sonar)
+	* Things to do : * Add Lib Captor
+	
+To compile the program :
+# make
+To Execute 
+# ./run_ROVER		 
+
+
+********** Example To Test The libraries Sensor without the Sensor *****************
+* On the BBB, connect P9_27(READ_PORT_PRU) with P9_14(PWM)
+
+* In the Rover_main.c file, add call function:
+test_Sonar();
+
+* Compile the program :
+# make
+
+Launch program run_Rover  ():
+ #./run_ROVER
+
+In the screen you will see this commment line :	
+	INFO: PRU completed transfer.
+
+PRU Program	is waiting for a signal
+
+
+* Open an other Console Command, we want to generate a 10 MHZ PWM signal 
+#cd /sys/devices/ocp.3/pwm_test_P9_14.11
+
+// Inside pwm_test_P9_14.11 Folder
+# echo 0 > run				// Stop Pwm Signal
+# echo 0 > polarity			// Set Polarity to Low level
+# echo 10000000 > period	// Set Period to 10 MHZ
+# echo 5000000  > duty		// Set duty to 50% of the Period (10000000/2 -> 5000000)
+# echo 1 > run				// Launch Signal
+
+* Go back to the 1st command console, and If all is ok, you will see a value about 4977us and a distance of 85.04 (About):
+ Time : 4977 us , Distance : 85.04 cm
+ test_Sonar :  Distance = 85.04 cm
+ 

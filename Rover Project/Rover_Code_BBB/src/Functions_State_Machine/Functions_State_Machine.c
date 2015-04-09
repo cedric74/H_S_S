@@ -37,6 +37,7 @@ int				newSockCmd;
 *	        F U N C T I O N S   	       *
 ********************************************/
 void test_program();
+void test_Sonar();
 /*
  ============================================
  Function     : Init_State_Machine()
@@ -54,10 +55,13 @@ void Init_State_Machine(){
 	CmdDirection = NO_CMD;
 
 	// Init Servo Motor
-	Lib_Servo_init();
+	//Lib_Servo_init();
+
+	// Init Sonar
+	//Lib_Sonar_Init();
 
 	// Thread Execute StateMachine
-	pthread_create (&threadId_StateMachine, NULL, &Thread_State_Machine, NULL);
+	//pthread_create (&threadId_StateMachine, NULL, &Thread_State_Machine, NULL);
 
 }
 
@@ -74,7 +78,8 @@ void * Thread_State_Machine(){
 	// Declarations Variables
 	pthread_t threadId_ReadCommand;
 
-	test_program();
+	//test_program();
+	test_Sonar();
 
 //	do{
 //		///printf(" ******* Start Socket ******* \n\n");
@@ -146,6 +151,20 @@ unsigned char state_machine(void){
 	CmdDirection = NO_CMD;
 
 	return 0;
+}
+
+/*
+ ============================================
+ Function     : test_Sonar()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void test_Sonar(){
+
+	//Lib_Sonar_Ping();
+	printf(" test_Sonar :  Distance = %4.2f cm \n", fDistance);
 }
 
 /*

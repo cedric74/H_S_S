@@ -18,14 +18,17 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "Functions_State_Machine/Functions_State_Machine.h"
-#include "Functions_WatchDog/Functions_WatchDog.h"
-#include "Lib_Gpio/beh_BBB_gpio.h"
+#include	"Lib_Servo/Lib_Servo.h"
+#include 	"Lib_Motor/Lib_Motor.h"
+#include 	"Lib_socket/Lib_socket.h"
+#include	"Lib_Sonar/Lib_Sonar.h"
+
+#include 	"Functions_WatchDog/Functions_WatchDog.h"
 
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"ROVER,  1.0, 30 march, "
+#define START_FILE			"ROVER,  1.2, 09 april, "
 #define SIZE_STRING			24
 
 /*******************************************

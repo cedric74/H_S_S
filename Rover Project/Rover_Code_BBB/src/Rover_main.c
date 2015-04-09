@@ -23,7 +23,7 @@
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *			
 ********************************************/
-#define	TICK_LOOP_MAIN		5
+#define	TICK_LOOP_MAIN		500000	// In usecond
 
 /*******************************************
 *          F U N C T I O N S    		   *
@@ -43,11 +43,11 @@ int main(int argc, char *argv[])
 
 	// Main Loop
 	do{
-		// Main Function Detect
-		//main_Detect();
+		// Main Function
+		Lib_Algo_Roaming_Rover();
 
 		// Sleep
-		sleep(TICK_LOOP_MAIN);
+		usleep(TICK_LOOP_MAIN);
 
 	}while(1);
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 void Init(){
 
 	// Start WatchDog
-	//watch_dog_start();
+	watch_dog_start();
 
 	// Debug print
 	printf("%s \n", START_FILE);
@@ -73,6 +73,16 @@ void Init(){
 	// Init Gpio Lib
 	beh_BBB_gpio_init();
 
+	// Motor
+	Lib_motor_init();
+	CmdDirection = NO_CMD;
+
+	// Init Servo Motor
+	Lib_Servo_init();
+
+	// Init Sonar
+	Lib_Sonar_Init();
+
 	// Init State Machine
-	Init_State_Machine();
+	//Init_State_Machine();
 }
