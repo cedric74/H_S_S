@@ -29,6 +29,7 @@
 #include <stdint.h>
 #include <signal.h>    /* signal name macros, and the signal() prototype */
 
+#include <math.h>
 // Driver header file
 #include "prussdrv.h"
 #include <pruss_intc_mapping.h>
@@ -111,14 +112,17 @@ int main (void)
 	prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
 	/* Wait until PRU0 has finished execution */
 	prussdrv_pru_wait_event (PRU_EVTOUT_0);
-	read_words(x);
-	printf(" Time : %d us\n", x[0]);
+	read_words(x);	
+	float fDistance =  (x[0] * (0.0174)) - (1.5602);
     printf("\tINFO: PRU completed transfer.\r\n");
     prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
 	    
     /* Disable PRU and close memory mapping*/
     prussdrv_pru_disable(PRU_NUM); 
     prussdrv_exit ();
+	 
+	 
+	 printf(" Time : %d us , Distance : %4.2f cm \n", x[0] , fDistance);
 	 
     return(0);
 }
