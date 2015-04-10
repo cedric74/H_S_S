@@ -17,14 +17,14 @@
 // Width : 22.5 cm	// For Security Calculate distance with 24 cm
 // Length: 24.5 cm
 
-// Cos A = Adj / Hypo -> Adj = Wide /2  -> Distance mini X  for 12 cm
+// Cos A = Adj / Hypo -> Adj = Wide /2  -> Distance mini X  for 22 cm (10 cm of Security)
 
-// For 22.5 = 12.98 cm
-// For 45, =  16.70 cm
-// For 67.5 = 31.35 cm
+// For 22.5 = 22.98 cm
+// For 45, =  26.70 cm
+// For 67.5 = 41.35 cm
 
 // Distance
-#define 	MINI_DIST			30		// in CM
+#define 	MINI_DIST			(24.5 + 10)		// in CM   (10 cm of Security)
 
 // Time
 #define		DELAYS_1_S			1000000	// in us,
