@@ -18,7 +18,7 @@
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
-
+#define DELAY_200_MS	200000
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
@@ -59,9 +59,6 @@ void Lib_Sonar_Init(){
  ============================================
  */
 int Lib_Sonar_Ping(){
-	//printf( " Test Sonar Ping \n");
-
-	// Launch Program myTest
 	// Declarations Variables
 	uint32_t x[2] = {0};
 
@@ -112,6 +109,10 @@ int Lib_Sonar_Ping(){
 
 	printf(" Time : %d us , Distance : %4.2f cm \n", x[0] , fDistance);
 
+	// Delay Before Next Ping
+	usleep(DELAY_200_MS);
+
+	// End Process
 	return PROCESS_OK;
 }
 

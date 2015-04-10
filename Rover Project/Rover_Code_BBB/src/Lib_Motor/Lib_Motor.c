@@ -33,6 +33,36 @@
  Description  :
  ============================================
  */
+void Lib_motor_rover_U_Turn(){
+	// Rotate 180 to The Left OR Right
+	Lib_motor_control(ROTATE_LEFT);
+	usleep(TIME_ROTATE_180);
+	Lib_motor_control(STOP_MOVE);
+}
+
+/*
+ ============================================
+ Function     : Lib_motor_rover_Rotate()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void Lib_motor_rover_Rotate(eCtrlDirection direction, int iRotateDegre){
+	Lib_motor_control(direction);
+	usleep(iRotateDegre);
+	Lib_motor_control(STOP_MOVE);
+}
+
+
+/*
+ ============================================
+ Function     : Lib_motor_control()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
 void Lib_motor_control(eCtrlDirection direction){
 	eCmdMotor cmdMotorLeft = tabCtrlDirection[direction][MOTOR_LEFT];
 	drv_motor_ctrl(cmdMotorLeft, MOTOR_LEFT);

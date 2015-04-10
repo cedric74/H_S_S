@@ -23,8 +23,8 @@
 #include <math.h>
 
 // Driver header file
-#include "prussdrv.h"
-#include <pruss_intc_mapping.h>
+//#include "prussdrv.h"
+//#include <pruss_intc_mapping.h>
 
 /*******************************************
 *               D E F I N E                *

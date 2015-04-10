@@ -21,9 +21,19 @@
 #define		PERIOD_20_MS		20000000
 
 // duty Value for Servo Sonar
+
 #define     SERVO_CENTER		1650000
-#define    	SERVO_FULL_LEFT		500000
-#define    	SERVO_FULL_RIGHT	2600000
+
+#define    	SERVO_0_LEFT		500000
+#define		SERVO_22_5_LEFT		787500
+#define		SERVO_45_LEFT		1075000
+#define		SERVO_67_5_LEFT		1362500
+
+#define    	SERVO_0_RIGHT		2600000
+#define		SERVO_22_5_RIGHT	1887500
+#define		SERVO_45_RIGHT		2125000
+#define		SERVO_67_5_RIGHT	2362500
+
 #define		SERVO_STEP			50000
 
 
@@ -31,11 +41,18 @@
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
 typedef enum{
-	CENTER 		= 0,
-	FULL_LEFT 	= 1,
-	FULL_RIGHT 	= 2,
-	STEP_RIGHT	= 3,
-	STEP_LEFT	= 4,
+	CENTER 				= 0 ,
+	LEFT_0 				= 1 ,
+	RIGHT_0 			= 2 ,
+	LEFT_22_5			= 3 ,
+	RIGHT_22_5			= 4 ,
+	LEFT_45				= 5 ,
+	RIGHT_45			= 6 ,
+	LEFT_67_5			= 7 ,
+	RIGHT_67_5			= 8 ,
+	RIGHT_STEP			= 9 ,
+	LEFT_STEP			= 10,
+	NBE_SONAR_ROTATE 	= 11,
 }eServo_Sonar_Rotate;
 
 

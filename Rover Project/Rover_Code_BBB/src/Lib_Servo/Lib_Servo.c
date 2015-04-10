@@ -40,27 +40,67 @@ void Lib_Servo_Sonar_Control(eServo_Sonar_Rotate valueRotate) // Create a typede
 			Lib_pwm_control(PERIOD_20_MS, SERVO_CENTER);
 			iCurrentPosSonar = SERVO_CENTER;
 		break;
-		case FULL_LEFT:
-			Lib_pwm_control(PERIOD_20_MS, SERVO_FULL_LEFT);
-			iCurrentPosSonar = SERVO_FULL_LEFT;
+		// Position
+		case LEFT_0:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_0_LEFT);
+			iCurrentPosSonar = SERVO_0_LEFT;
 		break;
-		case FULL_RIGHT:
-			Lib_pwm_control(PERIOD_20_MS, SERVO_FULL_RIGHT);
-			iCurrentPosSonar = SERVO_FULL_RIGHT;
-			break;
-		case STEP_RIGHT:
-			if(iCurrentPosSonar < SERVO_FULL_RIGHT){
+		case RIGHT_0:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_0_RIGHT);
+			iCurrentPosSonar = SERVO_0_RIGHT;
+		break;
+
+		case LEFT_22_5:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_22_5_LEFT);
+			iCurrentPosSonar = SERVO_22_5_LEFT;
+		break;
+
+		case RIGHT_22_5:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_22_5_RIGHT);
+			iCurrentPosSonar = SERVO_22_5_RIGHT;
+		break;
+
+		case LEFT_45:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_45_LEFT);
+			iCurrentPosSonar = SERVO_45_LEFT;
+		break;
+
+		case RIGHT_45:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_45_RIGHT);
+			iCurrentPosSonar = SERVO_45_RIGHT;
+		break;
+
+
+		case LEFT_67_5:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_67_5_LEFT);
+			iCurrentPosSonar = SERVO_67_5_LEFT;
+		break;
+
+		case RIGHT_67_5:
+			Lib_pwm_control(PERIOD_20_MS, SERVO_67_5_RIGHT);
+			iCurrentPosSonar = SERVO_67_5_RIGHT;
+		break;
+
+
+		case RIGHT_STEP:
+			if(iCurrentPosSonar < SERVO_0_RIGHT){
 				iCurrentPosSonar += SERVO_STEP;
 				Lib_pwm_control(PERIOD_20_MS, iCurrentPosSonar);
 			}
 
-			break;
-		case STEP_LEFT:
-			if(iCurrentPosSonar > SERVO_FULL_LEFT){
+		break;
+
+		case LEFT_STEP:
+			if(iCurrentPosSonar > SERVO_0_LEFT){
 				iCurrentPosSonar -= SERVO_STEP;
 				Lib_pwm_control(PERIOD_20_MS, iCurrentPosSonar);
 			}
 		break;
+
+		default :
+			//... Nothing To Do
+		break;
+
 	}
 }
 /*

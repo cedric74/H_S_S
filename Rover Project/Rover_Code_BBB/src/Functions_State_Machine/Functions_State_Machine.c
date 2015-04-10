@@ -48,7 +48,7 @@ void test_Sonar();
  */
 void Init_State_Machine(){
 
-	pthread_t threadId_StateMachine;
+	//pthread_t threadId_StateMachine;
 
 	// Init Motor
 	Lib_motor_init();
@@ -76,7 +76,7 @@ void Init_State_Machine(){
 void * Thread_State_Machine(){
 
 	// Declarations Variables
-	pthread_t threadId_ReadCommand;
+	//pthread_t threadId_ReadCommand;
 
 	//test_program();
 	test_Sonar();
@@ -180,7 +180,7 @@ void test_program(){
 	printf(" Sens 1 \n");
 	Lib_motor_control(FORWARD);
 	sleep(2);
-	Lib_Servo_Sonar_Control(FULL_LEFT);
+	Lib_Servo_Sonar_Control(LEFT_0);
 	printf(" Stop \n");
 	Lib_motor_control(STOP_MOVE);
 	//sleep(2);
@@ -190,7 +190,7 @@ void test_program(){
 	//sleep(2);
 	printf(" ROTATE_LEFT \n");
 	Lib_motor_control(ROTATE_LEFT);
-	Lib_Servo_Sonar_Control(FULL_RIGHT);
+	Lib_Servo_Sonar_Control(RIGHT_0);
 	sleep(2);
 	printf(" ROTATE_RIGHT \n");
 	Lib_motor_control(ROTATE_RIGHT);

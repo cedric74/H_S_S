@@ -17,6 +17,9 @@
 *               D E F I N E                *
 ********************************************/
 
+#define 	TIME_ROTATE_90		1800000	// in us, 1500000 Too Short
+#define 	TIME_ROTATE_180		4000000 // in us,
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -82,6 +85,10 @@ eCtrlDirection	CmdDirection;
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+void 	Lib_motor_rover_Rotate(eCtrlDirection direction, int iRotateDegre);
+void	Lib_motor_rover_U_Turn();
+
+
 void 	drv_motor_ctrl(eCmdMotor cmd, eMotor Motor);
 void 	drv_motor_init(eMotor Motor);
 void 	drv_motor_stop(eMotor Motor);
