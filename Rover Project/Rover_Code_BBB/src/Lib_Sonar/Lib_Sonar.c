@@ -110,7 +110,7 @@ int Lib_Sonar_Ping(){
 	printf(" Time : %d us , Distance : %4.2f cm \n", x[0] , fDistance);
 
 	// Delay Before Next Ping
-	usleep(DELAY_200_MS);
+	//usleep(DELAY_200_MS);
 
 	// End Process
 	return PROCESS_OK;

@@ -17,8 +17,8 @@
 *               D E F I N E                *
 ********************************************/
 
-#define 	TIME_ROTATE_90		1800000	// in us, 1500000 Too Short
-#define 	TIME_ROTATE_180		4000000 // in us,
+#define 	TIME_ROTATE_90		1700000	// in us, 1500000 Too Short, 1800000 Too Long, 1700000 OK
+#define 	TIME_ROTATE_180		3800000 // in us, 4000000 Too Long,
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -41,8 +41,8 @@ typedef enum{
 }eMotorPin;
 
 typedef enum{
-	ROTATE_LEFT		= 0,
-	ROTATE_RIGHT	= 1,
+	ROTATE_RIGHT	= 0,
+	ROTATE_LEFT		= 1,
 	FORWARD			= 2,
 	BACKWARD		= 3,
 	STOP_MOVE		= 4,

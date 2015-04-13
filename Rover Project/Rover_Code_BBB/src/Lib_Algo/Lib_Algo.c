@@ -71,7 +71,7 @@ void Lib_Algo_Test(){
 	// Rotate 90 to The Right
 	Lib_motor_rover_Rotate(ROTATE_RIGHT, TIME_ROTATE_90);
 	printf(" -> Rotate 90 to The Right \n");
-	sleep(1);
+	sleep(2);
 
 	// U TURN
 	Lib_motor_rover_U_Turn();
@@ -143,8 +143,8 @@ void Lib_Algo_Roaming_Rover(){
 
 							iPreviousCmd = ROTATE_LEFT;
 						}
-					}
-				}
+				//	}
+				//}
 			}
 
 		}else{

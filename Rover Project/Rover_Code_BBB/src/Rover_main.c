@@ -19,7 +19,7 @@
 /*******************************************
 *               D E F I N E                *			
 ********************************************/
-#define	TICK_LOOP_MAIN		500000	// In us
+#define	TICK_LOOP_MAIN		100000	// In us, 500000 too Long
 
 #define DELAY_5_SEC			5		// In s
 /*******************************************
@@ -52,11 +52,11 @@ int main(int argc, char *argv[])
 	sleep(DELAY_5_SEC);
 
 	// FOR DEBUG
-	Lib_Algo_Test();
+	//Lib_Algo_Test();
 
 	// Main Loop
 	// Wait for Ctrl-C
-	/*signal(SIGINT, on_sigint);
+	signal(SIGINT, on_sigint);
     while (is_sigint == 0){
 		// Main Function
 		Lib_Algo_Roaming_Rover();
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 		// Sleep
 		usleep(TICK_LOOP_MAIN);
 
-	}*/
+	}
 
 	// Call Stop Algo to stop motor and to init Servo Position
 	Lib_Algo_Stop();
