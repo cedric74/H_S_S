@@ -1,0 +1,21 @@
+ * Start a C program when BeagleBone boots
+
+Link :
+http://www.nunoalves.com/open_source/?p=308
+
+
+Step #1: Create a script that will call the program that you wish you launch at boot time:
+
+the program need to be already compiled
+
+---> command
+echo “#!/bin/bash” > /usr/bin/myScript.sh
+echo “/home/root/main” >> /usr/bin/myScript.sh
+chmod u+x /usr/bin/myScript.sh
+
+
+Step #2: Create the service file
+
+---> command
+nano /lib/systemd/myScript.service
+
