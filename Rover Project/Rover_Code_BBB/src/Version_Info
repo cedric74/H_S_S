@@ -1,9 +1,9 @@
 Version 1.3, 10 april :
-	* TO DO :	Need to Test values of new angles constante duty for Servo
+	* TO DO :	Need to Test values of new angles constant duty for Servo
 	* TO DO :	Need to Test values of new delay for rotate 90 and 180
-	* Stop program with Ctr+C (Program wait a SignINT to Stop Motor, replace servo and finsiih program proprely)
-	* Changed Behavior of Roaming Algorithm
-	* Added Angle of Scanning (22.5, 45, and 67.5 degre for the both side)
+	* Stop program with Ctr+C (Program wait a SignINT to Stop Motor, replace servo and finish program)
+	* Changed Behaviour of Roaming Algorithm
+	* Added Angle of Scanning (22.5, 45, and 67.5 degree for the both side)
 	* Added Lib Detect ( Not Yet Used)
 	* Added In Lib Algo Test Function
 	* Added more time for the Rotate 90 Delay
@@ -11,10 +11,10 @@ Version 1.3, 10 april :
 
 Version 1.2, 09 april :
 	* Add Lib Algo, Add Roaming Function
-	* Scanning area to Three place (Lft, Center and Right)
+	* Scanning area to Three place (Left, Center and Right)
 	* Tick each Second
-	* Need to change Timming delay for a good 90 and 180 Rotation
-	* Need to change the behavior for scanning, Detectin too late
+	* Need to change Timing delay for a good 90 and 180 Rotation
+	* Need to change the behaviour for scanning, Detection too late
 		
 
 Version 1.1, 09 april  :
