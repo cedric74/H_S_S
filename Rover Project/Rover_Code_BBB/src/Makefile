@@ -4,6 +4,7 @@ export CC
 export AR
 
 all:
+	touch *
 	$(CC) -g -o run_ROVER -I./ \
 		Rover_main.c \
 		Functions_WatchDog/Functions_WatchDog.c \
@@ -16,11 +17,10 @@ all:
 		Lib_Sonar/Lib_Sonar.c \
 		Lib_Algo/Lib_Algo.c \
 		Functions_State_Machine/Functions_State_Machine.c \
-		-lpthread -lprussdrv
-		 -Wall
+		-lpthread -lprussdrv -Wall
 
 clean:
 	rm -f run_ROVER
 	
-install: all
-	cp run_ROVER /usr/local/bin
+#install: all
+#	cp run_ROVER /usr/local/bin

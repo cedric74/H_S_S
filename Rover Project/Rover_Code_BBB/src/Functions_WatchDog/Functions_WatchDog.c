@@ -33,12 +33,15 @@
  Description  :
  ============================================
  */
-void Thread_Watch_Reset(){
+void * Thread_Watch_Reset(void * p){
 	do{
 		watch_dog_clear();
 		sleep(TIME_SLEEP_20_S);
 	}while(1);
+
+	return NULL;
 }
+
 
 /*
  ============================================

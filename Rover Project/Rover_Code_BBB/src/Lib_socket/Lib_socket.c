@@ -86,7 +86,7 @@ int accept_client_connection(int sockfd){
 	}
     //printf(" Accept connection From a client:  " );
 	some_addr = inet_ntoa(cli_addr.sin_addr); // return the IP
-	//printf(" %s\n", some_addr);
+	printf(" %s\n", some_addr);
 
 	return newsockfd;
 }

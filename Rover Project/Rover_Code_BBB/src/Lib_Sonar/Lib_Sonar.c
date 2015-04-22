@@ -46,6 +46,9 @@ void Lib_Sonar_Init(){
 	system("modprobe uio_pruss");
 	printf( " Init PRU OK \n");
 
+	// Wait Time to Load The Cape Into The Slots
+	usleep(500000);
+
 	// Init Variables Distance
 	fDistance = 0;
 }

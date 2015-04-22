@@ -38,9 +38,10 @@ int 		fWatchdog;
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-void Thread_Watch_Reset(void);
+void * Thread_Watch_Reset(void * p);
 void watch_dog_clear(void);
 void watch_dog_start(void);
 void watch_dog_stop(void);
+
 
 #endif /* FUNCTIONS_WATCHDOG_H_ */

@@ -30,10 +30,23 @@
 *               D E F I N E                *
 ********************************************/
 #define 	BUFFER_SIZE 	128
-#define 	PATH_POLARITY  	"/sys/devices/ocp.3/pwm_test_P9_14.11/polarity"
-#define 	PATH_PERIOD  	"/sys/devices/ocp.3/pwm_test_P9_14.11/period"
-#define 	PATH_DUTY    	"/sys/devices/ocp.3/pwm_test_P9_14.11/duty"
-#define     PATH_RUN		"/sys/devices/ocp.3/pwm_test_P9_14.11/run"
+
+#define		PATH_P9_14			"/sys/devices/ocp.3/pwm_test_P9_14."
+
+#define 	PATH_POLARITY  	"/polarity"
+#define 	PATH_PERIOD  	"/period"
+#define 	PATH_DUTY    	"/duty"
+#define     PATH_RUN		"/run"
+
+#define		Offset_11			"11"
+#define		Offset_12			"12"
+#define		Offset_13			"13"
+#define		Offset_14			"14"
+#define		Offset_15			"15"
+#define		Offset_16			"16"
+#define		Offset_17			"17"
+#define		Offset_18			"18"
+
 
 #define 	NO_ERROR_PWM	 0
 #define 	ERROR_PWM_OPEN	-1

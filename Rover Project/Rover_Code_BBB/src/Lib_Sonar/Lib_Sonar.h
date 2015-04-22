@@ -19,8 +19,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdint.h>
-#include <signal.h>
 #include <math.h>
+#include <stdlib.h>
 
 // Driver header file
 #include "prussdrv.h"
