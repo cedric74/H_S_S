@@ -1,7 +1,7 @@
 /*
  * Lib_Algo.c
  *
- *  Created on: Mar 09, 2015
+ *  Created on: Apr 09, 2015
  *      Author: cedric
  */
 
@@ -14,21 +14,27 @@
 *               D E F I N E                *
 ********************************************/
 // Dim Rover :
-// Width : 22.5 cm	// For Security Calculate distance with 24 cm
+// Width : 22.5 cm	
 // Length: 24.5 cm
+#define 	WIDTH_ROVER					22.5	// For Security Calculate distance with 24 cm
+#define 	LENGTH_ROVER				24.5
 
-// Cos A = Adj / Hypo -> Adj = Wide /2  -> Distance mini X  for 22 cm (10 cm of Security)
+// Trigonometry
+// Cos A = Adjacent / Hypo -> Adjacent = Width /2  -> Distance mini X  for 22 cm (10 cm of Security)
 
-// For 22.5 = 22.98 cm
-// For 45, =  26.70 cm
-// For 67.5 = 41.35 cm
+// For 22.5' =  22.98 cm
+// For 45'   =  26.70 cm
+// For 67.5' =  41.35 cm
 
 // Distance
-#define 	MINI_DIST			(24.5 + 10)		// in CM   (10 cm of Security)
+#define 	MINI_DIST_CENTER			(LENGTH_ROVER + 10)		// in CM   (10 cm of Security)
+#define		MINI_DIST_67_5				41.35					// in CM
+#define		MINI_DIST_45				26.70					// in CM
+#define		MINI_DIST_22_5				22.98					// in CM
 
 // Time
-#define		DELAYS_1_S			1000000	// in us,
-#define		DELAYS_500_MS		500000	// in us,
+#define		DELAYS_1_S					1000000	// in us,
+#define		DELAYS_500_MS				500000	// in us,
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -40,7 +46,7 @@
 static float	tabAreaScannig[NBE_SONAR_ROTATE]={0};
 
 // Variables to Avoid Infinite Loop
-static	eCtrlDirection	iPreviousCmd =  STOP_MOVE;
+static			eCtrlDirection	iPreviousCmd =  STOP_MOVE;
 
 /*******************************************
 *	        F U N C T I O N S   	       *
@@ -88,8 +94,8 @@ void Lib_Algo_Test(){
  */
 void Lib_Algo_Roaming_Rover(){
 
-	// ********* CHECK FRONT OF IF IT'S CLEAR	********************* // Maybe need to check for Angle 67.5 Left and Right
-	if((tabAreaScannig[CENTER]  > MINI_DIST)&& (tabAreaScannig[RIGHT_67_5]  > MINI_DIST) && (tabAreaScannig[LEFT_67_5]  > MINI_DIST) )
+	// ********* CHECK FRONT OF IF IT'S CLEAR	********************* // Maybe need to check for Angle 45 and 22.5 Left and Right
+	if((tabAreaScannig[CENTER]  > MINI_DIST_CENTER)&& (tabAreaScannig[RIGHT_67_5]  > MINI_DIST_67_5) && (tabAreaScannig[LEFT_67_5]  > MINI_DIST_67_5) )
 	{
 		// Go Head
 		Lib_motor_control(FORWARD);
@@ -97,59 +103,57 @@ void Lib_Algo_Roaming_Rover(){
 		// Scanning Area At CenterPosition
 		Lib_Algo_Scanning(CENTER);
 
+		// Prevent Infinite loop
 		iPreviousCmd = FORWARD;
+		
 		return;
 
 	}else{
 		// Stop Move
 		Lib_motor_control(STOP_MOVE);
-		Lib_Algo_All_Area_Scanning();												// Call In the Init Function
+		Lib_Algo_All_Area_Scanning();
 		printf(" -> STOP_MOVE \n");
 
 		//iPreviousCmd = STOP_MOVE;
 	}
 
 	// ********* CHECK RIGHT SIDE IF IT'S CLEAR	*********************
-	if(tabAreaScannig[RIGHT_0]  > MINI_DIST){
-		if(tabAreaScannig[RIGHT_22_5]  > MINI_DIST){
-			//if(tabAreaScannig[RIGHT_45]  > MINI_DIST){
-				//if(tabAreaScannig[RIGHT_67_5]  > MINI_DIST){
-					if(iPreviousCmd != ROTATE_LEFT){								// Prevent Infinite loop
-						printf(" -> Rotate 90 to The Right \n");
-						// Rotate 90 to The Right
-						Lib_motor_rover_Rotate(ROTATE_RIGHT, TIME_ROTATE_90);
+	if( (tabAreaScannig[RIGHT_0]  > MINI_DIST_CENTER) && (tabAreaScannig[RIGHT_22_5]  > MINI_DIST_CENTER) ){
+		//if(tabAreaScannig[RIGHT_45]  > MINI_DIST_CENTER){
+			//if(tabAreaScannig[RIGHT_67_5]  > MINI_DIST_CENTER){
+				if(iPreviousCmd != ROTATE_LEFT){								
+					printf(" -> Rotate 90 to The Right \n");
+					// Rotate 90 to The Right
+					Lib_motor_rover_Rotate(ROTATE_RIGHT, TIME_ROTATE_90);
 
+					// Scan All Are from new position
+					Lib_Algo_All_Area_Scanning();
+
+					// Prevent Infinite loop
+					iPreviousCmd = ROTATE_RIGHT;
+				}
+			//}
+		//}
+	}else{
+		// ********* CHECK LEFT SIDE IF IT'S CLEAR	*********************
+		if((tabAreaScannig[LEFT_0]  > MINI_DIST_CENTER) && (tabAreaScannig[LEFT_22_5]  > MINI_DIST_CENTER) ) {
+			//if(tabAreaScannig[LEFT_45]  > MINI_DIST_CENTER){
+				//if(tabAreaScannig[LEFT_67_5]  > MINI_DIST_CENTER){
+					if(iPreviousCmd != ROTATE_RIGHT){								
+						printf(" -> Rotate 90 to The Left \n");
+						// Rotate 90 to The Left
+						Lib_motor_rover_Rotate(ROTATE_LEFT, TIME_ROTATE_90);
 						// Scan All Are from new position
 						Lib_Algo_All_Area_Scanning();
 
-						iPreviousCmd = ROTATE_RIGHT;
+						// Prevent Infinite loop
+						iPreviousCmd = ROTATE_LEFT;
 					}
 				//}
 			//}
-		}
-	}else{
-		// ********* CHECK LEFT SIDE IF IT'S CLEAR	*********************
-		if(tabAreaScannig[LEFT_0]  > MINI_DIST){
-			if(tabAreaScannig[LEFT_22_5]  > MINI_DIST){
-				//if(tabAreaScannig[LEFT_45]  > MINI_DIST){
-					//if(tabAreaScannig[LEFT_67_5]  > MINI_DIST){
-						if(iPreviousCmd != ROTATE_RIGHT){								// Prevent Infinite loop
-							printf(" -> Rotate 90 to The Left \n");
-							// Rotate 90 to The Left
-							Lib_motor_rover_Rotate(ROTATE_LEFT, TIME_ROTATE_90);
-
-							// Scan All Are from new position
-							Lib_Algo_All_Area_Scanning();
-
-							iPreviousCmd = ROTATE_LEFT;
-						}
-				//	}
-				//}
-			}
-
 		}else{
 			// ********* NOT SIDE CLEAR, NEED TO DO U TURN	*********************
-			printf(" -> Rotate 180 to The Left \n");
+			printf(" -> U TURN \n");
 
 			// Rotate 180
 			Lib_motor_rover_U_Turn();
@@ -271,5 +275,4 @@ void Lib_Algo_Init(){
 
 	// Scanning the All Area at the Init Position
 	Lib_Algo_All_Area_Scanning();
-
 }
