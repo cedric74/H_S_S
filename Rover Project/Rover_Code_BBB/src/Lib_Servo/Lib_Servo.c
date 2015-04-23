@@ -39,46 +39,55 @@ void Lib_Servo_Sonar_Control(eServo_Sonar_Rotate valueRotate) // Create a typede
 		case CENTER :
 			Lib_pwm_control(PERIOD_20_MS, SERVO_CENTER);
 			iCurrentPosSonar = SERVO_CENTER;
+			printf(" SERVO_CENTER\n");
 		break;
 		// Position
 		case LEFT_0:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_0_LEFT);
 			iCurrentPosSonar = SERVO_0_LEFT;
+			printf(" SERVO_0_LEFT\n");
 		break;
 		case RIGHT_0:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_0_RIGHT);
 			iCurrentPosSonar = SERVO_0_RIGHT;
+			printf(" SERVO_0_RIGHT\n");
 		break;
 
 		case LEFT_22_5:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_22_5_LEFT);
 			iCurrentPosSonar = SERVO_22_5_LEFT;
+			printf(" SERVO_22_5_LEFT\n");
 		break;
 
 		case RIGHT_22_5:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_22_5_RIGHT);
 			iCurrentPosSonar = SERVO_22_5_RIGHT;
+			printf(" SERVO_22_5_RIGHT\n");
 		break;
 
 		case LEFT_45:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_45_LEFT);
 			iCurrentPosSonar = SERVO_45_LEFT;
+			printf(" SERVO_45_LEFT\n");
 		break;
 
 		case RIGHT_45:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_45_RIGHT);
 			iCurrentPosSonar = SERVO_45_RIGHT;
+			printf(" SERVO_45_RIGHT\n");
 		break;
 
 
 		case LEFT_67_5:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_67_5_LEFT);
 			iCurrentPosSonar = SERVO_67_5_LEFT;
+			printf(" SERVO_67_5_LEFT\n");
 		break;
 
 		case RIGHT_67_5:
 			Lib_pwm_control(PERIOD_20_MS, SERVO_67_5_RIGHT);
 			iCurrentPosSonar = SERVO_67_5_RIGHT;
+			printf(" SERVO_67_5_RIGHT\n");
 		break;
 
 
@@ -86,6 +95,7 @@ void Lib_Servo_Sonar_Control(eServo_Sonar_Rotate valueRotate) // Create a typede
 			if(iCurrentPosSonar < SERVO_0_RIGHT){
 				iCurrentPosSonar += SERVO_STEP;
 				Lib_pwm_control(PERIOD_20_MS, iCurrentPosSonar);
+				printf(" RIGHT_STEP\n");
 			}
 
 		break;
@@ -94,6 +104,7 @@ void Lib_Servo_Sonar_Control(eServo_Sonar_Rotate valueRotate) // Create a typede
 			if(iCurrentPosSonar > SERVO_0_LEFT){
 				iCurrentPosSonar -= SERVO_STEP;
 				Lib_pwm_control(PERIOD_20_MS, iCurrentPosSonar);
+				printf(" LEFT_STEP\n");
 			}
 		break;
 
@@ -122,4 +133,5 @@ void Lib_Servo_init(){
 	// Set Servo Sonar to Center Position
 	Lib_pwm_control(PERIOD_20_MS, SERVO_CENTER);
 	iCurrentPosSonar = SERVO_CENTER;
+	printf(" SERVO_CENTER\n");
 }

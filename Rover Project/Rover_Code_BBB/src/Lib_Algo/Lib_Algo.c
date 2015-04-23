@@ -8,6 +8,8 @@
 /*******************************************
 *			  I N C L U D E 			   *
 ********************************************/
+#include <time.h>
+
 #include "Lib_Algo.h"
 
 /*******************************************
@@ -35,6 +37,9 @@
 // Time
 #define		DELAYS_1_S					1000000	// in us,
 #define		DELAYS_500_MS				500000	// in us,
+
+// For Debug
+#define		NO_SONAR	0
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -225,8 +230,20 @@ void Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate){
 	// Maybe Need some Delay to be at the right place
 	usleep(DELAYS_500_MS);
 
-	// Sonar Scanning
-	Lib_Sonar_Ping();
+	#ifdef 	NO_SONAR
+		// Test Debug Without Sonar
+		// Generate A random Value for fDistance variables
+		fDistance = rand() % 100;
+
+		// Print Value
+		printf(" fDistance : %4.2f , Random Generator \n" , fDistance);
+
+	#else
+		// Sonar Scanning
+		Lib_Sonar_Ping();
+	#endif
+
+
 
 	// Save Value into the Table Area
 	tabAreaScannig[valueRotate] = fDistance;
@@ -270,8 +287,15 @@ void Lib_Algo_Init(){
 	// Init Servo Motor
 	Lib_Servo_init();
 
-	// Init Sonar
-	Lib_Sonar_Init();
+
+	#ifdef 	NO_SONAR
+		// Init Randon Generator
+		srand(time(NULL));
+
+	#else
+		// Init Sonar
+		Lib_Sonar_Init();
+	#endif
 
 	// Scanning the All Area at the Init Position
 	Lib_Algo_All_Area_Scanning();

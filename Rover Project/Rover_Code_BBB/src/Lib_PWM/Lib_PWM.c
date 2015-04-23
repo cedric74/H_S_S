@@ -168,7 +168,7 @@ int Lib_pwm_control(int iPeriod, int iDuty )
 	}
 
 	sprintf(buffer, "%d", iPeriod);
-	printf("iPeriod : %s, ", buffer);
+	//printf("iPeriod : %s, ", buffer);
 	write(fd, buffer, BUFFER_SIZE);
 
 	// Close descriptor File
@@ -184,7 +184,7 @@ int Lib_pwm_control(int iPeriod, int iDuty )
 		return ERROR_PWM_OPEN;
 	}
 	sprintf(buffer, "%d", iDuty);
-	printf("duty : %s\n", buffer);
+	//printf("duty : %s\n", buffer);
 	write(fd, buffer, BUFFER_SIZE);
 
 	// Close descriptor File
