@@ -97,6 +97,7 @@ int Lib_pwm_init(){
 	}while(fd < 0);
 
 
+	// Run -> 0
 	sprintf(buffer, "%d", 0);
 	printf("run : %s, \n", buffer);
 	write(fd, buffer, BUFFER_SIZE);
@@ -104,6 +105,20 @@ int Lib_pwm_init(){
 	// Close descriptor File
 	close (fd);
 
+	// Polarity -> 0
+	snprintf(buffer, BUFFER_SIZE, cPath_P9_14);
+	strcat(buffer,PATH_POLARITY);
+	fd = open(buffer, O_WRONLY);
+	if (fd < 0) {
+		printf("\n Error Open File : %s \n", buffer);
+		return ERROR_PWM_OPEN;
+	}
+
+	sprintf(buffer, "%d", 0);
+	write(fd, buffer, BUFFER_SIZE);
+
+	// Close descriptor File
+	close (fd);
 
 	printf(" Init Pwm Ok \n");
 	return 0;
