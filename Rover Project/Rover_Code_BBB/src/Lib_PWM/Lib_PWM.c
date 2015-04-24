@@ -38,12 +38,12 @@ int Lib_pwm_init(){
 	// Declaration Variables
 	int fd;
 	char buffer[BUFFER_SIZE];
-	int iTry = 0;
+	int iOffset = 0;
 
 	// Instructions
 
 	// Add Cape inside Slots
-	system("echo  bone_pwm_P9_14 	> /sys/devices/bone_capemgr.9/slots");
+	system("echo  bone_pwm_P9_14 > /sys/devices/bone_capemgr.9/slots");
 	printf( " Added Cape Pwm Into Slots OK \n");
 
 	// Wait Time to Load The Cape Into The Slots
@@ -52,54 +52,33 @@ int Lib_pwm_init(){
 	// Find Value Offset
 	do{
 		snprintf(cPath_P9_14, BUFFER_SIZE, PATH_P9_14);
-		switch(iTry){
-			case 0:
-				strcat(cPath_P9_14,Offset_11);
-				break;
-			case 1:
-				strcat(cPath_P9_14,Offset_12);
-				break;
-			case 2:
-				strcat(cPath_P9_14,Offset_13);
-			break;
-			case 3:
-				strcat(cPath_P9_14,Offset_14);
-			break;
-			case 4:
-				strcat(cPath_P9_14,Offset_15);
-			break;
-			case 5:
-				strcat(cPath_P9_14,Offset_16);
-			break;
-			case 6:
-				strcat(cPath_P9_14,Offset_17);
-			break;
-			case 7:
-				strcat(cPath_P9_14,Offset_18);
-			break;
 
-			default:
-				printf("\n Error Open File : %s \n", buffer);
-
-				// Stop Program
-				exit(0);
-				//return ERROR_PWM_OPEN;
-			break;
-		}
+		// Convert Integer to String
+		char str[2];
+		sprintf(str, "%d", iOffset);
+		strcat(cPath_P9_14,str);
 
 		// Copy  Path
 		snprintf(buffer , BUFFER_SIZE, cPath_P9_14);
 		strcat(buffer,PATH_RUN);
 
-		//printf("\n Test Open File : %s  , try : %d\n", buffer, iTry);
-		iTry++;
+		iOffset++;
+		if(iOffset > 20){
+			// Error to Find Offset for Pwm
+			printf("\n Error Open File : %s \n", buffer);
+
+			// Stop Program
+			exit(0);
+		}
+
+		// Try To Open File
 		fd = open(buffer, O_WRONLY);
 	}while(fd < 0);
 
 
 	// Run -> 0
 	sprintf(buffer, "%d", 0);
-	printf("run : %s, \n", buffer);
+	printf("run : %s, Offset : %d \n", buffer, (iOffset-1) );
 	write(fd, buffer, BUFFER_SIZE);
 
 	// Close descriptor File

@@ -45,6 +45,7 @@
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
 #define PROCESS_OK		0
+#define	TIMEOUT_ERROR	1
 
 // Formula to get the distance from the time of the sonar pulse feedback
 #define TIME_2_DISTANCE(a)		( ( (a) * (0.0174) ) - (1.5602) )

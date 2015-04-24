@@ -45,21 +45,22 @@ static volatile unsigned int is_sigint = 0;
  */
 int main(int argc, char *argv[])
 {
-	// Init
-	Init();
+	// Debug print
+	printf(" Delay 5 s Before Start Program .... \n");
 
 	// Delay Before Start
 	sleep(DELAY_5_SEC);
 
-	// FOR DEBUG
-	//Lib_Algo_Test();
+	// Init
+	Init();
+
+	// Start Algo Thread
+	Lib_Algo_Start();
 
 	// Main Loop
 	// Wait for Ctrl-C
 	signal(SIGINT, on_sigint);
     while (is_sigint == 0){
-		// Main Function
-		Lib_Algo_Roaming_Rover();
 
 		// Sleep
 		usleep(TICK_LOOP_MAIN);

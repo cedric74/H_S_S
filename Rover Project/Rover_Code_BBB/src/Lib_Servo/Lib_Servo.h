@@ -41,17 +41,17 @@
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
 typedef enum{
-	CENTER 				= 0 ,
-	LEFT_0 				= 1 ,
-	RIGHT_0 			= 2 ,
-	LEFT_22_5			= 3 ,
-	RIGHT_22_5			= 4 ,
-	LEFT_45				= 5 ,
-	RIGHT_45			= 6 ,
-	LEFT_67_5			= 7 ,
-	RIGHT_67_5			= 8 ,
+	LEFT_0 				= 0 ,
+	LEFT_22_5			= 1 ,
+	LEFT_45				= 2 ,
+	LEFT_67_5           = 3 ,
+	CENTER              = 4 ,
+	RIGHT_67_5          = 5 ,
+	RIGHT_45            = 6 ,
+	RIGHT_22_5          = 7 ,
+	RIGHT_0             = 8 ,
 	RIGHT_STEP			= 9 ,
-	LEFT_STEP			= 10,
+	LEFT_STEP           = 10,
 	NBE_SONAR_ROTATE 	= 11,
 }eServo_Sonar_Rotate;
 

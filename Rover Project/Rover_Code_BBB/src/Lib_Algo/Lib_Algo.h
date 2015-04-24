@@ -15,6 +15,7 @@
 #include 	"../Lib_Sonar/Lib_Sonar.h"
 #include	"../Lib_Servo/Lib_Servo.h"
 
+#include  <pthread.h>
 /*******************************************
 *               D E F I N E                *
 ********************************************/
@@ -30,12 +31,9 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-void Lib_Algo_Test();
-void Lib_Algo_Roaming_Rover();
-void Lib_Algo_All_Area_Scanning();
-void Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate);
-void Lib_Algo_Stop();
-void Lib_Algo_Init();
+void 	Lib_Algo_Stop();
+void 	Lib_Algo_Start();
+void 	Lib_Algo_Init();
 
 
 #endif /* SRC_LIB_ALGO_H_ */

@@ -42,8 +42,16 @@ static int Lib_Sonar_read_words_PRU(uint32_t x[2]);
 void Lib_Sonar_Init(){
 
 	// Init PRUSS
-	system("echo  PRUIO > /sys/devices/bone_capemgr.9/slots");
-	system("modprobe uio_pruss");
+	int iRet = system("echo  PRUIO > /sys/devices/bone_capemgr.9/slots");
+	if(iRet != 0){
+		printf( " Error Init PRU, Add PRUIO into Slots \n");
+		exit(0);
+	}
+	iRet = system("modprobe uio_pruss");
+	if(iRet != 0){
+		printf( " Error Init PRU,  modprobe uio_pruss\n");
+		exit(0);
+	}
 	printf( " Init PRU OK \n");
 
 	// Wait Time to Load The Cape Into The Slots
@@ -103,13 +111,19 @@ int Lib_Sonar_Ping(){
 	// Read Time Pulse From PRU
 	Lib_Sonar_read_words_PRU(x);
 
-	// Get The Distance With the Formula
-	fDistance = TIME_2_DISTANCE(x[0]);
-
 	/* Disable PRU and close memory mapping*/
 	prussdrv_pru_disable(PRU_NUM);
 	prussdrv_exit ();
 
+	// Get The Distance With the Formula
+	if(x[0] == 0 ){
+		printf(" Error TimeOut Sonar \n" );
+		// End Process
+		return TIMEOUT_ERROR;
+	}
+
+	// Convert Time Into Distance
+	fDistance = TIME_2_DISTANCE(x[0]);
 	printf(" Time : %d us , Distance : %4.2f cm \n", x[0] , fDistance);
 
 	// Delay Before Next Ping

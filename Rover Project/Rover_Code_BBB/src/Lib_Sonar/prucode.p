@@ -1,5 +1,5 @@
 // prucode.p, Version Cedric Toncanier
-// Version V 1.3, 2015-04-07
+// Version V 1.4, 2015-04-24
 
 .origin 0
 .entrypoint START
@@ -63,8 +63,20 @@ DELAY2:
 
 
 	// .... Maybe need to Add Some Delays for the pin switch to low level
-	
-	WBS r31.t3										// wait till a 1 is read
+	//WBS r31.t3										// wait till a 1 is read
+
+	// Change Logic		
+	//
+    // loop 500 usec (100* 500 x 5nsec x 2)
+    //
+    MOV r5, 0x0000C350
+    		
+WAIT_FOR_1_ON_P9_28:
+	SUB  r5, r5, 1
+    QBEQ  END_ERROR, r5, 0
+	QBBC WAIT_FOR_1_ON_P9_28, r31.t3
+
+	// Reset Count Value
 	MOV r4 , 0
 	// =================== MAIN LOOP FUNCTION ===============================
 MAIN_LOOP:
@@ -79,6 +91,13 @@ END_PROCESS:
 
     HALT											// End Program
 	
+    // =================== ERROR  FUNCTION ===============================		
+END_ERROR:
+	MOV	r4,	0
+	SBCO r4, CONST_PRUSHAREDRAM, 0, 8
+	MOV r31.b0, PRU0_ARM_INTERRUPT+16				// Send notification to Host for program completion
+
+    HALT											// End Program
     // =================== WAIT  FUNCTION ===============================	
 WAIT:
     LBCO    r2, CONST_IEP, 0x44, 4      			// Load CMP_STATUS register

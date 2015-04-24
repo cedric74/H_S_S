@@ -1,6 +1,6 @@
 Version 1.4, 23 april :
 	* Udpated Lib Pwm to get the right Offset for pwm_test_P9_14 during init function
-
+	* Added TimeOut PRU
 
 Version 1.3, 10 april :
 	* TO DO :	Need to Test values of new angles constant duty for Servo

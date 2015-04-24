@@ -41,6 +41,14 @@
 // For Debug
 #define		NO_SONAR	0
 
+// Time Tick Algo
+#define	TICK_LOOP_ALGO		100000	// In us, 500000 too Long
+
+
+// State Thread
+#define	RUNNING_PROCESS		1
+#define	STOP_PROCESS		0
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -48,14 +56,65 @@
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
+// Variables Thread Algo
+pthread_t 		thread_Algo;
+
 static float	tabAreaScannig[NBE_SONAR_ROTATE]={0};
 
 // Variables to Avoid Infinite Loop
 static			eCtrlDirection	iPreviousCmd =  STOP_MOVE;
 
+// Variable Flag Error Mode
+
+// Variable Stop Thread Algo
+unsigned char u8StopThread;
+
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+void 			Lib_Algo_Test();
+static void * 	Lib_Algo_Thread(void * p);
+
+static void  	Lib_Algo_Roaming_Rover(void);
+static int 	    Lib_Algo_All_Area_Scanning();
+static void 	Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate);
+
+/*
+ ============================================
+ Function     : Algo_start()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void Lib_Algo_Start(){
+
+	// Process Running
+	u8StopThread = RUNNING_PROCESS;
+
+	// Thread Execute Algo
+	pthread_create (&thread_Algo, NULL, &Lib_Algo_Thread, NULL);
+}
+
+/*
+ ============================================
+ Function     : Algo_start()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void * Lib_Algo_Thread(void * p){
+	do{
+		Lib_Algo_Roaming_Rover();
+
+		// Sleep
+		usleep(TICK_LOOP_ALGO);
+	}while(u8StopThread == RUNNING_PROCESS);
+
+	return NULL;
+}
+
 /*
  ============================================
  Function     : Lib_Algo_Test()
@@ -97,7 +156,12 @@ void Lib_Algo_Test(){
  Description  :
  ============================================
  */
-void Lib_Algo_Roaming_Rover(){
+void Lib_Algo_Roaming_Rover(void){
+
+	// Declarations Variables
+	int iRet;
+
+	// Mode Error
 
 	// ********* CHECK FRONT OF IF IT'S CLEAR	********************* // Maybe need to check for Angle 45 and 22.5 Left and Right
 	if((tabAreaScannig[CENTER]  > MINI_DIST_CENTER)&& (tabAreaScannig[RIGHT_67_5]  > MINI_DIST_67_5) && (tabAreaScannig[LEFT_67_5]  > MINI_DIST_67_5) )
@@ -111,13 +175,20 @@ void Lib_Algo_Roaming_Rover(){
 		// Prevent Infinite loop
 		iPreviousCmd = FORWARD;
 		
+		// End Function
 		return;
 
 	}else{
 		// Stop Move
 		Lib_motor_control(STOP_MOVE);
-		Lib_Algo_All_Area_Scanning();
 		printf(" -> STOP_MOVE \n");
+
+		// Scan All Area from current position
+		iRet = Lib_Algo_All_Area_Scanning();
+		if(iRet == STOP_PROCESS){
+			return;
+		}
+
 
 		//iPreviousCmd = STOP_MOVE;
 	}
@@ -131,8 +202,11 @@ void Lib_Algo_Roaming_Rover(){
 					// Rotate 90 to The Right
 					Lib_motor_rover_Rotate(ROTATE_RIGHT, TIME_ROTATE_90);
 
-					// Scan All Are from new position
-					Lib_Algo_All_Area_Scanning();
+					// Scan All Area from new position
+					iRet = Lib_Algo_All_Area_Scanning();
+					if(iRet == STOP_PROCESS){
+						return;
+					}
 
 					// Prevent Infinite loop
 					iPreviousCmd = ROTATE_RIGHT;
@@ -148,8 +222,11 @@ void Lib_Algo_Roaming_Rover(){
 						printf(" -> Rotate 90 to The Left \n");
 						// Rotate 90 to The Left
 						Lib_motor_rover_Rotate(ROTATE_LEFT, TIME_ROTATE_90);
-						// Scan All Are from new position
-						Lib_Algo_All_Area_Scanning();
+						// Scan All Area from new position
+						iRet = Lib_Algo_All_Area_Scanning();
+						if(iRet == STOP_PROCESS){
+							return;
+						}
 
 						// Prevent Infinite loop
 						iPreviousCmd = ROTATE_LEFT;
@@ -164,11 +241,13 @@ void Lib_Algo_Roaming_Rover(){
 			Lib_motor_rover_U_Turn();
 
 			// Scan All Are from new position
-			Lib_Algo_All_Area_Scanning();
+			iRet = Lib_Algo_All_Area_Scanning();
+			if(iRet == STOP_PROCESS){
+				return;
+			}
 		}
 	}
 }
-
 
 /*
  ============================================
@@ -178,40 +257,23 @@ void Lib_Algo_Roaming_Rover(){
  Description  :
  ============================================
  */
-void Lib_Algo_All_Area_Scanning(){
+static int Lib_Algo_All_Area_Scanning(){
 
-	// ************  LEFT 0 SCANNING *****************
-	Lib_Algo_Scanning(LEFT_0);
+	int iPos;
 
-	// ************  LEFT 22 5 SCANNING **************
-	Lib_Algo_Scanning(LEFT_22_5);
-
-	// ************  LEFT 45 SCANNING ****************
-	Lib_Algo_Scanning(LEFT_45);
-
-	// ************  LEFT 67 5 SCANNING **************
-	Lib_Algo_Scanning(LEFT_67_5);
-
-	// ************  CENTER SCANNING *****************
-	Lib_Algo_Scanning(CENTER);
-
-	// ************  RIGHT 67 5 SCANNING *************
-	Lib_Algo_Scanning(RIGHT_67_5);
-
-	// ************  RIGHT 45 SCANNING ***************
-	Lib_Algo_Scanning(RIGHT_45);
-
-	// ************  RIGHT 22 5 SCANNING *************
-	Lib_Algo_Scanning(RIGHT_22_5);
-
-	// ************  RIGHT SCANNING ******************
-	Lib_Algo_Scanning(RIGHT_0);
-
-	// ********* GO SERVO CENTER POSITION ************
+	for(iPos = LEFT_0 ; iPos <= RIGHT_0; iPos++){
+		if(u8StopThread == STOP_PROCESS){
+			// Stop Process
+			return STOP_PROCESS;
+		}
+		// ************  POSITION SCANNING **************
+		Lib_Algo_Scanning(iPos);
+	}
 
 	// Turn Sonar to Center Position
 	Lib_Servo_Sonar_Control(CENTER);
 
+	return RUNNING_PROCESS;
 }
 
 /*
@@ -222,7 +284,7 @@ void Lib_Algo_All_Area_Scanning(){
  Description  :
  ============================================
  */
-void Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate){
+static void Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate){
 
 	// Turn Sonar to Request Position
 	Lib_Servo_Sonar_Control(valueRotate);
@@ -233,7 +295,7 @@ void Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate){
 	#ifdef 	NO_SONAR
 		// Test Debug Without Sonar
 		// Generate A random Value for fDistance variables
-		fDistance = rand() % 100;
+		fDistance = rand() % 300;
 
 		// Print Value
 		printf(" fDistance : %4.2f , Random Generator \n" , fDistance);
@@ -259,8 +321,27 @@ void Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate){
  ============================================
  */
 void Lib_Algo_Stop(){
+
+	int old_cancel_state;
+
+	// Print End Process
+	printf(" Stop Program \n");
+
+	// Start Section critic
+	pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
+
+	// Set State Process to Stop
+	u8StopThread = STOP_PROCESS;
+
+	// End Section critic
+	pthread_setcancelstate (old_cancel_state, NULL);
+
+	// Wait for The End of the Thread
+	pthread_join(thread_Algo, NULL);
+
 	// Stop Motor
 	Lib_motor_control(STOP_MOVE);
+	printf(" -> STOP_MOVE \n");
 
 	// Servo Center Position
 	Lib_Servo_Sonar_Control(CENTER);
