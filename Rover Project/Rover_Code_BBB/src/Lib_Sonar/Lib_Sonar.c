@@ -42,16 +42,16 @@ static int Lib_Sonar_read_words_PRU(uint32_t x[2]);
 void Lib_Sonar_Init(){
 
 	// Init PRUSS
-	int iRet = system("echo  PRUIO > /sys/devices/bone_capemgr.9/slots");
-	if(iRet != 0){
-		printf( " Error Init PRU, Add PRUIO into Slots \n");
-		exit(0);
-	}
-	iRet = system("modprobe uio_pruss");
-	if(iRet != 0){
-		printf( " Error Init PRU,  modprobe uio_pruss\n");
-		exit(0);
-	}
+	system("echo  PRUIO > /sys/devices/bone_capemgr.9/slots");
+//	if(iRet != 0){
+//		printf( " Error Init PRU, Add PRUIO into Slots, %d\n", iRet);
+//		exit(0);
+//	}
+	system("modprobe uio_pruss");
+//	if(iRet != 0){
+//		printf( " Error Init PRU,  modprobe uio_pruss, %d\n", iRet);
+//		exit(0);
+//	}
 	printf( " Init PRU OK \n");
 
 	// Wait Time to Load The Cape Into The Slots
