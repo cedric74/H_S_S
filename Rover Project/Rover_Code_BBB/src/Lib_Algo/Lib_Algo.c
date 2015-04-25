@@ -37,12 +37,13 @@
 // Time
 #define		DELAYS_1_S					1000000	// in us,
 #define		DELAYS_500_MS				500000	// in us,
+#define		DELAYS_250_MS				250000	// in us,
 
 // For Debug
-#define		NO_SONAR	0
+//#define		NO_SONAR				0
 
 // Time Tick Algo
-#define	TICK_LOOP_ALGO		100000	// In us, 500000 too Long
+#define	TICK_LOOP_10_MS					10000	//
 
 
 // State Thread
@@ -109,7 +110,7 @@ void * Lib_Algo_Thread(void * p){
 		Lib_Algo_Roaming_Rover();
 
 		// Sleep
-		usleep(TICK_LOOP_ALGO);
+		usleep(TICK_LOOP_10_MS);
 	}while(u8StopThread == RUNNING_PROCESS);
 
 	return NULL;
@@ -290,7 +291,7 @@ static void Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate){
 	Lib_Servo_Sonar_Control(valueRotate);
 
 	// Maybe Need some Delay to be at the right place
-	usleep(DELAYS_500_MS);
+	usleep(DELAYS_250_MS);
 
 	#ifdef 	NO_SONAR
 		// Test Debug Without Sonar
