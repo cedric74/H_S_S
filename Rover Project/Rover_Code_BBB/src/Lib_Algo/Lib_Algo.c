@@ -43,8 +43,8 @@
 //#define		NO_SONAR				0
 
 // Time Tick Algo
-#define	TICK_LOOP_10_MS					10000	//
-
+#define	TICK_LOOP_10_MS					10000	// Too Short for Sonar
+#define	TICK_LOOP_100_MS				100000
 
 // State Thread
 #define	RUNNING_PROCESS		1
@@ -110,7 +110,7 @@ void * Lib_Algo_Thread(void * p){
 		Lib_Algo_Roaming_Rover();
 
 		// Sleep
-		usleep(TICK_LOOP_10_MS);
+		usleep(TICK_LOOP_100_MS );
 	}while(u8StopThread == RUNNING_PROCESS);
 
 	return NULL;
