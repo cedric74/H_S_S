@@ -44,7 +44,8 @@
 
 // Time Tick Algo
 #define	TICK_LOOP_10_MS					10000	// Too Short for Sonar
-#define	TICK_LOOP_100_MS				100000
+#define	TICK_LOOP_100_MS				100000	// Maybe To Short
+#define	TICK_LOOP_200_MS				200000
 
 // State Thread
 #define	RUNNING_PROCESS		1
@@ -110,7 +111,7 @@ void * Lib_Algo_Thread(void * p){
 		Lib_Algo_Roaming_Rover();
 
 		// Sleep
-		usleep(TICK_LOOP_100_MS );
+		usleep(TICK_LOOP_200_MS  );		// TICK_LOOP_100_MS
 	}while(u8StopThread == RUNNING_PROCESS);
 
 	return NULL;
@@ -273,6 +274,9 @@ static int Lib_Algo_All_Area_Scanning(){
 
 	// Turn Sonar to Center Position
 	Lib_Servo_Sonar_Control(CENTER);
+
+	// Delay More Time To Change Pos from Right 0 To Center Pos
+	usleep(DELAYS_500_MS);
 
 	return RUNNING_PROCESS;
 }

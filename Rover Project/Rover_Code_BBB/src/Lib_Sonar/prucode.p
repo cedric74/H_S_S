@@ -78,18 +78,13 @@ WAIT_FOR_1_ON_P9_28:
 
 	// Reset Count Value
 	MOV r4 , 0
-	
-	//
-    // loop 500 usec (100* 500 x 5nsec x 2)
-    //
-	MOV r5, 0x004C4B40
-			
+	MOV r5, 0x0000C350			
 	// =================== MAIN LOOP FUNCTION ===============================
 MAIN_LOOP:
 	CALL WAIT										// Wait 1 us
 	ADD r4, r4, 1									// increment and store uint32_t into shared ram (4 bytes)
-	SUB  r5, r5, 1
-    QBEQ  END_ERROR, r5, 0
+    SUB  r5, r5, 1
+    QBEQ  END_ERROR, r5, 0							// TimeOut
 SEND_DATA:											// Send Counter 32 bits R4
 	SBCO r4, CONST_PRUSHAREDRAM, 0, 8
 	QBBS  MAIN_LOOP, r31.t3

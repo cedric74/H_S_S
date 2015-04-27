@@ -11,6 +11,9 @@
 ********************************************/
 #include "Lib_Sonar.h"
 
+// Standard header files
+#include <signal.h>
+
 /*******************************************
 *               D E F I N E                *
 ********************************************/
@@ -102,7 +105,25 @@ int Lib_Sonar_Ping(){
 	prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
 
 	/* Wait until PRU0 has finished execution */
-	prussdrv_pru_wait_event (PRU_EVTOUT_0);
+//	 pid_t  pid_fils;
+//	 pid_t  pid_pere;
+//
+//	 pid_pere = getpid();
+//	 pid_fils = fork();
+//	 if (pid_fils == 0){
+//		 //ChildProcess();
+//		 // Wait 5 Seconds
+//		 sleep(5);
+//		 kill (pid_pere, SIGKILL);
+//		 printf(" Error TimeOut Sonar \n" );
+//		 // End Process
+//		 return TIMEOUT_ERROR;
+//	 }else{
+//	     //ParentProcess();
+//		 prussdrv_pru_wait_event (PRU_EVTOUT_0);
+//		 kill (pid_fils, SIGKILL);
+//	 }
+	 prussdrv_pru_wait_event (PRU_EVTOUT_0);
 
 	// Clear Event
 	//printf("\tINFO: PRU completed transfer.\r\n");
