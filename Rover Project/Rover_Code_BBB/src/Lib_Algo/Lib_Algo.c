@@ -111,7 +111,7 @@ void * Lib_Algo_Thread(void * p){
 		Lib_Algo_Roaming_Rover();
 
 		// Sleep
-		usleep(TICK_LOOP_200_MS  );		// TICK_LOOP_100_MS
+		usleep( TICK_LOOP_10_MS);
 	}while(u8StopThread == RUNNING_PROCESS);
 
 	return NULL;
