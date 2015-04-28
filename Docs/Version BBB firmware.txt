@@ -1,4 +1,12 @@
 BBB firmware : Home Security System
+28_04_2015, Version 1.12 :
+	* Modified main, Reduced Timing Tick from 5s To 500ms
+	* Modified Functions Alert, To include the configurations loaded
+	* Added Lib Config, Load specific information instead of keep this inside Program
+	* Added Lib Pwm, Test Sound Buzzer with PWM signal
+	* Modified Lib Detect, Reduced time delay to disable system from 30s to 15s, Added Volatile argument for detect variable
+	* Modified Functions State Machine and Lib socket, to fixed thread warning
+	* Modified Functions Alert, Added The Captor Detecting name in the email alert, Removed call to perror()
 08_04_2015, Version 1.11 :
 	* Stopped buzzer when the interrupter is switch to off
 30_03_2015, Version 1.10 :

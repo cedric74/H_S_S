@@ -1,3 +1,15 @@
+For Version : 28_04_2015, Version 1.12
+
+P9_11 ->	Out, Buzzer				// AdaFruit Sensor 
+P9_12 ->	In,Captor Back Door
+P9_13 ->	In, Interrupter
+P9_14 ->	In, Captor Main Door	//(External Pull Up)
+P9_15 ->	Out, Siren
+P9_16 ->	Out, Buzzer V2. 		// Test With PWM Signal
+P9_17 ->	
+P9_18 ->	
+
+---------------------------------------------
 For Version : 30_03_2015, Version 1.10
 
 P9_11 ->	Out, Buzzer	// AdaFruit Sensor 
