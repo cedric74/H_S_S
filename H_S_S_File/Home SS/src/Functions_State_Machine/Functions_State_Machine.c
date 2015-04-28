@@ -30,8 +30,10 @@
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
 cmdApplication 	u8Command 			= NO_CMD;
+pthread_t 		thread_Send_Data 	= 0;
+
 int 			ret_thread 			= 0;
-int 			thread_Send_Data 	= 0;
+
 int 			iStopthread         = 0;
 int 			iStopCommand		= 0;
 
@@ -73,7 +75,7 @@ void Init_State_Machine(){
  Description  :
  ============================================
  */
-void Thread_State_Machine(){
+void * Thread_State_Machine(void * p){
 
 	// Declarations Variables
 	pthread_t threadId_ReadCommand;
@@ -126,6 +128,8 @@ void Thread_State_Machine(){
 		iStopCommand = 0;
 
 	}while(1);
+
+	return NULL;
 }
 
 /*
@@ -226,13 +230,14 @@ void* Thread_Read_Command(){
  Description  :
  ============================================
  */
-void* Thread_Send_Data_PC(){
+void* Thread_Send_Data_PC(void * p){
 
+	// Init
 	//readSensor();			NO SENSOR AVAIBLE
 	//temperature;
 	//humidity;
 
-	while(iStopCommand != 1){
+	while(iStopCommand != STOP_THREAD){
 
 		if(iStopthread == STOP_THREAD){
 			iStopthread = 0;
@@ -310,7 +315,7 @@ void StartThread_ReadSensor(){
  ============================================
  */
 void* Thread_ReadSensor(){
-	while(iStopCommand != 1){
+	while(iStopCommand != STOP_THREAD){
 //		int iret = readSensor();	NO SENSOR AVAIBLE
 //		if(iret != DHT_SUCCESS){	NO SENSOR AVAIBLE
 			temperature	= 0;

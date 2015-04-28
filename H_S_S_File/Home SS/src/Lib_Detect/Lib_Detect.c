@@ -21,8 +21,8 @@
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *			
 ********************************************/
-unsigned char 	u8DetectOn 			= 0;
-int 			iCountInter 		= 0;
+volatile unsigned char 	u8DetectOn 			= 0;
+static int 				iCountInter 		= 0;
 
 /*******************************************
 *	 P R O T O T Y P E   F U N C T I O N   *			
@@ -91,8 +91,13 @@ void main_Detect(){
 			}else{
 				// Alert OK
 				printf(" Alert OK \n");
+
 				// Send Alert By Mail & Sms
-				send_Alert(SMS_OK );		//	NO_SMS
+				if(u8DetectOn == ptrCaptorMainDoor->ePinCaptor){
+					send_Alert(SMS_OK,  ptrCaptorMainDoor->sMessage);		//	NO_SMS
+				}else{
+					send_Alert(SMS_OK, ptrCaptorBackDoor->sMessage );		//	NO_SMS
+				}
 
 				// Siren ON.
 				File_Log("Siren  ON , ", 12);
@@ -229,15 +234,15 @@ void Read_Captor(structCaptor * sCaptor){
 	readEntry = beh_BBB_gpio_ReadPin(sCaptor->ePinCaptor);
 
 	// State Machine Captor
-	//printf(" Before Inside Captor %d", sCaptor.stateCapt);
 	switch(sCaptor->stateCapt){
 		case STATE_NO_DETECTION :
 			if( readEntry == DETECT_OK){
 				// Change State
-				pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
 
+				// Start Critic Section
+				pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
 				sCaptor->stateCapt = STATE_DETECTION ;
-				/* Fin de la section critique. */
+				// End Critic Section
 				pthread_setcancelstate (old_cancel_state, NULL);
 				printf(" Press Ok, Captor %s", sCaptor->sMessage);
 			} 
@@ -253,18 +258,15 @@ void Read_Captor(structCaptor * sCaptor){
 					printf(" Release Ok, Count: %d, Captor %s",  sCaptor->icountDete , sCaptor->sMessage);
 					sCaptor->icountDete = 0;
 
+					// Start Critic Section
 					pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
-
 					u8DetectOn = (unsigned char)sCaptor->ePinCaptor;
-
-					/* Fin de la section critique. */
+					// End Critic Section
 					pthread_setcancelstate (old_cancel_state, NULL);
 				} 
 			}	 
 		break;
 	}
-
-	//return sCaptor;
 }
 
 /*

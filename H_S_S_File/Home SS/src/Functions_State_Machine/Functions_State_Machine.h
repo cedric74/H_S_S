@@ -45,10 +45,10 @@
 *	        F U N C T I O N S   	       *
 ********************************************/
 void 			Init_State_Machine();
-void 			Thread_State_Machine();
+void * 			Thread_State_Machine(void * p);
 unsigned char	state_machine(void);
 void* 			Thread_Read_Command();
-void* 	 		Thread_Send_Data_PC();
+void* 			Thread_Send_Data_PC(void * p);
 void 			StopThread_Send_Data();
 void 			StartThread_Send_Data();
 void* 			Thread_ReadSensor();

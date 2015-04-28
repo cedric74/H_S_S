@@ -23,7 +23,9 @@
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *			
 ********************************************/
-#define	TICK_LOOP_MAIN		5
+#define	TICK_LOOP_MAIN_500_MS		500000
+#define	TICK_LOOP_MAIN_1_S	   		1000000
+
 /*******************************************
 *          F U N C T I O N S    		   *
 ********************************************/
@@ -47,7 +49,7 @@ int main(int argc, char *argv[])
 		main_Detect();
 
 		// Sleep
-		sleep(TICK_LOOP_MAIN);
+		usleep(TICK_LOOP_MAIN_500_MS);
 
 	}while(1);
 
@@ -66,6 +68,13 @@ void Init(){
 
 	// Start WatchDog
 	watch_dog_start();
+
+	// Load Config File
+	int iRet =Lib_Config_Load();
+	if(iRet == ERROR){
+		printf(" Error Load Configuration File\n");
+		exit(0);
+	}
 
 	// Create File Log With Version
 	File_Log(START_FILE, SIZE_STRING);

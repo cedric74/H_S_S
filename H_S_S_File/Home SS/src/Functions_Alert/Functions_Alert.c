@@ -74,10 +74,14 @@ void * Thread_DailyReport(){
  ============================================
  */
 void Send_Report_File_Log(){
+	char buffer[200];
+	snprintf(buffer , 200, "mpack -s \"Daily Report\" /home/debian/Desktop/dailyReportFile.txt ");
+	strcat(buffer,tabUser[MAIN_USER].sAddress);
+	int iReturn =system(buffer);
+    //int iReturn = system("mpack -s \"Daily Report\" /home/debian/Desktop/dailyReportFile.txt cedric.toncanier@gmail.com");
 
-    int iReturn = system("mpack -s \"Daily Report\" /home/debian/Desktop/dailyReportFile.txt cedric.toncanier@gmail.com");
-    if(iReturn == ERROR){
-    	 perror("Failed to invoke mpack");
+	if(iReturn == ERROR){
+    	 //perror("Failed to invoke mpack");
     }else{
     	system("rm /home/debian/Desktop/dailyReportFile.txt");
 
@@ -173,7 +177,7 @@ int Connection_OK(){
  Description  :
  ============================================
  */
-int send_Alert(int iSmsok){
+int send_Alert(int iSmsok, char strCaptor[5]){
 
 	// Declarations Variables
 	int iVal;
@@ -187,13 +191,15 @@ int send_Alert(int iSmsok){
 	}
 
 	// Send Alerte by mail
-	iVal = sendEmail();
+	iVal = sendEmail(strCaptor);
 	if( iVal == ERROR){
 		File_Log("PROBLEM_SEND_ALERT, ", 20);
 		File_Log("FAILED_SEND_MAIL, ", 18);
-		return ERROR;
+
+		//return ERROR;
+	}else{
+		File_Log("Send Mail Ok, ", 14);
 	}
-	File_Log("Send Mail Ok, ", 14);
 
 	if(iSmsok == SMS_OK){
 		// Send Alerte by sms
@@ -219,10 +225,19 @@ int send_Alert(int iSmsok){
  ============================================
  */
 int sendSMS(){
-    int iReturn = system("ssmtp -s \"ALERT Email\" 5145749606@sms.fido.ca");
-    if(iReturn == ERROR){
-   	 perror("Failed to invoke mpack");
-    }
+	int iLoop;
+	for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
+		char buffer[200];
+		snprintf(buffer , 200, "ssmtp -s \"ALERT Email\" ");
+		strcat(buffer,tabUser[iLoop].sNumPhone);
+		strcat(buffer,"@sms.fido.ca");
+		int iReturn =system(buffer);
+		//int iReturn = system("ssmtp -s \"ALERT Email\" 5145749606@sms.fido.ca");
+		if(iReturn == ERROR){
+			//perror("Failed to invoke mpack");
+		    return ERROR;
+		}
+	}
 
     return OK;
 }
@@ -236,18 +251,58 @@ int sendSMS(){
  Description  :
  ============================================
  */
-int sendEmail()
+int sendEmail(char strCaptor[5])
 {
-     int iReturn = system("mpack -s \"Alert Intrusion\"  /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
-     if(iReturn == ERROR){
-    	 perror("Failed to invoke mpack");
-     }
+	int iLoop;
+	if(strcmp(strCaptor, "MAIN\n")){
 
-     iReturn = system("mpack -s \"Alert Intrusion\"  /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
+		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
+			char buffer[200];
+			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
+			strcat(buffer,tabUser[iLoop].sAddress);
+			int iReturn =system(buffer);
+			if(iReturn == ERROR){
+				//perror("Failed to invoke mpack");
+			    return ERROR;
+			}
+		}
+	}else{
+		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
+			char buffer[200];
+			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
+			strcat(buffer,tabUser[iLoop].sAddress);
+			int iReturn =system(buffer);
+			if(iReturn == ERROR){
+				//perror("Failed to invoke mpack");
+				return ERROR;
+			}
+		}
+	}
 
-     if(iReturn == ERROR){
-    	 perror("Failed to invoke mpack");
-     }
+	/*if(strcmp(strCaptor, "MAIN\n")){
+		iReturn = system("mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
+		if(iReturn == ERROR){
+			//perror("Failed to invoke mpack");
+			return ERROR;
+		}
 
-     return OK;
+		iReturn = system("mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
+		if(iReturn == ERROR){
+			 //perror("Failed to invoke mpack");
+			return ERROR;
+		}
+	}else{
+		iReturn = system("mpack -s \"Alert Intrusion Back Door\"  /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
+		if(iReturn == ERROR){
+			//perror("Failed to invoke mpack");
+			return ERROR;
+		}
+
+		iReturn = system("mpack -s \"Alert Intrusion Back Door\"  /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
+		if(iReturn == ERROR){
+			//perror("Failed to invoke mpack");
+			return ERROR;
+		}
+	}*/
+	return OK;
 }

@@ -25,6 +25,8 @@
 #define SIREN			P9_15
 #define BUZZER			P9_11
 
+// Buzzer V2 With PWM	P9_16
+
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *

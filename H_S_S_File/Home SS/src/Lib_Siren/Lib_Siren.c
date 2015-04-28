@@ -10,6 +10,7 @@
 ********************************************/
 #include "Lib_Siren.h"
 
+#include "..\Lib_PWM\Lib_PWM.h"
 /*******************************************
 *               D E F I N E                *
 ********************************************/
@@ -18,6 +19,11 @@
 #define TIME_WARNING	500
 #define FREQ_BUZZER		100   	// In us , Pas mal 1000 , trop 50000
 #define NBE_BIP			8
+
+
+// Test Sound PM
+#define	PERIOD_DO		7575757 			// In ns, F = 132 Hz
+#define	DUTY_DO			(PERIOD_DO/2)
 
 
 /*******************************************
@@ -44,7 +50,7 @@ void Start_Thread_Warning(){
 	// Declarations Variables
 	pthread_t thread_id;
 
-	// Thread Execute Read Captor
+	// Thread Execute Warning Sound System On
 	pthread_create (&thread_id, NULL, &Thread_WarningSytemON, NULL);
 
 }
@@ -61,15 +67,25 @@ void * Thread_WarningSytemON(){
 	int i;
 	int iTimeDelay = 1000000/2;
 
+	// Test Buzzer with PWM
+	Lib_pwm_control( PERIOD_DO, DUTY_DO );
+	Lib_pwm_start();
+
+
 	for( i = 0 ; i < NBE_BIP; i++){
 		WarningSystemOn();
 		usleep(iTimeDelay);
 
+		Lib_pwm_control( PERIOD_DO, DUTY_DO/2 );
 		// If The Interrupter is switch to OFF, Stop Buzzer
 		if (stateInterrupter == STATE_OFF){
 			break;
 		}
 	}
+
+	// Test Buzzer with PWM
+	Lib_pwm_stop();
+
 	return NULL;
 }
 
@@ -160,6 +176,9 @@ void Init_Siren(){
 
 	// Init Buzzer
 	beh_BBB_gpio_conf_dir(BUZZER, OUTPUT);
+
+	// Init Buzzer V2 , With PWM
+	Lib_pwm_init();
 
 	// Init Siren Ouput
 	beh_BBB_gpio_conf_dir(SIREN, OUTPUT);

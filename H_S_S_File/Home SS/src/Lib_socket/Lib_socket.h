@@ -44,7 +44,7 @@ int 			create_Socket(int iPort);
 int 			accept_client_connection(int sockfd);
 int 			write_socket(int  newsockfd, char * sMessage, int iSize);
 int 			read_socket(int newsockfd, int iLength , unsigned char * bData);
-void 			send_binary(int  newsockfd, char *file_name);
+void 			send_binary(int  newsockfd, const char *file_name);
 
 void 			close_socket(int sockfd, int newsockfd);
 void 			error(const char *msg);

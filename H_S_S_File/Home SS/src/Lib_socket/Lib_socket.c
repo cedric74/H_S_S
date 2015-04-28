@@ -75,7 +75,7 @@ int create_Socket(int iPort){
 int accept_client_connection(int sockfd){
 	struct sockaddr_in cli_addr;
 	socklen_t clilen;
-	char *some_addr;
+	//char *some_addr;
 
 	clilen = sizeof(cli_addr);
 
@@ -85,8 +85,9 @@ int accept_client_connection(int sockfd){
 		exit(1);
 	}
     //printf(" Accept connection From a client:  " );
-	some_addr = inet_ntoa(cli_addr.sin_addr); // return the IP
-	//printf(" %s\n", some_addr);
+	//some_addr = inet_ntoa(cli_addr.sin_addr); // return the IP
+	// Print IP CLient
+    //printf(" %s\n", some_addr);
 
 	return newsockfd;
 }
@@ -163,7 +164,7 @@ void error(const char *msg)
  Description  :
  ============================================
  */
-void send_binary(int newsockfd, char *file_name)
+void send_binary(int newsockfd, const char *file_name)
 {
 
     int buff_size = 50240;		//10240;

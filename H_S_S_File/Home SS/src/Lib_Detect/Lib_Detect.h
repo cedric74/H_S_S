@@ -54,12 +54,12 @@
 #define OFF_INTERRUPT		1
 #define ON_INTERRUPT		0
 
-#define DELAYS_TO_DISABLE	30		// 30 Sec
+#define DELAYS_TO_DISABLE	15		// In Sec , 30 Sec Maybe To Long
 #define DELAYS_TO_ENABLE	(60*2)	// 2 MIN
 
 #define SIZE_MESS_CAPTOR	4
 
-#define WAIT_1MS	1000
+#define WAIT_1MS			1000
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *			
 ********************************************/
