@@ -36,8 +36,12 @@ const char * dailyReportFile = "/home/debian/Desktop/dailyReportFile.txt";
  ============================================
  */
 void Report_File_To_Supervisor(){
+
+	printf(" Test Report_File_To_Supervisor \n");
+
 	int socketFile 	= create_Socket(PORT_FILE);
 	int newSockFile = accept_client_connection(socketFile);
+
 	send_binary(newSockFile, dailyReportFile);
 	close_socket(socketFile, newSockFile);
 }
@@ -78,7 +82,6 @@ void Send_Report_File_Log(){
 	snprintf(buffer , 200, "mpack -s \"Daily Report\" /home/debian/Desktop/dailyReportFile.txt ");
 	strcat(buffer,tabUser[MAIN_USER].sAddress);
 	int iReturn =system(buffer);
-    //int iReturn = system("mpack -s \"Daily Report\" /home/debian/Desktop/dailyReportFile.txt cedric.toncanier@gmail.com");
 
 	if(iReturn == ERROR){
     	 //perror("Failed to invoke mpack");
@@ -225,21 +228,20 @@ int send_Alert(int iSmsok, char strCaptor[5]){
  ============================================
  */
 int sendSMS(){
-	int iLoop;
-	for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
+	int iBcl;
+	for(iBcl = 0 ; iBcl < u8NbUSer; iBcl++){
 		char buffer[200];
 		snprintf(buffer , 200, "ssmtp -s \"ALERT Email\" ");
-		strcat(buffer,tabUser[iLoop].sNumPhone);
+		strcat(buffer,tabUser[iBcl].sNumPhone);
 		strcat(buffer,"@sms.fido.ca");
+		printf("buffer sms, ind: %d, nb User = %d  , : %s \n", iBcl, u8NbUSer, buffer);
 		int iReturn =system(buffer);
-		//int iReturn = system("ssmtp -s \"ALERT Email\" 5145749606@sms.fido.ca");
 		if(iReturn == ERROR){
-			//perror("Failed to invoke mpack");
+			printf("Error sms: %s \n", buffer);
 		    return ERROR;
 		}
 	}
-
-    return OK;
+	return OK;
 }
 
 
@@ -254,55 +256,35 @@ int sendSMS(){
 int sendEmail(char strCaptor[5])
 {
 	int iLoop;
-	if(strcmp(strCaptor, "MAIN\n")){
-
+	if(strcmp(strCaptor, "MAIN\n")== 0){
 		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 			char buffer[200];
-			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
+			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg ");
 			strcat(buffer,tabUser[iLoop].sAddress);
+
+			printf("buffer email: %s \n", buffer);
 			int iReturn =system(buffer);
 			if(iReturn == ERROR){
-				//perror("Failed to invoke mpack");
+				snprintf(buffer , 200, "ssmtp -s \"Alert Intrusion Main Door\"  ");
+				strcat(buffer,tabUser[iLoop].sAddress);
+				system(buffer);
 			    return ERROR;
 			}
 		}
 	}else{
 		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 			char buffer[200];
-			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
+			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Back Door\"  /home/debian/Desktop/Intrusion.jpeg ");
 			strcat(buffer,tabUser[iLoop].sAddress);
+			printf("buffer email: %s \n", buffer);
 			int iReturn =system(buffer);
 			if(iReturn == ERROR){
-				//perror("Failed to invoke mpack");
+				snprintf(buffer , 200, "ssmtp -s \"Alert Intrusion Back Door\"  ");
+				strcat(buffer,tabUser[iLoop].sAddress);
+				system(buffer);
 				return ERROR;
 			}
 		}
 	}
-
-	/*if(strcmp(strCaptor, "MAIN\n")){
-		iReturn = system("mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
-		if(iReturn == ERROR){
-			//perror("Failed to invoke mpack");
-			return ERROR;
-		}
-
-		iReturn = system("mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
-		if(iReturn == ERROR){
-			 //perror("Failed to invoke mpack");
-			return ERROR;
-		}
-	}else{
-		iReturn = system("mpack -s \"Alert Intrusion Back Door\"  /home/debian/Desktop/Intrusion.jpeg cedric.toncanier@gmail.com");
-		if(iReturn == ERROR){
-			//perror("Failed to invoke mpack");
-			return ERROR;
-		}
-
-		iReturn = system("mpack -s \"Alert Intrusion Back Door\"  /home/debian/Desktop/Intrusion.jpeg aurelie.leguernic.alg@gmail.com");
-		if(iReturn == ERROR){
-			//perror("Failed to invoke mpack");
-			return ERROR;
-		}
-	}*/
 	return OK;
 }

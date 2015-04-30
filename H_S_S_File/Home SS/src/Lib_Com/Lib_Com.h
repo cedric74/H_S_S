@@ -5,8 +5,8 @@
  *      Author: cedric.toncanier
  */
 
-#ifndef SRC_LIB_COM_LIB_COM_H_
-#define SRC_LIB_COM_LIB_COM_H_
+#ifndef _LIB_COM_H_
+#define _LIB_COM_H_
 
 /*******************************************
 *			  I N C L U D E 			   *
@@ -70,4 +70,4 @@ typedef struct{
 void 			libcom_InputStatus(strInputStatus * ptr, unsigned char captor1, unsigned char captor2, unsigned char interrupter, float fTemp,float fHum);
 cmdApplication 	libcom_cmdAppli(unsigned char  * cmd);
 
-#endif /* SRC_LIB_COM_LIB_COM_H_ */
+#endif /* _LIB_COM_H_ */

@@ -82,7 +82,7 @@ int Lib_Config_Load(void){
 			// Get Adress
 			case GET_ADDRESS:
 				snprintf(tabUser[iIndexUser].sAddress , sizeLine, line);
-				tabUser[iIndexUser].sAddress[sizeLine-2] = '\0';
+				tabUser[iIndexUser].sAddress[sizeLine-1] = '\0';
 
 				// Change State;
 				confiState = GET_NUM;
@@ -90,7 +90,7 @@ int Lib_Config_Load(void){
 			// Get Num
 			case GET_NUM:
 				snprintf(tabUser[iIndexUser].sNumPhone , sizeLine, line);
-				tabUser[iIndexUser].sNumPhone[sizeLine-2] = '\0';
+				tabUser[iIndexUser].sNumPhone[sizeLine-1] = '\0';
 
 				if(iIndexUser == (u8NbUSer-1)){
 					confiState = END;

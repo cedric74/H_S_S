@@ -73,7 +73,8 @@ void main_Detect(){
 
 			// Take A picture
 			File_Log("Take A Pic, ", 12);
-			Start_Thread_Pic();
+			//Start_Thread_Pic();
+			Take_Picture();
 
 			// Delays to Disable System with Interrupter
 			printf(" DELAYS_TO_DISABLE\n");
@@ -91,6 +92,9 @@ void main_Detect(){
 			}else{
 				// Alert OK
 				printf(" Alert OK \n");
+				// Siren ON.
+				File_Log("Siren  ON , ", 12);
+				Start_Siren();
 
 				// Send Alert By Mail & Sms
 				if(u8DetectOn == ptrCaptorMainDoor->ePinCaptor){
@@ -98,10 +102,6 @@ void main_Detect(){
 				}else{
 					send_Alert(SMS_OK, ptrCaptorBackDoor->sMessage );		//	NO_SMS
 				}
-
-				// Siren ON.
-				File_Log("Siren  ON , ", 12);
-				Start_Siren();
 			}
 
 		}else{
