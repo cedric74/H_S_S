@@ -77,9 +77,50 @@ unsigned char u8StopThread;
 void 			Lib_Algo_Test();
 static void * 	Lib_Algo_Thread(void * p);
 
+
+void 			Lib_Algo_Ball_Rover(void);
 static void  	Lib_Algo_Roaming_Rover(void);
 static int 	    Lib_Algo_All_Area_Scanning();
 static void 	Lib_Algo_Scanning(eServo_Sonar_Rotate valueRotate);
+
+
+/*
+ ============================================
+ Function     : Lib_Algo_Ball_Rover()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void Lib_Algo_Ball_Rover(void){
+
+
+	// Declarations Variables
+	int iRet;
+
+	//tabAreaScannig[CENTER]  > MINI_DIST_CENTER
+
+	// Go Head
+	//Lib_motor_control(FORWARD);
+	//printf(" -> FORWARD \n");
+	// Scanning Area At CenterPosition
+	//Lib_Algo_Scanning(CENTER);
+	// Prevent Infinite loop
+	//iPreviousCmd = FORWARD;
+
+	printf( "Position : \n" );
+
+	iRet = Lib_Algo_All_Area_Scanning();
+
+	int i = 0 ;
+	for(i = LEFT_0 ; i <= RIGHT_0; i++){
+		// ************  POSITION SCANNING **************
+		// tabAreaScannig[CENTER]  > MINI_DIST_CENTER
+		printf("pos : %d  , Distance : 4.2%F\n", LEFT_0, tabAreaScannig[i] );
+
+	}
+}
+
 
 /*
  ============================================
@@ -100,7 +141,7 @@ void Lib_Algo_Start(){
 
 /*
  ============================================
- Function     : Algo_start()
+ Function     : Lib_Algo_Thread()
  Parameter    :
  Return Value : void
  Description  :
