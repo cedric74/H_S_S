@@ -1,4 +1,7 @@
 BBB firmware : Home Security System
+03_06_2015, Version 1.13 :
+	* Modified Lib Detect, Reduced constant Count Detection value from 100 to 70,( If door open to fast, no enough detection count to trig alarm ) 
+	* Modified Functions Alert, added Check time function, replaced sleep 1 day by check a specific time value every day for send daily report					   
 28_04_2015, Version 1.12 :
 	* Modified main, Reduced Timing Tick from 5s To 500ms
 	* Modified Functions Alert, To include the configurations loaded
