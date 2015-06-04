@@ -24,14 +24,13 @@
 
 #include "Lib_Detect/Lib_Detect.h"
 #include "Lib_Siren/Lib_Siren.h"
-
 #include "Lib_Config/Lib_Config.h"
 
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Version 1.12, 28 april, "
-#define SIZE_STRING			24
+#define START_FILE			"Version 1.13, 03 June, "
+#define SIZE_STRING			23
 
 #define DEBUG				1
 

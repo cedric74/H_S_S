@@ -205,8 +205,8 @@ int Lib_pwm_stop(){
 
 	// Instructions
 	// ----- Echo 0 > RUN
-	snprintf(buffer, BUFFER_SIZE, cPath_P9_16);
-	strcat(buffer,PATH_RUN);
+	snprintf(buffer, BUFFER_SIZE, PATH_RUN);
+	strcat(buffer,PATH_DUTY);
 
 	fd = open(buffer, O_WRONLY);
 	if (fd < 0) {

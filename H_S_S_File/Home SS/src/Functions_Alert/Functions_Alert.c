@@ -14,19 +14,61 @@
 *               D E F I N E                *
 ********************************************/
 #define WAIT_1_DAYS		86400	// In Second
+#define WAIT_1_MIN		60		// In Second
+
+
+#define	TRUE			1
+#define	FALSE			0
+
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
 const char * dailyReportFile = "/home/debian/Desktop/dailyReportFile.txt";
 
+const int HourTimeDay 	= 20;
+const int MinTimeDay 	= 00;
+
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
 
 /*******************************************
+*	      L O C A L  F U N C T I O N S      *
+********************************************/
+static int CheckTime(void);
+
+/*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+
+/*
+ ============================================
+ Function     : CheckTime()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+static int CheckTime(void){
+
+	// Declarations Variables
+	time_t rawtime;
+	struct tm * timeinfo;
+
+	// Instructions
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
+	//printf(" %s" , asctime(timeinfo));
+
+	// Check if it's the right time of day
+	if( ((timeinfo->tm_hour) == HourTimeDay) && ((timeinfo->tm_min) == MinTimeDay)){
+		return	TRUE;
+	}
+
+	return	FALSE;
+}
+
 /*
  ============================================
  Function     : Report_File_To_Supervisor()
@@ -36,12 +78,8 @@ const char * dailyReportFile = "/home/debian/Desktop/dailyReportFile.txt";
  ============================================
  */
 void Report_File_To_Supervisor(){
-
-	printf(" Test Report_File_To_Supervisor \n");
-
 	int socketFile 	= create_Socket(PORT_FILE);
 	int newSockFile = accept_client_connection(socketFile);
-
 	send_binary(newSockFile, dailyReportFile);
 	close_socket(socketFile, newSockFile);
 }
@@ -55,17 +93,34 @@ void Report_File_To_Supervisor(){
  ============================================
  */
 void * Thread_DailyReport(){
+	int iret;
 
 	while(1){
-		sleep(WAIT_1_DAYS);
-		int iret = Connection_OK();
-		if( iret == ERROR){
-			File_Log("PROBLEM_SEND_DAILY RAPPORT, ", 28);
-			File_Log("NO_CONNECTION, ", 15);
-		}else{
-			Send_Report_File_Log();
+		sleep(WAIT_1_MIN);
+		if(CheckTime()){
+			iret = Connection_OK();
+			if( iret == ERROR){
+				File_Log("PROBLEM_SEND_DAILY RAPPORT, ", 28);
+				File_Log("NO_CONNECTION, ", 15);
+			}else{
+				Send_Report_File_Log();
+			}
+
+			// Sleep 1 minutes to avoid to send several report the same day
+			sleep(WAIT_1_MIN);
 		}
 	}
+
+//	while(1){
+//		sleep(WAIT_1_DAYS);
+//		int iret = Connection_OK();
+//		if( iret == ERROR){
+//			File_Log("PROBLEM_SEND_DAILY RAPPORT, ", 28);
+//			File_Log("NO_CONNECTION, ", 15);
+//		}else{
+//			Send_Report_File_Log();
+//		}
+//	}
 
 	return NULL;
 }
@@ -106,11 +161,11 @@ void File_Log(char string[50], int iLength){
 	// Instructions
 	fpLog = fopen ( dailyReportFile, "a");
 
-	 time_t rawtime;
-	 struct tm * timeinfo;
+	time_t rawtime;
+	struct tm * timeinfo;
 
-	 time ( &rawtime );
-	 timeinfo = localtime ( &rawtime );
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
 	fwrite(string , 1 , iLength , fpLog );
 	fwrite(asctime (timeinfo) , 1 , 25 , fpLog );
 
@@ -141,14 +196,6 @@ int Ping_Phone(){
 		File_Log("Cedric Here, ", 12);
 		//printf("\n Cedric Here\n\n");
 	}
-
-	// Ping Aurelie
-//	int iret = system("ping -c3 ADRESSE_IP_AURELIE");
-//	if(iret !=0 ){
-//		printf("\n Aurelie No Here \n");
-//		iValue = PHONE_CEDRIC;
-//	}
-//	printf("\n Aurelie Here\n\n");
 
 	return iValue;
 }
@@ -228,20 +275,20 @@ int send_Alert(int iSmsok, char strCaptor[5]){
  ============================================
  */
 int sendSMS(){
-	int iBcl;
-	for(iBcl = 0 ; iBcl < u8NbUSer; iBcl++){
+	int iLoop;
+	for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 		char buffer[200];
 		snprintf(buffer , 200, "ssmtp -s \"ALERT Email\" ");
-		strcat(buffer,tabUser[iBcl].sNumPhone);
+		strcat(buffer,tabUser[iLoop].sNumPhone);
 		strcat(buffer,"@sms.fido.ca");
-		printf("buffer sms, ind: %d, nb User = %d  , : %s \n", iBcl, u8NbUSer, buffer);
 		int iReturn =system(buffer);
 		if(iReturn == ERROR){
-			printf("Error sms: %s \n", buffer);
+			//perror("Failed to invoke mpack");
 		    return ERROR;
 		}
 	}
-	return OK;
+
+    return OK;
 }
 
 
@@ -256,35 +303,30 @@ int sendSMS(){
 int sendEmail(char strCaptor[5])
 {
 	int iLoop;
-	if(strcmp(strCaptor, "MAIN\n")== 0){
+	if(strcmp(strCaptor, "MAIN\n")){
+
 		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 			char buffer[200];
-			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg ");
+			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
 			strcat(buffer,tabUser[iLoop].sAddress);
-
-			printf("buffer email: %s \n", buffer);
 			int iReturn =system(buffer);
 			if(iReturn == ERROR){
-				snprintf(buffer , 200, "ssmtp -s \"Alert Intrusion Main Door\"  ");
-				strcat(buffer,tabUser[iLoop].sAddress);
-				system(buffer);
+				//perror("Failed to invoke mpack");
 			    return ERROR;
 			}
 		}
 	}else{
 		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 			char buffer[200];
-			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Back Door\"  /home/debian/Desktop/Intrusion.jpeg ");
+			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
 			strcat(buffer,tabUser[iLoop].sAddress);
-			printf("buffer email: %s \n", buffer);
 			int iReturn =system(buffer);
 			if(iReturn == ERROR){
-				snprintf(buffer , 200, "ssmtp -s \"Alert Intrusion Back Door\"  ");
-				strcat(buffer,tabUser[iLoop].sAddress);
-				system(buffer);
+				//perror("Failed to invoke mpack");
 				return ERROR;
 			}
 		}
 	}
+
 	return OK;
 }

@@ -10,7 +10,7 @@
 ********************************************/
 #include "Lib_Camera.h"
 
-#include <time.h>
+
 /*******************************************
 *               D E F I N E                *
 ********************************************/
@@ -34,13 +34,13 @@
  Description  :
  ============================================
  */
-//void Start_Thread_Pic(){
-//	// Declarations Variables
-//	pthread_t thread_id;
-//
-//	// Thread Execute Read Captor
-//	pthread_create (&thread_id, NULL, &ThreadPic, NULL);
-//}
+void Start_Thread_Pic(){
+	// Declarations Variables
+	pthread_t thread_id;
+
+	// Thread Execute Read Captor
+	pthread_create (&thread_id, NULL, &ThreadPic, NULL);
+}
 /*
  ============================================
  Function     : ThreadPic()

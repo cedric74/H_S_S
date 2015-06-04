@@ -44,7 +44,7 @@
 #define INTRUSION_OK		1
 #define INTRUSION_NO		0
 
-#define COUNT_DETECTION		100
+#define COUNT_DETECTION		75		// Changed in version 1.13 from 100->75, try fix fast door opening
 
 #define COUNT_INTERRUPTER	500
 

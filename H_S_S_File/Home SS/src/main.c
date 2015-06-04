@@ -66,6 +66,9 @@ int main(int argc, char *argv[])
  */
 void Init(){
 
+	// Print Version
+	printf("%s \n" , START_FILE);
+
 	// Start WatchDog
 	watch_dog_start();
 

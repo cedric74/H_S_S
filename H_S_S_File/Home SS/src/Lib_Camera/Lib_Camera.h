@@ -11,11 +11,13 @@
 /*******************************************
 *			  I N C L U D E 			   *
 ********************************************/
+#include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
 #include <pthread.h>
+#include <time.h>
 
 /*******************************************
 *               D E F I N E                *

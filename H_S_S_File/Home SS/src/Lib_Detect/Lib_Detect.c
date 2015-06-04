@@ -73,8 +73,7 @@ void main_Detect(){
 
 			// Take A picture
 			File_Log("Take A Pic, ", 12);
-			//Start_Thread_Pic();
-			Take_Picture();
+			Start_Thread_Pic();
 
 			// Delays to Disable System with Interrupter
 			printf(" DELAYS_TO_DISABLE\n");
@@ -92,9 +91,6 @@ void main_Detect(){
 			}else{
 				// Alert OK
 				printf(" Alert OK \n");
-				// Siren ON.
-				File_Log("Siren  ON , ", 12);
-				Start_Siren();
 
 				// Send Alert By Mail & Sms
 				if(u8DetectOn == ptrCaptorMainDoor->ePinCaptor){
@@ -102,6 +98,10 @@ void main_Detect(){
 				}else{
 					send_Alert(SMS_OK, ptrCaptorBackDoor->sMessage );		//	NO_SMS
 				}
+
+				// Siren ON.
+				File_Log("Siren  ON , ", 12);
+				Start_Siren();
 			}
 
 		}else{
@@ -245,6 +245,10 @@ void Read_Captor(structCaptor * sCaptor){
 				// End Critic Section
 				pthread_setcancelstate (old_cancel_state, NULL);
 				printf(" Press Ok, Captor %s", sCaptor->sMessage);
+			}else{
+				// Version 1.13, Try To reset Counter each time not Detection
+				sCaptor->icountDete = 0;
+
 			} 
 		break ;
 		
@@ -252,6 +256,9 @@ void Read_Captor(structCaptor * sCaptor){
 			if( readEntry == DETECT_OK){
 				sCaptor->icountDete++;
 			}else{
+				// DEBUG
+				//printf(" Detect count : %i \n", sCaptor->icountDete);
+
 				// Change State
 				sCaptor->stateCapt = STATE_NO_DETECTION;
 				if( sCaptor->icountDete >= COUNT_DETECTION){
