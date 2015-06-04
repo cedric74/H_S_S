@@ -64,23 +64,36 @@ void Start_Thread_Warning(){
  ============================================
  */
 void * Thread_WarningSytemON(){
-	int i;
-	int iTimeDelay = 1000000/2;
+	int i, i2;
+	int iTimeDelay = 100000;
+	int iPeriod = PERIOD_DO;
 
+	int iDuty = ( iPeriod / 2 );
 	// Test Buzzer with PWM
-	Lib_pwm_control( PERIOD_DO, DUTY_DO );
+	Lib_pwm_control( iPeriod, iDuty );
 	Lib_pwm_start();
 
+	for( i2 = 0 ; i2 < 5 ; i2++){
+		for( i = 0 ; i < NBE_BIP; i++){
+			//WarningSystemOn();
+			usleep(iTimeDelay);
+			//Lib_pwm_stop();
+			//usleep(iTimeDelay);
 
-	for( i = 0 ; i < NBE_BIP; i++){
-		WarningSystemOn();
-		usleep(iTimeDelay);
+			//iDuty =
+			Lib_pwm_control( iPeriod, iDuty);
+			//Lib_pwm_start();
 
-		Lib_pwm_control( PERIOD_DO, DUTY_DO/2 );
-		// If The Interrupter is switch to OFF, Stop Buzzer
-		if (stateInterrupter == STATE_OFF){
-			break;
+			// If The Interrupter is switch to OFF, Stop Buzzer
+			if (stateInterrupter == STATE_OFF){
+				break;
+			}
+			iPeriod = iPeriod/ 2 ;
+			iDuty = iPeriod / 2 ;
 		}
+		iPeriod = PERIOD_DO;
+		iDuty = ( iPeriod / 2 );
+		sleep(1);
 	}
 
 	// Test Buzzer with PWM
