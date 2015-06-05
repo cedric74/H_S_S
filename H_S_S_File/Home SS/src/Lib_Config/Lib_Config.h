@@ -16,7 +16,7 @@
 *               D E F I N E                *
 ********************************************/
 #define 	ERROR			-1
-#define 	MAX_USER		5
+#define 	MAX_USER		 5
 
 #define		MAIN_USER		0
 

@@ -304,7 +304,6 @@ int sendEmail(char strCaptor[5])
 {
 	int iLoop;
 	if(strcmp(strCaptor, "MAIN\n")){
-
 		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 			char buffer[200];
 			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");

@@ -24,6 +24,7 @@
 volatile unsigned char 	u8DetectOn 			= 0;
 static int 				iCountInter 		= 0;
 
+
 /*******************************************
 *	 P R O T O T Y P E   F U N C T I O N   *			
 ********************************************/
@@ -244,34 +245,36 @@ void Read_Captor(structCaptor * sCaptor){
 				sCaptor->stateCapt = STATE_DETECTION ;
 				// End Critic Section
 				pthread_setcancelstate (old_cancel_state, NULL);
-				printf(" Press Ok, Captor %s", sCaptor->sMessage);
-			}else{
-				// Version 1.13, Try To reset Counter each time not Detection
-				sCaptor->icountDete = 0;
-
-			} 
+				printf(" Press OK, Captor %s", sCaptor->sMessage);
+			}
 		break ;
 		
 		case STATE_DETECTION :
 			if( readEntry == DETECT_OK){
 				sCaptor->icountDete++;
 			}else{
+				sCaptor->icountDete--;
+
 				// DEBUG
-				//printf(" Detect count : %i \n", sCaptor->icountDete);
+				printf(" Detect count : %i \n", sCaptor->icountDete);
+			}
 
-				// Change State
+			// Change State
+			if(sCaptor->icountDete == 0){
 				sCaptor->stateCapt = STATE_NO_DETECTION;
-				if( sCaptor->icountDete >= COUNT_DETECTION){
-					printf(" Release Ok, Count: %d, Captor %s",  sCaptor->icountDete , sCaptor->sMessage);
-					sCaptor->icountDete = 0;
+			}
 
-					// Start Critic Section
-					pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
-					u8DetectOn = (unsigned char)sCaptor->ePinCaptor;
-					// End Critic Section
-					pthread_setcancelstate (old_cancel_state, NULL);
-				} 
-			}	 
+			if( sCaptor->icountDete >= COUNT_DETECTION){
+				sCaptor->stateCapt = STATE_NO_DETECTION;
+				printf(" Release OK, Count: %d, Captor %s",  sCaptor->icountDete , sCaptor->sMessage);
+				sCaptor->icountDete = 0;
+
+				// Start Critic Section
+				pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
+				u8DetectOn = (unsigned char)sCaptor->ePinCaptor;
+				// End Critic Section
+				pthread_setcancelstate (old_cancel_state, NULL);
+			}
 		break;
 	}
 }
