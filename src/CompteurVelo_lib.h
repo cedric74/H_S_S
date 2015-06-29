@@ -19,7 +19,8 @@
 #include <unistd.h>
 
 #include 	"Functions_WatchDog/Functions_WatchDog.h"
-#include	"Lib_socket/Lib_socket.h"
+#include	"Lib_Job/Lib_Job.h"
+#include    "Lib_Gpio/beh_BBB_gpio.h"
 
 /*******************************************
 *               D E F I N E                *
