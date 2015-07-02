@@ -19,11 +19,21 @@
 ********************************************/
 const int SERVER_PORT = 6000;
 
+// Data Bike
+const float RADIUS_BIKE = 340.00F; // Diameter 680 mm
+
+// Perimeter of circle formula
+//P = 2.Pi.Radius
+
+#define DISTANCE(x) ((2 * 3.14 * RADIUS_BIKE * x))
+
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
 static int socketData;
 static int newSockData;
+
+char iData[2] = {0,0};
 
 /*******************************************
 *	        F U N C T I O N S   	       *
@@ -65,20 +75,33 @@ int Job_init(void){
 int Job_main(void){
 
 	// Declarations Variables
-	char iData[2] = {0,0};
+
 
 	// Instructions
 
 #ifdef 	DEBUG
-	iData[0] = rand() % 100;
+	// Simulate Detection
+	iData[0] = rand() % 30;
+#else
+	// Detection with Captor
+	//....
 #endif
 
-	//
-	printf(" data : %i \n", iData[0]);
+	// Get Distance
+	int Dist = DISTANCE(iData[0]);
 
+	// Print Debug
+	printf(" Count : %i , Distance : %i ", iData[0], Dist);
+
+	iData[0] = (char)(Dist/10000);
+	iData[1] = (char)((Dist - (iData[0] *10000))/100);
+	iData[2] = (char)(Dist - (iData[1]*100 + iData[0]*10000));
+
+
+	printf(" Value : %i %i %i\n", iData[0], iData[1], iData[2]);
 	// Send Socket
-	write_socket(newSockData, iData, 1);	// Problem with the size of the message
 
+	write_socket(newSockData, iData, 3);	// Problem with the size of the message
 
 	return 0;
 }
@@ -96,4 +119,5 @@ int Job_end(){
 
 	return 0;
 }
+
 

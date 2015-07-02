@@ -21,7 +21,7 @@
 ********************************************/
 #define	TICK_LOOP_MAIN		100000	// In us
 #define DELAY_5_SEC			5		// In s
-
+#define	TICK_500_MS			500000	// In us
 /*******************************************
 *   P R O T O T Y P E   F U N C T I O N S  *			
 ********************************************/
@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
 
 		// Wait 5 Sec
 		sleep(DELAY_5_SEC);
+		//usleep(TICK_500_MS);
 	}
 
 	printf("END %s \n", START_FILE);

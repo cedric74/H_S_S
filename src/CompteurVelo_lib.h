@@ -25,7 +25,8 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Compteur Velo, 1.0, 28 June, "
+#define START_FILE			"Compteur Velo, 1.1, 01 July, "
+
 #define SIZE_STRING			30
 
 /*******************************************
