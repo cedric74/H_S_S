@@ -1713,10 +1713,10 @@ containing a value of this type.
         public static final int split_action_bar=0x7f090004;
         public static final int submit_area=0x7f09003c;
         public static final int tabMode=0x7f09000c;
-        public static final int textViewAverageSpeed=0x7f090046;
+        public static final int textViewAverageSpeed=0x7f090045;
         public static final int textViewDistance=0x7f090044;
         public static final int textViewSpeed=0x7f090041;
-        public static final int textsocket=0x7f090045;
+        public static final int textsocket=0x7f090046;
         public static final int title=0x7f090027;
         public static final int up=0x7f090001;
         public static final int useLogo=0x7f090013;
