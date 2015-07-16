@@ -20,20 +20,14 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
-<<<<<<< .mine
-public class MainActivity extends ActionBarActivity implements View.OnClickListener {
-=======
-@SuppressWarnings("deprecation")
-public class MainActivity extends ActionBarActivity {
->>>>>>> .r93
 
+public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 	/**
 	 * CONSTANT
 	 */
     private final boolean START = true;
     private final boolean STOP  = false;
     private final int TICK_DATA = 2; // 5 Seconds Maybe Too Long
-<<<<<<< .mine
 
     // DEBUG
     /**
@@ -332,8 +326,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     // End MainClass MainActivity
-=======
->>>>>>> .r93
+
 }
 
 
