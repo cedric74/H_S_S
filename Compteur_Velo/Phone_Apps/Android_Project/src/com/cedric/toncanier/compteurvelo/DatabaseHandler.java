@@ -7,25 +7,25 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHandler extends SQLiteOpenHelper{
 
-	  public static final String TRIP_KEY 		= "id";
-	  public static final String TRIP_SPEED 	= "speed";
-	  public static final String TRIP_DISTANCE 	= "distance";
-	  public static final String TRIP_TIME 		= "time";
-	  public static final String TRIP_DATE 		= "date";
-	    
-	  public static final String TRIP_TABLE_NAME = "trip";
-	  public static final String TRIP_TABLE_CREATE =
-	    "CREATE TABLE " + TRIP_TABLE_NAME + " (" +
-	    		TRIP_KEY 		+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-	    		TRIP_SPEED 		+ "REAL, " +
-	    		TRIP_DISTANCE 	+ "REAL"   +
-	    		TRIP_TIME		+ "TEXT"   +
-	    		TRIP_DATE		+ "TEXT);";
+	private static final String COL_ID 			= "Id";
+	private static final String COL_SPEED 		= "Speed";
+	private static final String COL_DISTANCE 	= "Distance";
+	private static final String COL_TIME 		= "Time";
+	private static final String COL_DATE 		= "Date";
+	public static final String TABLE_TRIP 		= "Table_trips";
+	
+	
+	public static final String TRIP_TABLE_CREATE =
+	    "CREATE TABLE " + TABLE_TRIP + " (" +
+	    		COL_ID 		+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+	    		COL_SPEED 		+ "REAL, " +
+	    		COL_DISTANCE 	+ "REAL"   +
+	    		COL_TIME		+ "TEXT"   +
+	    		COL_DATE		+ "TEXT);";
 	  
 	public DatabaseHandler(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -35,7 +35,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
+		//comme ça lorsque je change la version les id repartent de 0
+		db.execSQL("DROP TABLE " + TABLE_TRIP + ";");
+		onCreate(db);
 		
 	}
+	
 }

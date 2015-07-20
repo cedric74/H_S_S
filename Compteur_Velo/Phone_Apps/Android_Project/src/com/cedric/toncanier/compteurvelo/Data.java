@@ -18,6 +18,9 @@ public class Data {
 		this.sTime = sTime;
 		this.sDate = sDate;
 	}
+	public Data() {
+		// TODO Auto-generated constructor stub
+	}
 	public long getlId() {
 		return lId;
 	}

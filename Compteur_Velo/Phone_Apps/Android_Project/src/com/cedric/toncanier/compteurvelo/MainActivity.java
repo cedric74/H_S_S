@@ -1,17 +1,22 @@
 package com.cedric.toncanier.compteurvelo;
 
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
+
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.text.DecimalFormat;
+
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.os.Bundle;
+
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import android.os.Message;
 import android.os.Handler.Callback;
 import android.support.v7.app.ActionBarActivity;
@@ -25,14 +30,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	/**
 	 * CONSTANT
 	 */
-    private final boolean START = true;
-    private final boolean STOP  = false;
-    private final int TICK_DATA = 2; // 5 Seconds Maybe Too Long
+    private final boolean 	START 		= true;
+    private final boolean 	STOP  		= false;
+    private final int 		TICK_DATA 	= 2; 		// 5 Seconds Maybe Too Long
 
     // DEBUG
     /**
      * DEBUG
      */
+    //TODO, Change DEBUG VALUE
     private final int MAX_RDM   = 50000;
     private final int MIN_RDM   = 46000;
 
@@ -42,9 +48,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     DataCycle             	data;
     Test_Debug_Without_BBB  debug;
     
-    DataDAO 				db;
-    Data					dataTest;
-
     /**
      * VARIABLES
      */
@@ -109,15 +112,31 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         
         // Test Data Base 
         
-//        try{
-//        	db = new DataDAO(null);
-//        	dataTest = new Data(0,1,2,"3", "4");
-//        	db.add(dataTest);
-//        }
-//        
-//        catch(Exception ex){
-//        	ex.printStackTrace();
-//        }
+        // Creation d'une instance de ma classe 
+       DataBDD bdd = new DataBDD(this);
+       bdd.open();
+       
+        // Create  Entry
+        Data tTest = new Data(0,1,2,"3", "4");
+        
+        // Insert Entry
+        bdd.insertTrip(tTest);
+        
+        
+        // TEST
+        Data dResult = bdd.getTripWithDate("4");
+        
+       // Data dResult = mDD.getTrip("0");
+        
+//        Livre livreFromBdd = livreBdd.getLivreWithTitre(livre.getTitre());
+//        //Si un livre est retourné (donc si le livre à bien été ajouté à la BDD)
+//        if(livreFromBdd != null){
+//        	//On affiche les infos du livre dans un Toast
+//        	Toast.makeText(this, livreFromBdd.toString(), Toast.LENGTH_LONG).show();
+//        	//On modifie le titre du livre
+//        	livreFromBdd.setTitre("J'ai modifié le titre du livre");
+//        	//Puis on met à jour la BDD
+//            livreBdd.updateLivre(livreFromBdd.getId(), livreFromBdd)
         
         
         // Button
