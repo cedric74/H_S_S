@@ -211,11 +211,11 @@ int Ping_Phone(){
 int Connection_OK(){
 	int iret = system("ping -c1 google.com");
 	if(iret !=0 ){
-		//printf("\n No Network Connection \n");
+		printf("\n No Network Connection \n");
 		return ERROR;
 	}
 
-	//printf("\n Network Connection OK\n\n");
+	printf("\n Network Connection OK\n\n");
 	return OK;
 }
 
@@ -237,10 +237,13 @@ int send_Alert(int iSmsok, char strCaptor[5]){
 	if( iVal == ERROR){
 		File_Log("PROBLEM_SEND_ALERT, ", 20);
 		File_Log("NO_CONNECTION, ", 15);
+
+		printf("PROBLEM_SEND_ALERT/n");
 		return ERROR;
 	}
 
-	// Send Alerte by mail
+	printf("Debug,  Send Alert by mail\n");
+	// Send Alert by mail
 	iVal = sendEmail(strCaptor);
 	if( iVal == ERROR){
 		File_Log("PROBLEM_SEND_ALERT, ", 20);
@@ -306,19 +309,21 @@ int sendEmail(char strCaptor[5])
 	if(strcmp(strCaptor, "MAIN\n")){
 		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 			char buffer[200];
-			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
+			snprintf(buffer , 200, "ssmtp -s \"ALERT Email main door\" ");
 			strcat(buffer,tabUser[iLoop].sAddress);
+			//strcat(buffer,"@sms.fido.ca");
 			int iReturn =system(buffer);
 			if(iReturn == ERROR){
-				//perror("Failed to invoke mpack");
-			    return ERROR;
+				perror("Failed to invoke ssmtp");
+				return ERROR;
 			}
 		}
 	}else{
 		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
 			char buffer[200];
-			snprintf(buffer , 200, "mpack -s \"Alert Intrusion Main Door\"  /home/debian/Desktop/Intrusion.jpeg");
+			snprintf(buffer , 200, "ssmtp -s \"ALERT Email back door\" ");
 			strcat(buffer,tabUser[iLoop].sAddress);
+			//strcat(buffer,"@sms.fido.ca");
 			int iReturn =system(buffer);
 			if(iReturn == ERROR){
 				//perror("Failed to invoke mpack");
