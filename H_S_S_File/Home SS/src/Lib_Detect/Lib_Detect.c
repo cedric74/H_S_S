@@ -93,6 +93,11 @@ void main_Detect(){
 				// Alert OK
 				printf(" Alert OK \n");
 
+				// Siren ON.
+				printf(" Siren ON. \n");
+				File_Log("Siren  ON , ", 12);
+				Start_Siren();
+
 				// Send Alert By Mail & Sms
 				if(u8DetectOn == ptrCaptorMainDoor->ePinCaptor){
 					send_Alert(NO_SMS,  ptrCaptorMainDoor->sMessage);		//	SMS_OK, NO_SMS
@@ -100,10 +105,6 @@ void main_Detect(){
 					send_Alert(NO_SMS, ptrCaptorBackDoor->sMessage );		//	NO_SMS
 				}
 
-				// Siren ON.
-				printf(" Siren ON. \n");
-				File_Log("Siren  ON , ", 12);
-				Start_Siren();
 			}
 
 		}else{
@@ -111,6 +112,9 @@ void main_Detect(){
 			File_Log("System OFF, ", 12);
 		}
 	}
+
+	// Print
+	printf("End Alert, System in Ready Mode \n");
 
 	// Start Section critic
 	pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, &old_cancel_state);
@@ -120,6 +124,7 @@ void main_Detect(){
 
 	// End Section critic
 	pthread_setcancelstate (old_cancel_state, NULL);
+
 }
 
 /*
@@ -235,6 +240,11 @@ void Read_Captor(structCaptor * sCaptor){
 	// Read Input Captor
 	readEntry = beh_BBB_gpio_ReadPin(sCaptor->ePinCaptor);
 
+	// Leave Function if Detection flag is trigger
+	if(u8DetectOn != 0){
+		sCaptor->icountDete = 0;
+		return;
+	}
 	// State Machine Captor
 	switch(sCaptor->stateCapt){
 		case STATE_NO_DETECTION :
@@ -257,7 +267,7 @@ void Read_Captor(structCaptor * sCaptor){
 				sCaptor->icountDete--;
 
 				// DEBUG
-				printf(" Detect count : %i \n", sCaptor->icountDete);
+				//printf(" Detect count : %i \n", sCaptor->icountDete);
 			}
 
 			// Change State

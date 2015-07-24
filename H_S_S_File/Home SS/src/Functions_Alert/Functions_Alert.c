@@ -25,6 +25,7 @@
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
 const char * dailyReportFile = "/home/debian/Desktop/dailyReportFile.txt";
+const char * alertFile 		 = "/home/debian/Desktop/AlertFile.txt";
 
 const int HourTimeDay 	= 20;
 const int MinTimeDay 	= 00;
@@ -36,7 +37,9 @@ const int MinTimeDay 	= 00;
 /*******************************************
 *	      L O C A L  F U N C T I O N S      *
 ********************************************/
-static int CheckTime(void);
+static int 	CheckTime(void);
+static void CreateAlertFile(char cDoor[5]);
+static void SendAlertFile();
 
 /*******************************************
 *	        F U N C T I O N S   	       *
@@ -124,6 +127,7 @@ void * Thread_DailyReport(){
 
 	return NULL;
 }
+
 /*
  ============================================
  Function     : Send_Report_File_Log()
@@ -242,95 +246,70 @@ int send_Alert(int iSmsok, char strCaptor[5]){
 		return ERROR;
 	}
 
-	printf("Debug,  Send Alert by mail\n");
-	// Send Alert by mail
-	iVal = sendEmail(strCaptor);
-	if( iVal == ERROR){
-		File_Log("PROBLEM_SEND_ALERT, ", 20);
-		File_Log("FAILED_SEND_MAIL, ", 18);
+	// Create Alert File
+	CreateAlertFile(strCaptor);
 
-		//return ERROR;
-	}else{
-		File_Log("Send Mail Ok, ", 14);
-	}
-
-	if(iSmsok == SMS_OK){
-		// Send Alerte by sms
-		iVal = sendSMS();
-		if( iVal == ERROR){
-			File_Log("PROBLEM_SEND_ALERT, ", 20);
-			File_Log("FAILED_SEND_SMS, ", 17);
-			return ERROR;
-		}
-		File_Log("Send SMS, ", 13);
-	}
+	// Send Alert File
+	SendAlertFile();
 
 	return OK;
-
 }
 
 /*
  ============================================
- Function     : sendSMS()
+ Function     : File_Log()
  Parameter    :
  Return Value : void
  Description  :
  ============================================
  */
-int sendSMS(){
-	int iLoop;
-	for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
-		char buffer[200];
-		snprintf(buffer , 200, "ssmtp -s \"ALERT Email\" ");
-		strcat(buffer,tabUser[iLoop].sNumPhone);
-		strcat(buffer,"@sms.fido.ca");
-		int iReturn =system(buffer);
-		if(iReturn == ERROR){
-			//perror("Failed to invoke mpack");
-		    return ERROR;
-		}
-	}
+static void CreateAlertFile(char cDoor[5]){
 
-    return OK;
+	// Declarations
+	time_t rawtime;
+	struct tm * timeinfo;
+	char cBuffer[200];
+
+	// Instructions
+	// Create Alert Message with Door alert
+	snprintf(cBuffer , 100, "Home Security System Alert ");
+	strcat(cBuffer, cDoor);
+
+	// Time
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
+
+	// Open File
+	fpLog = fopen ( alertFile, "w");
+
+	// Write File
+	fwrite(cBuffer , 1 , 100 , fpLog );
+	fwrite(asctime (timeinfo) , 1 , 25 , fpLog );
+
+	// Close File
+	fclose(fpLog);
 }
-
 
 /*
  ============================================
- Function     : sendmail()
+ Function     : SendReportFile()
  Parameter    :
  Return Value : void
  Description  :
  ============================================
  */
-int sendEmail(char strCaptor[5])
-{
-	int iLoop;
-	if(strcmp(strCaptor, "MAIN\n")){
-		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
-			char buffer[200];
-			snprintf(buffer , 200, "ssmtp -s \"ALERT Email main door\" ");
-			strcat(buffer,tabUser[iLoop].sAddress);
-			//strcat(buffer,"@sms.fido.ca");
-			int iReturn =system(buffer);
-			if(iReturn == ERROR){
-				perror("Failed to invoke ssmtp");
-				return ERROR;
-			}
-		}
-	}else{
-		for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
-			char buffer[200];
-			snprintf(buffer , 200, "ssmtp -s \"ALERT Email back door\" ");
-			strcat(buffer,tabUser[iLoop].sAddress);
-			//strcat(buffer,"@sms.fido.ca");
-			int iReturn =system(buffer);
-			if(iReturn == ERROR){
-				//perror("Failed to invoke mpack");
-				return ERROR;
-			}
-		}
-	}
+static void SendAlertFile(){
 
-	return OK;
+	char buffer[200];
+	snprintf(buffer , 200, "mpack -s \"Alert Home Security System\" /home/debian/Desktop/AlertFile.txt ");
+	strcat(buffer,tabUser[MAIN_USER].sAddress);
+	int iReturn =system(buffer);
+
+	if(iReturn == ERROR){
+    	 //perror("Failed to invoke mpack");
+    }else{
+    	//TODO, need to save alert file in history folder , Add index in ConfigFile
+    	//system("cp /home/debian/Desktop/AlertFile.txt /home/debian/Desktop/history/");
+    	system("rm /home/debian/Desktop/AlertFile.txt");
+     }
 }
