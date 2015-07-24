@@ -21,6 +21,7 @@
 ********************************************/
 #define	TICK_LOOP_MAIN		100000	// In us
 #define DELAY_5_SEC			5		// In s
+#define DELAY_1_SEC			1		// In s
 #define	TICK_500_MS			500000	// In us
 /*******************************************
 *   P R O T O T Y P E   F U N C T I O N S  *			
@@ -57,8 +58,8 @@ int main(int argc, char *argv[])
 		// Call Job Function
 		Job_main();
 
-		// Wait 5 Sec
-		sleep(DELAY_5_SEC);
+		// Wait 1 Sec
+		sleep(DELAY_1_SEC);
 		//usleep(TICK_500_MS);
 	}
 
