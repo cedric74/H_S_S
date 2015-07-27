@@ -64,7 +64,5 @@ int 	Ping_Phone();
 int 	Connection_OK();
 int 	send_Alert(int iSmsok, char strCaptor[5]);
 int 	sendEmail(char strCaptor[5]);
-int 	sendSMS();
-
 
 #endif /* FUNCTIONS_ALERTE_H_ */

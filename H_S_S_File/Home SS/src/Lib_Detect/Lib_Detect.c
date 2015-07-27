@@ -100,9 +100,9 @@ void main_Detect(){
 
 				// Send Alert By Mail & Sms
 				if(u8DetectOn == ptrCaptorMainDoor->ePinCaptor){
-					send_Alert(NO_SMS,  ptrCaptorMainDoor->sMessage);		//	SMS_OK, NO_SMS
+					send_Alert(SMS_OK,  ptrCaptorMainDoor->sMessage);		//	SMS_OK, NO_SMS
 				}else{
-					send_Alert(NO_SMS, ptrCaptorBackDoor->sMessage );		//	NO_SMS
+					send_Alert(SMS_OK, ptrCaptorBackDoor->sMessage );		//	NO_SMS
 				}
 
 			}
@@ -111,9 +111,8 @@ void main_Detect(){
 			printf(" System OFF \n");
 			File_Log("System OFF, ", 12);
 		}
-	}
 
-	// Print
+		// Print
 	printf("End Alert, System in Ready Mode \n");
 
 	// Start Section critic
@@ -124,6 +123,8 @@ void main_Detect(){
 
 	// End Section critic
 	pthread_setcancelstate (old_cancel_state, NULL);
+
+	}
 
 }
 

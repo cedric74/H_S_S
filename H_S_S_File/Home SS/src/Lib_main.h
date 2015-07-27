@@ -29,7 +29,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"V1.17, DEBUG, 24 July, "
+#define START_FILE			"V1.18, DEBUG, 26 July, "
 #define SIZE_STRING			23
 
 #define DEBUG				1

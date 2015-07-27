@@ -55,7 +55,7 @@
 #define ON_INTERRUPT		0
 
 #define DELAYS_TO_DISABLE	15		// In Sec , 30 Sec Maybe To Long
-#define DELAYS_TO_ENABLE	5		//(60*2)	// 2 MIN
+#define DELAYS_TO_ENABLE	(60*2)	// 2 MIN
 
 #define SIZE_MESS_CAPTOR	4
 

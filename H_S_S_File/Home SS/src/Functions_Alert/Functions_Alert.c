@@ -16,10 +16,8 @@
 #define WAIT_1_DAYS		86400	// In Second
 #define WAIT_1_MIN		60		// In Second
 
-
 #define	TRUE			1
 #define	FALSE			0
-
 
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
@@ -40,6 +38,7 @@ const int MinTimeDay 	= 00;
 static int 	CheckTime(void);
 static void CreateAlertFile(char cDoor[5]);
 static void SendAlertFile();
+static int sendSMS();
 
 /*******************************************
 *	        F U N C T I O N S   	       *
@@ -113,18 +112,6 @@ void * Thread_DailyReport(){
 			sleep(WAIT_1_MIN);
 		}
 	}
-
-//	while(1){
-//		sleep(WAIT_1_DAYS);
-//		int iret = Connection_OK();
-//		if( iret == ERROR){
-//			File_Log("PROBLEM_SEND_DAILY RAPPORT, ", 28);
-//			File_Log("NO_CONNECTION, ", 15);
-//		}else{
-//			Send_Report_File_Log();
-//		}
-//	}
-
 	return NULL;
 }
 
@@ -246,18 +233,54 @@ int send_Alert(int iSmsok, char strCaptor[5]){
 		return ERROR;
 	}
 
+	printf("CreateAlertFile\n");
 	// Create Alert File
 	CreateAlertFile(strCaptor);
 
-	// Send Alert File
+	// Send Alert File by Email
 	SendAlertFile();
+
+	// Send Alert by SMS
+	if(iSmsok == SMS_OK){
+	iVal = sendSMS();
+		if( iVal == ERROR){
+			File_Log("PROBLEM_SEND_ALERT, ", 20);
+			File_Log("FAILED_SEND_SMS, ", 17);
+			return ERROR;
+		}
+		File_Log("Send SMS, ", 13);
+	}
 
 	return OK;
 }
 
 /*
  ============================================
- Function     : File_Log()
+ Function     : sendSMS()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+static int sendSMS(){
+	//int iLoop;
+	//for(iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
+		char buffer[200];
+		snprintf(buffer , 200, "ssmtp -s \"ALERT Email\" ");
+		strcat(buffer,tabUser[MAIN_USER+1].sNumPhone);
+		strcat(buffer,"@sms.fido.ca");
+		int iReturn =system(buffer);
+		if(iReturn == ERROR){
+			//perror("Failed to invoke mpack");
+		    return ERROR;
+		}
+	//}
+
+    return OK;
+}
+/*
+ ============================================
+ Function     : CreateAlertFile()
  Parameter    :
  Return Value : void
  Description  :
@@ -266,13 +289,14 @@ int send_Alert(int iSmsok, char strCaptor[5]){
 static void CreateAlertFile(char cDoor[5]){
 
 	// Declarations
+	const int iSizeBuffer = 32;
 	time_t rawtime;
 	struct tm * timeinfo;
-	char cBuffer[200];
+	char cBuffer[32]={0};
 
 	// Instructions
 	// Create Alert Message with Door alert
-	snprintf(cBuffer , 100, "Home Security System Alert ");
+	snprintf(cBuffer , iSizeBuffer, "Home Security System Alert ");
 	strcat(cBuffer, cDoor);
 
 	// Time
@@ -283,7 +307,7 @@ static void CreateAlertFile(char cDoor[5]){
 	fpLog = fopen ( alertFile, "w");
 
 	// Write File
-	fwrite(cBuffer , 1 , 100 , fpLog );
+	fwrite(cBuffer , 1 , iSizeBuffer , fpLog );
 	fwrite(asctime (timeinfo) , 1 , 25 , fpLog );
 
 	// Close File
@@ -299,17 +323,23 @@ static void CreateAlertFile(char cDoor[5]){
  ============================================
  */
 static void SendAlertFile(){
+	int iLoop ;
+	for( iLoop = 0 ; iLoop < u8NbUSer; iLoop++){
+		char buffer[200];
+		snprintf(buffer , 200, "mpack -s \"Alert Home Security System\" /home/debian/Desktop/AlertFile.txt ");
+		strcat(buffer,tabUser[iLoop].sAddress);
+		int iReturn =system(buffer);
 
-	char buffer[200];
-	snprintf(buffer , 200, "mpack -s \"Alert Home Security System\" /home/debian/Desktop/AlertFile.txt ");
-	strcat(buffer,tabUser[MAIN_USER].sAddress);
-	int iReturn =system(buffer);
+		//printf("File : %s \n",buffer);
 
-	if(iReturn == ERROR){
-    	 //perror("Failed to invoke mpack");
-    }else{
-    	//TODO, need to save alert file in history folder , Add index in ConfigFile
-    	//system("cp /home/debian/Desktop/AlertFile.txt /home/debian/Desktop/history/");
-    	system("rm /home/debian/Desktop/AlertFile.txt");
-     }
+		if(iReturn == ERROR){
+			 //perror("Failed to invoke mpack");
+		}else{
+			//TODO, need to save alert file in history folder , Add index in ConfigFile
+			//system("cp /home/debian/Desktop/AlertFile.txt /home/debian/Desktop/history/");
+			//system("rm /home/debian/Desktop/AlertFile.txt");
+		 }
+	}
+
+	system("rm /home/debian/Desktop/AlertFile.txt");
 }
