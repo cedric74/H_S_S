@@ -232,6 +232,7 @@ void Read_Interrupter(){
  */
 void Read_Captor(structCaptor * sCaptor){
 
+	//TODO, Problem with Captor, Detection sometime not good
 	// Declarations Variables
 	unsigned char readEntry = 0 ;
 	int old_cancel_state;
@@ -272,7 +273,7 @@ void Read_Captor(structCaptor * sCaptor){
 			}
 
 			// Change State
-			if(sCaptor->icountDete == 0){
+			if(sCaptor->icountDete <= 0){
 				sCaptor->stateCapt = STATE_NO_DETECTION;
 			}
 
