@@ -21,11 +21,12 @@
 #include 	"Functions_WatchDog/Functions_WatchDog.h"
 #include	"Lib_Job/Lib_Job.h"
 #include    "Lib_Gpio/beh_BBB_gpio.h"
+#include 	"Lib_ConfigXML/Lib_ConfigXML.h"
 
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Compteur Velo, 1.2, 24 July, "
+#define START_FILE			"Compteur Velo, 1.3, 11 Augu, "
 
 #define SIZE_STRING			30
 

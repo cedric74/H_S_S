@@ -30,10 +30,14 @@ typedef enum {
 
 
 typedef enum {
+	DB			= 4,
+}NodeConfigL3;
+
+typedef enum {
 	DB_NAME		= 5,
 	DB_TYPE		= 6,
 	DB_VALUE	= 7,
-}NodeConfigL3;
+}NodeConfigL4;
 
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
@@ -54,8 +58,9 @@ int Lib_Config_Load(const char * cPathXMLFile ){
 
 	// Declarations Variables
 	NodeConfigL1 	currentNodeL1 = HEAD;
-	NodeConfigL2    currentNodeL2;
-	NodeConfigL3	currentNodeL3;
+	NodeConfigL2    currentNodeL2 = 0;
+	NodeConfigL3	currentNodeL3 = 0;
+	NodeConfigL4	currentNodeL4 = 0;
 
 	FILE * 		fConfig;
 	char * 		line = NULL;
@@ -65,81 +70,77 @@ int Lib_Config_Load(const char * cPathXMLFile ){
 	// Open File
 	fConfig = fopen ( cPathXMLFile, "r");
 	if(fConfig == NULL){
-		printf("-Error Open File : %s", cPathXMLFile);
+		printf("-Error Open File : %s\n", cPathXMLFile);
 		return -1;
 	}
+
 	//	Seek to the beginning of the file
 	fseek(fConfig, SEEK_SET, 0);
 
 	// Read Line by Line
 	while ((sizeLine = getline(&line, &len, fConfig)) != -1) {
 
-		// Print XML
-		//printf("%s\n", line);
-
 		//TODO, Parse XML
-
 		switch(currentNodeL1){
 			case HEAD:
 				if( compare_strings( line, "<config>")){
 					currentNodeL1 = CONFIG;
+					//continue;
 				}
 			break;
 			case CONFIG:
 				if( compare_strings( line, 	"<data>")){
 					currentNodeL2 = DATA;
+					//continue;
+				}
+				//				if( compare_strings( line, 	"<version>")){
+//					currentNodeL2 = VERSION;
+//				}
+		}
+
+		switch(currentNodeL2){
+			case DATA:
+				if( compare_strings( line, 	"<db env>")){
+					currentNodeL3 = DB;
+					//continue;
+				}
+				break;
+
+			case VERSION:
+				continue;
+			break;
+		}
+
+		switch(currentNodeL3){
+			case DB:
+				if( compare_strings( line, 	"<name>")){
+					currentNodeL4 = DB_NAME;
+					//continue;
 				}
 				if( compare_strings( line, 	"<version>")){
-					currentNodeL2 = VERSION;
+					currentNodeL4 = DB_TYPE;
+					//continue;
 				}
-				switch(currentNodeL2){
-					case DATA:
-						if( compare_strings( line, 	"<name>")){
-							currentNodeL3 = DB_NAME;
-						}
-						if( compare_strings( line, 	"<version>")){
-							currentNodeL3 = DB_TYPE;
-						}
-						if( compare_strings( line, 	"<value>")){
-							currentNodeL3 = DB_VALUE;
-						}
-						switch(currentNodeL3){
-							case DB_NAME:
-								// Copy Name
-								// Debug
-								printf("Copy Name: %s\n", line);
-							break;
-							case DB_TYPE:
-								// Copy Type
-								// Debug
-								printf("Copy Type: %s\n", line);
-							break;
-							case DB_VALUE:
-								// Copy Value
-								// Debug
-								printf("Copy Value: %s\n", line);
-							break;
-						}
-
-					break;
-					case VERSION:
-
-					break;
+				if( compare_strings( line, 	"<value>")){
+					currentNodeL4 = DB_VALUE;
+					//continue;
 				}
 			break;
+		}
 
-			/*
-			case VERSION:
-				//
+		switch(currentNodeL4){
+			case DB_NAME:
+				printf("Copy Name: %s", line);
+				continue;
 			break;
-			case DATA:
-				//
+			case DB_TYPE:
+				printf("Copy Type: %s", line);
+				continue;
 			break;
-			case DB:
-				//
+			case DB_VALUE:
+				printf("Copy Value: %s", line);
+				continue;
 			break;
-
-			*/
 		}
 	}
 

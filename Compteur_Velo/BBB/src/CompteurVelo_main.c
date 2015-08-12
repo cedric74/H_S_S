@@ -22,6 +22,7 @@
 #define	TICK_LOOP_MAIN		100000	// In us
 #define DELAY_5_SEC			5		// In s
 #define DELAY_1_SEC			1		// In s
+#define DELAY_2_SEC			2		// In s
 #define	TICK_500_MS			500000	// In us
 /*******************************************
 *   P R O T O T Y P E   F U N C T I O N S  *			
@@ -52,16 +53,19 @@ int main(int argc, char *argv[])
 	// Init
 	Init();
 
-	signal(SIGINT, on_sigint);
-	while (is_sigint == 0){
+	// Config
+	Lib_Config_Load( "/home/debian/Desktop/configXML.xml");
 
-		// Call Job Function
-		Job_main();
-
-		// Wait 1 Sec
-		sleep(DELAY_1_SEC);
-		//usleep(TICK_500_MS);
-	}
+//	signal(SIGINT, on_sigint);
+//	while (is_sigint == 0){
+//
+//		// Call Job Function
+//		Job_main();
+//
+//		// Wait 1 Sec
+//		sleep(DELAY_2_SEC);
+//		//usleep(TICK_500_MS);
+//	}
 
 	printf("END %s \n", START_FILE);
 	return 0;
@@ -81,13 +85,13 @@ void Init(){
 	printf("%s \n", START_FILE);
 
 	// Start WatchDog
-	watch_dog_start();
+	//watch_dog_start();
 
 	// Init Gpio Lib
 	beh_BBB_gpio_init();
 
 	// Init Socket
-	Job_init();
+	//Job_init();
 }
 
 
