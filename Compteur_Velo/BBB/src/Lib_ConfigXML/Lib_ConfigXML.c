@@ -14,6 +14,14 @@
 *               D E F I N E                *
 ********************************************/
 
+#define SIZE_NAME	6
+#define	SIZE_TYPE	6
+#define	SIZE_VALUE	7
+
+#define SIZE_DATA	50
+
+#define ERROR		-1
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -39,6 +47,36 @@ typedef enum {
 	DB_VALUE	= 7,
 }NodeConfigL4;
 
+
+typedef struct{
+	char cName[20];
+	char cType[20];
+	char cValue[20];
+}sNodeL4;
+
+typedef enum{
+	TAG_NAME	=0,
+	TAG_TYPE	=1,
+	TAG_VALUE	=2,
+	SIZE_TAB,
+}tagEnum;
+
+typedef struct{
+	char	opentag[10];
+	char	closetag[10];
+}structag;
+
+
+
+//tab de tag
+structag cTabTag[SIZE_TAB]={
+/* TAG_NAME */	{"name", "/name"},
+/* TAG_TYPE */	{"type", "/type"},
+/* TAG_VALUE*/	{"value","/value"},
+};
+
+
+
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
@@ -46,6 +84,8 @@ typedef enum {
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+int  getInsideTag(tagEnum tagE, char line[], char cBuffer[]);
+
 /*
  ============================================
  Function     : Lib_Config_Load()
@@ -54,19 +94,21 @@ typedef enum {
  Description  :
  ============================================
  */
-int Lib_Config_Load(const char * cPathXMLFile ){
+int Lib_Config_Load(const char * cPathXMLFile){
 
 	// Declarations Variables
-	NodeConfigL1 	currentNodeL1 = HEAD;
-	NodeConfigL2    currentNodeL2 = 0;
-	NodeConfigL3	currentNodeL3 = 0;
 	NodeConfigL4	currentNodeL4 = 0;
-
+	char bIn 		=0;
 	FILE * 		fConfig;
 	char * 		line = NULL;
 	size_t 		len = 0;
 	ssize_t 	sizeLine;
+	sNodeL4     cTable[SIZE_DATA];
+	char 		cBuffer[20]={0};
+	int 		iIndex = 0;
+	tagEnum		tagCurrent;
 
+	// Instructions
 	// Open File
 	fConfig = fopen ( cPathXMLFile, "r");
 	if(fConfig == NULL){
@@ -81,67 +123,96 @@ int Lib_Config_Load(const char * cPathXMLFile ){
 	while ((sizeLine = getline(&line, &len, fConfig)) != -1) {
 
 		//TODO, Parse XML
-		switch(currentNodeL1){
-			case HEAD:
-				if( compare_strings( line, "<config>")){
-					currentNodeL1 = CONFIG;
-					//continue;
-				}
-			break;
-			case CONFIG:
-				if( compare_strings( line, 	"<data>")){
-					currentNodeL2 = DATA;
-					//continue;
-				}
-				//				if( compare_strings( line, 	"<version>")){
-//					currentNodeL2 = VERSION;
-//				}
+		if(strstr(line, "<db>") != NULL) {
+			bIn = 1;
 		}
-
-		switch(currentNodeL2){
-			case DATA:
-				if( compare_strings( line, 	"<db env>")){
-					currentNodeL3 = DB;
-					//continue;
-				}
-				break;
-
-			case VERSION:
-				continue;
-			break;
+		if(strstr(line, "</db>") != NULL) {
+			if(bIn == 1){
+				iIndex++;
+			}
+			bIn = 0;
 		}
-
-		switch(currentNodeL3){
-			case DB:
-				if( compare_strings( line, 	"<name>")){
+		if(bIn == 1){
+			//------------- BALISE NAME -----------------------
+			tagCurrent = TAG_NAME;
+			sizeLine = getInsideTag( tagCurrent, line, cBuffer);
+			if(sizeLine != ERROR){
+				currentNodeL4 = DB_NAME;
+			}
+			printf("OK 3\n");
+			/*
+			 *
+			if( strstr(line, "<name>") != NULL){
+				if( strstr(line, "</name>") != NULL){
+					int i;
+					int iP;
+					for(i =0; i < sizeLine ; i++){
+						if(line[i]=='/'){
+							iP =i-1;
+						}
+					}
 					currentNodeL4 = DB_NAME;
-					//continue;
+					strncpy(cBuffer, &line[SIZE_NAME], iP- SIZE_NAME);
+					sizeLine = iP- SIZE_NAME+1;
 				}
-				if( compare_strings( line, 	"<version>")){
+			}
+*/
+			//------------- BALISE TYPE -----------------------
+			/*
+			if( strstr(line, "<type>") != NULL){
+				if( strstr(line, "</type>") != NULL){
+					int i;
+					int iP;
+					for(i =0; i < sizeLine ; i++){
+						if(line[i]=='/'){
+							iP =i-1;
+						}
+					}
 					currentNodeL4 = DB_TYPE;
-					//continue;
+					strncpy(cBuffer, &line[SIZE_TYPE], iP- SIZE_TYPE);
+					sizeLine = iP- SIZE_NAME+1;
 				}
-				if( compare_strings( line, 	"<value>")){
+			}
+*/
+			//------------- BALISE VALUE -----------------------
+			//getInsideTag();
+			/*
+			if( strstr(line, "<value>") != NULL){
+				if( strstr(line, "</value>") != NULL){
+					int i;
+					int iP;
+					for(i =0; i < sizeLine ; i++){
+						if(line[i]=='/'){
+							iP =i-1;
+						}
+					}
 					currentNodeL4 = DB_VALUE;
-					//continue;
+					strncpy(cBuffer, &line[SIZE_VALUE], iP-SIZE_VALUE);
+					sizeLine = iP- SIZE_VALUE+1;
 				}
-			break;
+			}*/
+			switch(currentNodeL4){
+				case DB_NAME:
+					snprintf( cTable[iIndex].cName , sizeLine, cBuffer);
+				break;
+				case DB_TYPE:
+					//snprintf( cTable[iIndex].cType,  sizeLine, cBuffer);
+				break;
+				case DB_VALUE:
+					//snprintf( cTable[iIndex].cValue,  sizeLine, cBuffer);
+				break;
+			}
 		}
+	}
 
-		switch(currentNodeL4){
-			case DB_NAME:
-				printf("Copy Name: %s", line);
-				continue;
-			break;
-			case DB_TYPE:
-				printf("Copy Type: %s", line);
-				continue;
-			break;
-			case DB_VALUE:
-				printf("Copy Value: %s", line);
-				continue;
-			break;
-		}
+	// Print All Data
+	printf("OK 4\n");
+
+	int i;
+	for(i =0 ; i < iIndex ; i++){
+		printf("cTable[%i].cName  : %s\n", i, cTable[i].cName);
+		//printf("cTable[%i].cType  : %s\n", i, cTable[i].cType);
+		//printf("cTable[%i].cValue : %s\n", i, cTable[i].cValue);
 	}
 
 	return 0;
@@ -159,6 +230,40 @@ int Lib_Config_Save(const char * cPathXMLFile){
 	//TODO, Lib_Config_Save, Implement this function
 
 	return 0;
+}
+
+
+/*
+ ============================================
+ Function     : getInsideTag()
+  @Parameter  : Path of Xml File
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int  getInsideTag(tagEnum tagE, char line[], char cBuffer[]){
+
+	int iRetSize = ERROR;
+	//------------- BALISE NAME -----------------------
+	if( strstr(line, cTabTag[tagE].opentag) != NULL){
+		if( strstr(line, cTabTag[tagE].closetag) != NULL){
+			int i;
+			int iP;
+			printf("OK\n");
+			for(i =0; i < iRetSize ; i++){
+				if(line[i]=='/'){
+					iP =i-1;
+				}
+			}
+			printf("OK 2\n");
+			strncpy(cBuffer, &line[SIZE_NAME], iP- SIZE_NAME);
+			iRetSize = iP- SIZE_NAME+1;
+
+			printf("OK 2'\n");
+		}
+	}
+
+	return iRetSize;
 }
 
 

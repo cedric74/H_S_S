@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*******************************************
 *               D E F I N E                *
@@ -35,4 +36,4 @@ int Lib_Config_Load(const char * cPatchXMLFile );
 int Lib_Config_Save(const char * cPathXMLFile  );
 
 
-#endif /* SRC_LIB_CONFIGXML_LIB_CONFIGXML_H_ */
+#endif /* IB_CONFIGXML_H_ */
