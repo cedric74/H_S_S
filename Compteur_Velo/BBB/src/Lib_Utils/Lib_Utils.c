@@ -44,3 +44,40 @@ int compare_strings(char a[], char b[])
    else
       return -1;
 }
+
+/*
+ ============================================
+ Function     : findChar()
+ @Parameter   :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int findChar( char cBuff[], int iLen, char c){
+	int iP = -1 , i;
+
+	for( i =0; i < iLen ; i++){
+		if(cBuff[i]== c){
+			iP =i-1;
+		}
+	}
+	return iP;
+}
+
+/*
+ ============================================
+ Function     : convertToBCD()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int convertToBCD(char cBuff[], int iValue, int iLen){
+	//TODO, More Generic
+	int iRet = 0;
+	cBuff[0] = (char)(iValue/10000);
+	cBuff[1] = (char)((iValue - (cBuff[0] *10000))/100);
+	cBuff[2] = (char)(iValue - (cBuff[1]*100 + cBuff[0]*10000));
+
+	return iRet;
+}

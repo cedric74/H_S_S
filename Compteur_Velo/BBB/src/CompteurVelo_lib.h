@@ -22,17 +22,19 @@
 #include	"Lib_Job/Lib_Job.h"
 #include    "Lib_Gpio/beh_BBB_gpio.h"
 #include 	"Lib_ConfigXML/Lib_ConfigXML.h"
+#include 	"Lib_Param/Lib_Param.h"
 
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Compteur Velo, 1.3, 11 Augu, "
-
+#define START_FILE			"Compteur Velo, 1.4, 13 Augu, "
 #define SIZE_STRING			30
 
+#define FILE_XML		    "/home/debian/Desktop/configXML.xml"
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
+
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
@@ -40,7 +42,7 @@
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-void 			Init(void);
+
 
 
 #endif // _ROVER_LIB_H

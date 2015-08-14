@@ -1,17 +1,22 @@
 /*
- * Lib_Utils.h
+ * Lib_Param.h
  *
- *  Created on: Aug 11, 2015
+ *  Created on: Aug 13, 2015
  *      Author: ctoncanier
  */
 
-#ifndef LIB_UTILS_H_
-#define LIB_UTILS_H_
+#ifndef LIB_PARAM_H_
+#define LIB_PARAM_H_
 
 /*******************************************
 *			  I N C L U D E 			   *
 ********************************************/
+#include "../Lib_Utils/Lib_Utils.h"
+#include 	"../Lib_ConfigXML/Lib_ConfigXML.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 /*******************************************
 *               D E F I N E                *
 ********************************************/
@@ -24,11 +29,18 @@
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
 
+// Variables From XML
+int 	iTickLoop;
+int 	iPortSocket;
+float 	fRadius;
+
+//int iRadiusBike;
+
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-int compare_strings(char a[], char b[]);
-int findChar(char cBuff[], int iLen, char c);
-int convertToBCD(char cBuff[], int iValue, int iLen);
+int 	getData(sNodeL4 tabData[], int iLen);
+void 	setDefaultData();
 
-#endif /* LIB_UTILS_H_ */
+
+#endif /* LIB_PARAM_H_ */

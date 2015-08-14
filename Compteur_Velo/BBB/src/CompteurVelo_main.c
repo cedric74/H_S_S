@@ -24,15 +24,20 @@
 #define DELAY_1_SEC			1		// In s
 #define DELAY_2_SEC			2		// In s
 #define	TICK_500_MS			500000	// In us
+
 /*******************************************
 *   P R O T O T Y P E   F U N C T I O N S  *			
 ********************************************/
-static void on_sigint(int x);
+void on_sigint(int x);
+void Init();
+int  Load_Data();
+void exit_main();
 
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *			
 ********************************************/
 static volatile unsigned int is_sigint = 0;
+
 
 /*******************************************
 *          F U N C T I O N S    		   *
@@ -53,21 +58,21 @@ int main(int argc, char *argv[])
 	// Init
 	Init();
 
-	// Config
-	Lib_Config_Load( "/home/debian/Desktop/configXML.xml");
+	// DEBUG
+	printf("Tick Main : %i , iPortSocket : %i, fRadius : %3.2f \n", iTickLoop , iPortSocket , fRadius);
 
-//	signal(SIGINT, on_sigint);
-//	while (is_sigint == 0){
-//
-//		// Call Job Function
-//		Job_main();
-//
-//		// Wait 1 Sec
-//		sleep(DELAY_2_SEC);
-//		//usleep(TICK_500_MS);
-//	}
+	signal(SIGINT, on_sigint);
+	while (is_sigint == 0){
 
-	printf("END %s \n", START_FILE);
+		// Call Job Function
+		Job_main();
+
+		// Wait
+		sleep(iTickLoop);
+		//usleep(TICK_500_MS);
+	}
+
+	printf("\n\nEND %s \n", START_FILE);
 	return 0;
 }
 
@@ -90,8 +95,55 @@ void Init(){
 	// Init Gpio Lib
 	beh_BBB_gpio_init();
 
+	// Init Config XML
+	if(Load_Data()== -1){
+		printf("Error Load XML\n");
+
+		// Default Setting
+		setDefaultData();
+
+	}else{
+		printf("Load XML, OK\n");
+	}
+
 	// Init Socket
-	//Job_init();
+	Job_init();
+
+}
+
+/*
+ ============================================
+ Function     : Load_Data()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int Load_Data(){
+
+	// Temp Tab
+	sNodeL4 tabData[SIZE_DATA];
+
+	int iIndex = Lib_Config_Load(FILE_XML, tabData);
+	if(iIndex > 0){
+		// Load XML Data
+		if(getData(tabData , iIndex) != 0){
+			return -1;
+		}
+		// Print All Data
+		printf("\n----- Config XML ---- \n");
+		int i;
+		for(i =0 ; i < iIndex ; i++){
+			printf("cTable[%i].cName  : %s\n", i, tabData[i].cName);
+			printf("cTable[%i].cType  : %s\n", i, tabData[i].cType);
+			printf("cTable[%i].cValue : %s\n", i, tabData[i].cValue);
+		}
+		printf("\n\n");
+	}else{
+		return -1;
+	}
+	return 0;
+
 }
 
 
@@ -103,7 +155,24 @@ void Init(){
  Description  :
  ============================================
  */
-static void on_sigint(int x)
+void on_sigint(int x)
 {
   is_sigint = 1;
+}
+
+/*
+ ============================================
+ Function     : exit_main()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+void exit_main(int iStatus){
+	if(iStatus == 1){
+		printf("\n\nError END %s \n", START_FILE);
+		exit(0);
+	}
+
+	printf("\n\nEND %s \n", START_FILE);
 }

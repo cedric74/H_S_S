@@ -5,8 +5,8 @@
  *      Author: cedric
  */
 
-#ifndef SRC_LIB_JOB_LIB_JOB_H_
-#define SRC_LIB_JOB_LIB_JOB_H_
+#ifndef LIB_JOB_H_
+#define LIB_JOB_H_
 
 /*******************************************
 *			  I N C L U D E 			   *
@@ -18,6 +18,8 @@
 #include <time.h>
 
 #include	"../Lib_socket/Lib_socket.h"
+#include 	"../Lib_Param/Lib_Param.h"
+#include 	"../Lib_Utils/Lib_Utils.h"
 
 /*******************************************
 *               D E F I N E                *
@@ -38,4 +40,4 @@ int Job_init(void);
 int Job_main(void);
 int Job_end(void);
 
-#endif /* SRC_LIB_JOB_LIB_JOB_H_ */
+#endif /* LIB_JOB_H_ */
