@@ -30,5 +30,6 @@
 int compare_strings(char a[], char b[]);
 int findChar(char cBuff[], int iLen, char c);
 int convertToBCD(char cBuff[], int iValue, int iLen);
+int getLength(char cBuff[], int iMax);
 
 #endif /* LIB_UTILS_H_ */

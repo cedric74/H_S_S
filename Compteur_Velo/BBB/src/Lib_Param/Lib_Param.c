@@ -15,19 +15,19 @@
 ********************************************/
 
 // Nbe Variable to Load from XML
-#define NBE_VARIABLE_XML_TO_LOAD	3
 #define DELAY_2_SEC					2		// In s
 #define SERVER_PORT					6000
 #define RADIUS_CYCLE				340
 
-// Parameter name
-#define TAG_TICK					"tick_main_loop"
-#define TAG_PORT_SOCKET				"port_socket_server"
-#define TAG_RADIUS					"radius_cycle"
-
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
+
+// Parameter name
+const char TAG_TICK[]=			"tick_main_loop";
+const char TAG_PORT_SOCKET[]=	"port_socket_server";
+const char TAG_RADIUS[]=		"radius_cycle";
+
 typedef enum{
 	TYPE_INT	=0,
 	TYPE_STRING	=1,
@@ -72,9 +72,8 @@ structtype cTabType[NBE_TYPE]={
  Description  :
  ============================================
  */
-int getData(sNodeL4 tabData[], int iLen){
+int getData(sData tabData[], int iLen){
 
-	//TODO, To complete with others parameters
 	int iType, iCheck =0;
 	int iDxData = 0;
 	for(iDxData = 0; iDxData < iLen; iDxData++){
@@ -114,14 +113,58 @@ int getData(sNodeL4 tabData[], int iLen){
 
 /*
  ============================================
- Function     : setDefaultData()
+ Function     : setData()
  Parameter    :
  Return Value : void
  Description  :
  ============================================
  */
-void setData(sNodeL4 tabData[]){
-	//TODO, setData(), missing implementation
+int setData(sData tabData[], int iLen){
+
+	// Declarations Variables
+	int iType, iCheck =0;
+	int iDxData = 0;
+	char cBuffer[10]= {0};
+
+	// Instructions
+	for(iDxData = 0; iDxData < iLen; iDxData++){
+		for( iType =0 ;iType < NBE_TYPE; iType++){
+			if(strstr(tabData[iDxData].cType, cTabType[iType].name) != NULL) {
+				switch(iType){
+					case TYPE_INT:
+						if(strstr( tabData[iDxData].cName, TAG_TICK) != NULL) {
+							snprintf( cBuffer, 10, "%i\n", iTickLoop);
+							int iInde = getLength( cBuffer, 10);
+							snprintf( tabData[iDxData].cValue, iInde, "%s", cBuffer);
+							printf("iTickLoop : %s...\n", tabData[iDxData].cValue);
+							iCheck++;
+						}
+						if(strstr( tabData[iDxData].cName, TAG_PORT_SOCKET) != NULL) {
+							snprintf( cBuffer, 10, "%i\n", iPortSocket);
+							int iInde = getLength( cBuffer, 10);
+							snprintf( tabData[iDxData].cValue, iInde, "%s", cBuffer);
+							printf("iPortSocket : %s...\n", tabData[iDxData].cValue);
+							iCheck++;
+						}
+					break;
+					case TYPE_FLOAT:
+						if(strstr( tabData[iDxData].cName, TAG_RADIUS) != NULL) {
+							snprintf( cBuffer, 10, "%3.2f\n", fRadius);
+							int iInde = getLength( cBuffer, 10);
+							snprintf( tabData[iDxData].cValue, iInde, "%s", cBuffer);
+							printf("fRadius : %s...\n", tabData[iDxData].cValue);
+							iCheck++;
+						}
+					break;
+					default:
+						return -1;
+					break;
+				}
+			}
+		}
+	}
+
+	return 0;
 }
 
 
@@ -143,4 +186,7 @@ void setDefaultData(){
 
 	// Set Default Radius
 	fRadius = RADIUS_CYCLE;
+
+	// Set Data on the tabData
+	setData( tabData,  NBE_VARIABLE_XML_TO_LOAD);
 }

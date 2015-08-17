@@ -18,6 +18,10 @@
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
+typedef enum{
+	DATA	=0x10,
+	CMD		= 0x20,
+}typeMessageEnum;
 
 // Formula distance from count of round and radius of the wheel
 #define DISTANCE(x,y) ((2 * 3.14 * y * x))
@@ -28,8 +32,6 @@
 ********************************************/
 static int socketData;
 static int newSockData;
-
-char iData[3] = {0,0,0};
 
 /*******************************************
 *	        F U N C T I O N S   	       *
@@ -55,8 +57,8 @@ int Job_init(void){
 	printf(" Waiting for Client Connection .... \n");
 
 	// Create Socekt Server
-	//socketData 	= create_Socket(iPortSocket);
-	//newSockData = accept_client_connection(socketData);
+	socketData 	= create_Socket(iPortSocket);
+	newSockData = accept_client_connection(socketData);
 
 	return 0;
 }
@@ -72,6 +74,7 @@ int Job_init(void){
 int Job_main(void){
 
 	// Declarations Variables
+	char iData[3] = {0,0,0};
 
 	// Instructions
 
@@ -97,9 +100,12 @@ int Job_main(void){
 	}
 	printf(" Value : %02i %02i %02i\n", iData[0], iData[1], iData[2]);
 
+	// Set Message af DATA, and the data is composed of tab of 3 Char
+	strMsg  *pMesg = libcom_SetMsg( DATA, 3, sizeof(char) , iData);
+
 	// Send Socket
-	//TODO, Change the size of the message
-	//write_socket(newSockData, iData, 3);
+	//TODO, Check if modification are OK
+	write_socket(newSockData, (char *)pMesg, pMesg->bLength+2);
 
 	return 0;
 }
@@ -113,7 +119,7 @@ int Job_main(void){
  ============================================
  */
 int Job_end(){
-	//close_socket(socketData, newSockData);
+	close_socket(socketData, newSockData);
 
 	return 0;
 }

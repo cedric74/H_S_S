@@ -59,6 +59,7 @@ int findChar( char cBuff[], int iLen, char c){
 	for( i =0; i < iLen ; i++){
 		if(cBuff[i]== c){
 			iP =i-1;
+			break;
 		}
 	}
 	return iP;
@@ -80,4 +81,16 @@ int convertToBCD(char cBuff[], int iValue, int iLen){
 	cBuff[2] = (char)(iValue - (cBuff[1]*100 + cBuff[0]*10000));
 
 	return iRet;
+}
+
+/*
+ ============================================
+ Function     : getLength()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int getLength(char cBuff[], int iMax){
+	return (findChar(cBuff, iMax, '\n')+2);
 }

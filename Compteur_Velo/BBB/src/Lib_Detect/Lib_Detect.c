@@ -31,7 +31,7 @@ int 			iCountInter 		= 0;
 /*******************************************
 *	          M  A I N    	               *			
 ********************************************/
-	//TODO, Implemente this inside the program
+	//TODO, Implemente ReadCaptor() inside the program
 /*
  ============================================
  Function     : Thread_Read_Captor()

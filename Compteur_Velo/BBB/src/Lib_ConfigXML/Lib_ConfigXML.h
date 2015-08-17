@@ -13,6 +13,7 @@
 ********************************************/
 #include "../Lib_Utils/Lib_Utils.h"
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,7 +21,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define SIZE_DATA	50
+#define SIZE_DATA	10
 #define ERROR		-1
 
 /*******************************************
@@ -37,7 +38,7 @@ typedef struct{
 	char cName[20];
 	char cType[10];
 	char cValue[10];
-}sNodeL4;
+}sData;
 
 typedef enum{
 	TAG_NAME	=0,
@@ -60,8 +61,8 @@ typedef struct{
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-int Lib_Config_Load(const char * cPathXMLFile, sNodeL4 cTable[]);
-int Lib_Config_Save(const char * cPathXMLFile  );
+int Lib_Config_Load(const char * cPathXMLFile, sData cTable[]);
+int Lib_Config_Save(const char * cPathXMLFile, sData cTable[], int iNbeData);
 
 
 #endif /* IB_CONFIGXML_H_ */

@@ -38,7 +38,6 @@ void exit_main();
 ********************************************/
 static volatile unsigned int is_sigint = 0;
 
-
 /*******************************************
 *          F U N C T I O N S    		   *
 ********************************************/
@@ -60,6 +59,36 @@ int main(int argc, char *argv[])
 
 	// DEBUG
 	printf("Tick Main : %i , iPortSocket : %i, fRadius : %3.2f \n", iTickLoop , iPortSocket , fRadius);
+
+	// DEBUG
+	//setData( tabData, NBE_VARIABLE_XML_TO_LOAD);
+
+	// DEBUG
+	//Lib_Config_Save(FILE_XML, tabData, NBE_VARIABLE_XML_TO_LOAD);
+
+	// DEBUG
+//	int Value[]={ 12345,6789	};
+//	unsigned char uB[] = {0,1,2,3,4,5};
+//	strMsg  *pMesg = libcom_SetMsg( 1, 2, sizeof(int) , Value);
+//	printf(" Type   : 0x%X", pMesg->bType);
+//	printf(" Length : 0x%X\n", pMesg->bLength);
+//
+//	printf(" test :  %d\n", *(char*)pMesg->value);
+//	int i=0;
+
+	// Ok pour Char
+//	for( i =0; i < 6 ; i++){
+//		printf(" data :  %d\n", *(char*)pMesg->value);
+//		pMesg->value++;
+//	}
+	// OK, for int.
+//	printf(" test :  %d\n", *(int*)pMesg->value);
+//	for( i =0; i < 2 ; i++){
+//		printf(" data : %d\n",   (int)*((int*)pMesg->value));
+//		pMesg->value +=(sizeof(int));
+//	}
+
+
 
 	signal(SIGINT, on_sigint);
 	while (is_sigint == 0){
@@ -97,7 +126,7 @@ void Init(){
 
 	// Init Config XML
 	if(Load_Data()== -1){
-		printf("Error Load XML\n");
+		printf("Error Load XML , Get Default Setting \n");
 
 		// Default Setting
 		setDefaultData();
@@ -122,7 +151,7 @@ void Init(){
 int Load_Data(){
 
 	// Temp Tab
-	sNodeL4 tabData[SIZE_DATA];
+	//sNodeL4 tabData[SIZE_DATA];
 
 	int iIndex = Lib_Config_Load(FILE_XML, tabData);
 	if(iIndex > 0){

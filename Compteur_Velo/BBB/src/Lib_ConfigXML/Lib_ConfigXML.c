@@ -17,16 +17,37 @@
 #define	SIZE_TYPE	6
 #define	SIZE_VALUE	7
 
+#define MAX_LINE	100
+
+#define SIZE_HEAD	3
+#define SIZE_TAIL	2
+
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
-
 //tab of tag
 structag cTabTag[NBE_TAG]={
 /* TAG_NAME */	{"name", "/name" , SIZE_NAME ,	DB_NAME  },
 /* TAG_TYPE */	{"type", "/type" , SIZE_TYPE ,	DB_TYPE  },
 /* TAG_VALUE*/	{"value","/value", SIZE_VALUE, 	DB_VALUE },
 };
+
+char  cHead[SIZE_HEAD][MAX_LINE]={
+		{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"},
+		{"<config>\n"},
+		{"<data>\n"},
+};
+
+char cOpenVersion[] 	= "<version>";
+char cCLoseVersion[] 	= "</version>";
+
+char  cTail[SIZE_TAIL][MAX_LINE]={
+		{"</data>\n<"},
+		{"</config>\n"},
+};
+
+char cOpenData[] 	= "<db>\n";
+char cCloseData[] 	= "</db>\n";
 
 /*******************************************
 *   P R O T O T Y P E   F U N C T I O N S  *
@@ -49,7 +70,7 @@ int  getInsideTag(tagEnum tagE, char line[], char cBuffer[], int iLen);
  Description  :
  ============================================
  */
-int Lib_Config_Load(const char * cPathXMLFile, sNodeL4 cTable[]){
+int Lib_Config_Load(const char * cPathXMLFile, sData cTable[]){
 
 	// Declarations Variables
 	NodeConfigL4	currentNodeL4 = 0;
@@ -58,7 +79,6 @@ int Lib_Config_Load(const char * cPathXMLFile, sNodeL4 cTable[]){
 	char * 		line = NULL;
 	size_t 		len = 0;
 	ssize_t 	sizeLine;
-	//sNodeL4     cTable[SIZE_DATA];
 	char 		cBuffer[20]={0};
 	int 		iIndex = 0;
 
@@ -114,13 +134,8 @@ int Lib_Config_Load(const char * cPathXMLFile, sNodeL4 cTable[]){
 		}
 	}
 
-//	// Print All Data
-//	int i;
-//	for(i =0 ; i < iIndex ; i++){
-//		printf("cTable[%i].cName  : %s\n", i, cTable[i].cName);
-//		printf("cTable[%i].cType  : %s\n", i, cTable[i].cType);
-//		printf("cTable[%i].cValue : %s\n", i, cTable[i].cValue);
-//	}
+	// Close file
+	fclose(fConfig);
 
 	return iIndex;
 }
@@ -133,28 +148,76 @@ int Lib_Config_Load(const char * cPathXMLFile, sNodeL4 cTable[]){
  Description  :
  ============================================
  */
-int Lib_Config_Save(const char * cPathXMLFile){
+//TODO , Add Version
+int Lib_Config_Save(const char * cPathXMLFile,  sData cTable[], int iNbeData){
 
 	// Declarations Variables
-	FILE * 		fConfig;
-	char * 		line = NULL;
-	size_t 		len = 0;
-	ssize_t 	sizeLine;
+	FILE * 		fOuput;
+	int 		i, iLength, iIndData;
 
-	fConfig = fopen ( cPathXMLFile, "a");
-		if(fConfig == NULL){
-			printf("-Error Open File : %s\n", cPathXMLFile);
-			return ERROR;
+	// Instructions
+	fOuput = fopen (cPathXMLFile, "w");
+	if(fOuput == NULL){
+		printf("-Error Open File : %s\n", cPathXMLFile);
+		return ERROR;
+	}
+
+	// Create Head
+	for( i=0 ; i <  SIZE_HEAD; i++){
+		iLength = getLength(cHead[i], 1000);
+		fwrite(cHead[i] , 1 , iLength, fOuput );
+	}
+
+	// Add version
+	char cBuf[MAX_LINE];
+	//snprintf(cBuf , MAX_LINE, "%s%s%s\n", cOpenVersion, START_FILE, cCLoseVersion);
+	snprintf(cBuf , MAX_LINE, "%s%s\n", cOpenVersion, cCLoseVersion);
+	iLength = getLength(cOpenVersion, 1000);
+	fwrite(cBuf, 1 , iLength, fOuput );
+
+	for(iIndData = 0; iIndData < iNbeData ; iIndData++){
+
+		// Open Data
+		iLength = getLength(cOpenData, 1000);
+		fwrite(cOpenData , 1 , iLength, fOuput );
+
+		// Each Tag
+		int iCurrentTag;
+		for(iCurrentTag = DB_NAME; iCurrentTag < NBE_TAG; iCurrentTag++){
+			char cBuffer[MAX_LINE]={0};
+
+			switch(iCurrentTag){
+				case DB_NAME:
+					printf("OK DB_NAME \n");
+					snprintf(cBuffer , MAX_LINE, "<%s>%s<%s>\n", cTabTag[iCurrentTag].opentag, cTable[iIndData].cName, cTabTag[iCurrentTag].closetag);
+				break;
+				case DB_TYPE:
+					printf("OK DB_TYPE \n");
+					snprintf(cBuffer , MAX_LINE, "<%s>%s<%s>\n", cTabTag[iCurrentTag].opentag, cTable[iIndData].cType, cTabTag[iCurrentTag].closetag);
+				break;
+				case DB_VALUE:
+					printf("OK DB_VALUE \n");
+					snprintf(cBuffer , MAX_LINE, "<%s>%s<%s>\n", cTabTag[iCurrentTag].opentag, cTable[iIndData].cValue, cTabTag[iCurrentTag].closetag);
+				break;
+			}
+			iLength = getLength(cBuffer, MAX_LINE);
+			fwrite(cBuffer , 1 , iLength, fOuput );
 		}
 
-		//	Seek to the beginning of the file
-		fseek(fConfig, SEEK_SET, 0);
+		// Close Data 1
+		iLength = getLength(cCloseData, 1000);
+		fwrite(cCloseData , 1 , iLength, fOuput );
 
-		// Read Line by Line
-		while ((sizeLine = getline(&line, &len, fConfig)) != -1) {
-			// Write all the line with open & close tag
-			//TODO, Lib_Config_Save(), misssing implemetation
-		}
+	}
+
+	// Tail
+	for( i=0 ; i <  SIZE_TAIL ; i++){
+		iLength = getLength(cTail[i] , 1000);
+		fwrite(cTail[i] , 1 , iLength, fOuput );
+	}
+
+	// Close File
+	fclose(fOuput);
 
 	return 0;
 }

@@ -24,6 +24,7 @@
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
+#define NBE_VARIABLE_XML_TO_LOAD	3
 
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
@@ -34,12 +35,14 @@ int 	iTickLoop;
 int 	iPortSocket;
 float 	fRadius;
 
-//int iRadiusBike;
+
+sData tabData[SIZE_DATA];
 
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-int 	getData(sNodeL4 tabData[], int iLen);
+int 	getData(sData tabData[], int iLen);
+int 	setData(sData tabData[], int iLen);
 void 	setDefaultData();
 
 
