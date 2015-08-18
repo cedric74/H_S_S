@@ -50,10 +50,18 @@ strMsg * libcom_SetMsg(unsigned char bType, unsigned char bLength, int iSize,  v
 	pMesg->bChecksum	= 0;
 
 	if(iSize == sizeof(int)){
-		pMesg->value = (int*)value;
+		int i;
+		for( i= 0; i < bLength ; i++){
+			(pMesg->value) = *((int*)value);
+			pMesg->value += iSize;
+		}
 	}
 	else if(iSize == sizeof(char)){
-		pMesg->value = (char*)value;
+		int i;
+		for( i= 0; i < bLength ; i++){
+			(pMesg->value) = *((char*)value);
+			pMesg->value += iSize;
+		}
 	}
 
 	// Calcul Checksum

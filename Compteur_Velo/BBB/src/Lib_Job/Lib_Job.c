@@ -74,7 +74,7 @@ int Job_init(void){
 int Job_main(void){
 
 	// Declarations Variables
-	char iData[3] = {0,0,0};
+	unsigned char iData[3] = {0,0,0};
 
 	// Instructions
 
@@ -103,9 +103,18 @@ int Job_main(void){
 	// Set Message af DATA, and the data is composed of tab of 3 Char
 	strMsg  *pMesg = libcom_SetMsg( DATA, 3, sizeof(char) , iData);
 
+
 	// Send Socket
-	//TODO, Check if modification are OK
+	//FIXME, Check if modification are OK
+	printf(" Value q: %02i\n", pMesg->value);
+	pMesg->value++;
+	printf(" Value q: %02i\n", pMesg->value);
+	pMesg->value++;
+	printf(" Value q: %02i\n", pMesg->value);
+
 	write_socket(newSockData, (char *)pMesg, pMesg->bLength+2);
+
+	getchar();
 
 	return 0;
 }
