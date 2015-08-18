@@ -23,8 +23,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h> /* gethostbyname */
 
-#include "../Lib_Param/Lib_Param.h"
 /*******************************************
 *               D E F I N E                *			
 ********************************************/
@@ -40,7 +40,8 @@
 /*******************************************
 *	        F U N C T I O N S   	       *			
 ********************************************/
-int 			create_Socket(int iPort);
+int 			create_Socket_Client(const char * hostname, int iPort);
+int 			create_Socket_Server(int iPort);
 int 			accept_client_connection(int sockfd);
 int 			write_socket(int  newsockfd, char * sMessage, int iSize);
 int 			read_socket(int newsockfd, int iLength , unsigned char * bData);

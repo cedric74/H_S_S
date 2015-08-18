@@ -35,7 +35,7 @@ typedef struct{
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
-strMsg *  	libcom_SetMsg(unsigned char bType, unsigned char bLength, int iSize,  void * value);
-int 		libcom_GetMsg();
+int 		libcom_SetMsg(char buffer[], unsigned char bType, unsigned char bLength, int iSize,  void * value);
+int 		libcom_GetMsg(char buffer[],  strMsg * mMesg);
 
 #endif /* LIB_COM_H_ */

@@ -28,7 +28,7 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
-#define START_FILE			"Compteur Velo, 1.5, 17 Augu, "
+#define START_FILE			"Compteur Velo, 1.6, 18 Augu, "
 #define SIZE_STRING			30
 
 #define FILE_XML		    "/home/debian/Desktop/configXML.xml"

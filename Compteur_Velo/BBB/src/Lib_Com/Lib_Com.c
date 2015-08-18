@@ -13,7 +13,13 @@
 /*******************************************
 *               D E F I N E                *
 ********************************************/
+#define OFFSET_HEAD		3
 
+
+#define OF_TYPE   	  0
+#define OF_LENGTH	(OF_TYPE+1)
+#define OF_CHKSUM	(OF_LENGTH+1)
+#define OF_VALUE	(OF_CHKSUM+1)
 /*******************************************
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
@@ -26,11 +32,33 @@ int libcom_Checksum(strMsg * pMesg);
 /*******************************************
 *	 G L O B A L   V A R I A B L E S  	   *
 ********************************************/
-strMsg mMesg;
 
 /*******************************************
 *	        F U N C T I O N S   	       *
 ********************************************/
+
+/*
+ ============================================
+ Function     : libcom_CreateMsg()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+strMsg libcom_CreateMsg(unsigned char bType, unsigned char bLength, int iSize,  void * value){
+	// TODO, libcom_CreateMsg(), missing implementation
+
+	// Declaration Variables
+	strMsg mMesg;
+
+	// Instructions
+	mMesg.bType 	= bType;
+	mMesg.bLength 	= bLength;
+	mMesg.value 	= value;
+
+	return mMesg;
+}
+
 /*
  ============================================
  Function     : libcom_SetMsg()
@@ -39,9 +67,11 @@ strMsg mMesg;
  Description  :
  ============================================
  */
-strMsg * libcom_SetMsg(unsigned char bType, unsigned char bLength, int iSize,  void * value){
+int libcom_SetMsg(char buffer[], unsigned char bType, unsigned char bLength, int iSize,  void * value){
 
+	// TODO, libcom_SetMsg(), modify behavior , and char buffer[]
 	// Declaration Variables
+	strMsg mMesg;
 	strMsg * pMesg = &mMesg;
 
 	// Instructions
@@ -49,25 +79,30 @@ strMsg * libcom_SetMsg(unsigned char bType, unsigned char bLength, int iSize,  v
 	pMesg->bLength		= bLength;
 	pMesg->bChecksum	= 0;
 
+	// Copy Data
+	buffer[0] = pMesg->bType;
+	buffer[1] = pMesg->bLength;
+
 	if(iSize == sizeof(int)){
+		pMesg->value = (int *)value;
 		int i;
-		for( i= 0; i < bLength ; i++){
-			(pMesg->value) = *((int*)value);
-			pMesg->value += iSize;
+		for(i =0 ; i < bLength ; i++){
+			buffer[i+OFFSET_HEAD] = (int)*(int*)(pMesg->value);
+			pMesg->value += sizeof(int);
 		}
-	}
-	else if(iSize == sizeof(char)){
+	}else if(iSize == sizeof(char)){
+		pMesg->value = (char* )value;
 		int i;
-		for( i= 0; i < bLength ; i++){
-			(pMesg->value) = *((char*)value);
-			pMesg->value += iSize;
+		for(i =0 ; i < bLength ; i++){
+			buffer[i+OFFSET_HEAD] = (char)*(char*)(pMesg->value);
+			pMesg->value += sizeof(char);
 		}
 	}
 
 	// Calcul Checksum
 	//libcom_Checksum(pMesg , bLength , iSize);
 
-	return pMesg;
+	return (bLength+OFFSET_HEAD);
 }
 
 /*
@@ -78,8 +113,13 @@ strMsg * libcom_SetMsg(unsigned char bType, unsigned char bLength, int iSize,  v
  Description  :
  ============================================
  */
-int libcom_GetMsg(){
-	// TODO, libcom_GetMsg(), missing implementation
+int libcom_GetMsg(char buffer[],  strMsg * mMesg){
+
+	// Copy Data
+	mMesg->bType   = buffer[OF_TYPE];
+	mMesg->bLength = buffer[OF_LENGTH];
+	mMesg->value   = &(buffer[OF_VALUE]);
+
 	return 0;
 }
 

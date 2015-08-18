@@ -74,7 +74,7 @@ int findChar( char cBuff[], int iLen, char c){
  ============================================
  */
 int convertToBCD(char cBuff[], int iValue, int iLen){
-	//TODO, More Generic
+	//TODO, convertToBCD(), More Generic
 	int iRet = 0;
 	cBuff[0] = (char)(iValue/10000);
 	cBuff[1] = (char)((iValue - (cBuff[0] *10000))/100);

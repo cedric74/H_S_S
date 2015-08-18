@@ -19,7 +19,7 @@
 *   T Y P E D E F   &  C O N S T A N T E   *
 ********************************************/
 typedef enum{
-	DATA	=0x10,
+	DATA	= 0x10,
 	CMD		= 0x20,
 }typeMessageEnum;
 
@@ -56,8 +56,8 @@ int Job_init(void){
 	// Debug print
 	printf(" Waiting for Client Connection .... \n");
 
-	// Create Socekt Server
-	socketData 	= create_Socket(iPortSocket);
+	// Create Socket Server
+	socketData = create_Socket_Server(iPortSocket);
 	newSockData = accept_client_connection(socketData);
 
 	return 0;
@@ -74,7 +74,7 @@ int Job_init(void){
 int Job_main(void){
 
 	// Declarations Variables
-	unsigned char iData[3] = {0,0,0};
+	char iData[3] ={0};
 
 	// Instructions
 
@@ -93,28 +93,31 @@ int Job_main(void){
 	printf(" Count : %02i , Distance : %05i ", iData[0], iDist);
 
 	// Convert Binary To BCD
-	iDist = convertToBCD(iData, iDist, 3);
-	if(iDist <0){
+	int iRt = convertToBCD( iData, iDist, 3);
+	if(iRt < 0 ){
 		printf("Error, Convert To BCD\n");
 		return -1;
 	}
 	printf(" Value : %02i %02i %02i\n", iData[0], iData[1], iData[2]);
 
 	// Set Message af DATA, and the data is composed of tab of 3 Char
-	strMsg  *pMesg = libcom_SetMsg( DATA, 3, sizeof(char) , iData);
+	char buffer[10] = {0};
+	int iLen  = libcom_SetMsg(buffer, DATA, 3, sizeof(char) , iData);
 
+	// DEBUG OK
+//	strMsg mMesg1= {0};
+//	strMsg *p = &mMesg1;
+//	libcom_GetMsg(buffer, p);
+//	printf("bType : %i \n",mMesg1.bType);
+//	printf("bLength : %i \n",mMesg1.bLength);
+//	printf("data : %i \n", (char)*(char*)(mMesg1.value));
+//	(mMesg1.value)++;
+//	printf("data : %i \n", (char)*(char*)(mMesg1.value));
+//	(mMesg1.value)++;
+//	printf("data : %i \n", (char)*(char*)(mMesg1.value));
 
 	// Send Socket
-	//FIXME, Check if modification are OK
-	printf(" Value q: %02i\n", pMesg->value);
-	pMesg->value++;
-	printf(" Value q: %02i\n", pMesg->value);
-	pMesg->value++;
-	printf(" Value q: %02i\n", pMesg->value);
-
-	write_socket(newSockData, (char *)pMesg, pMesg->bLength+2);
-
-	getchar();
+	write_socket(newSockData, buffer, iLen);
 
 	return 0;
 }

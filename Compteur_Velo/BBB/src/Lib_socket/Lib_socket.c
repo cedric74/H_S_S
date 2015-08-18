@@ -14,30 +14,107 @@
 #include "Lib_socket.h"
 
 /*******************************************
+*               D E F I N E                *
+********************************************/
+#define 	WAITING_LIST_SIZE	2
+
+typedef struct sockaddr_in SOCKADDR_IN;
+typedef struct sockaddr SOCKADDR;
+typedef struct in_addr IN_ADDR;
+
+
+/*******************************************
+*   P R O T O T Y P E   F U N C T I O N S  *
+********************************************/
+int create_Socket();
+
+/*******************************************
+*	 G L O B A L   V A R I A B L E S  	   *
+********************************************/
+
+/*******************************************
 *	          F U N C T I O N S            *
 ********************************************/
+
 /*
  ============================================
- Function     : create_Socket()
+ Function     : create_Socket_Client()
  Parameter    :
  Return Value : void
  Description  :
  ============================================
  */
-int create_Socket(int iPort){
+int create_Socket(){
+
+	// Create Socket
+	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	 if (sockfd < 0){
+		error("ERROR opening socket \n ");
+		exit(1);
+		//return ERROR_SOCKET;
+	}
+	 return sockfd;
+}
+
+/*
+ ============================================
+ Function     : create_Socket_Client()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int create_Socket_Client(const char * hostname, int iPort){
+
+	// Declarations Variables
+	struct hostent *hostinfo = NULL;
+	struct sockaddr_in serv_addr;
+
+	// Create Socket Client
+	int sockfd = create_Socket();
+
+	// Get Address Server
+	hostinfo = gethostbyname(hostname);
+	if (hostinfo == NULL)
+	{
+	    fprintf (stderr, "Unknown host %s.\n", hostname);
+	    exit(EXIT_FAILURE);
+	}
+
+	// Clear the block with 0
+	memset((char *) &serv_addr, 0, sizeof(serv_addr));
+
+	serv_addr.sin_addr = *(IN_ADDR *) hostinfo->h_addr;
+	serv_addr.sin_port = htons(iPort);
+	serv_addr.sin_family = AF_INET;
+
+	if(connect(sockfd,(SOCKADDR *) &serv_addr, sizeof(SOCKADDR)) == ERROR_SOCKET)
+	{
+	    perror("connect()");
+	    exit(1);
+	}
+
+	return sockfd;
+}
+
+/*
+ ============================================
+ Function     : create_Socket_Server()
+ Parameter    :
+ Return Value : void
+ Description  :
+ ============================================
+ */
+int create_Socket_Server(int iPort){
 	int portno;
 	struct sockaddr_in serv_addr;
 	int yes = 1;
 
 	// Create Socket Server
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0){
-		error("ERROR opening socket \n ");
-		exit(1);
-		//return ERROR_SOCKET;
-	}
+	int sockfd = create_Socket();
 
-    bzero((char *) &serv_addr, sizeof(serv_addr));
+    //bzero((char *) &serv_addr, sizeof(serv_addr));
+	memset((char *) &serv_addr, 0, sizeof(serv_addr));
     portno = 	iPort;
 
 	serv_addr.sin_family = AF_INET;
@@ -56,10 +133,8 @@ int create_Socket(int iPort){
 		exit(1);
 	}
 
-	//printf("	* Socket Create, port : %d \n" , portno);
-	//printf("	* Waiting for client Connection ..... \n");
 	// Block Function
-	listen(sockfd,5);
+	listen(sockfd, WAITING_LIST_SIZE);
 
 	return sockfd;
 }

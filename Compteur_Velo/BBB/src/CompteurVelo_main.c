@@ -7,7 +7,7 @@
  Description : 
  ============================================================================
  */
- /*******************************************
+/*******************************************
 *			  I N C L U D E 			   *			
 ********************************************/
 // Standard header files
@@ -88,8 +88,6 @@ int main(int argc, char *argv[])
 //		pMesg->value +=(sizeof(int));
 //	}
 
-
-
 	signal(SIGINT, on_sigint);
 	while (is_sigint == 0){
 
@@ -98,7 +96,6 @@ int main(int argc, char *argv[])
 
 		// Wait
 		sleep(iTickLoop);
-		//usleep(TICK_500_MS);
 	}
 
 	printf("\n\nEND %s \n", START_FILE);
@@ -149,9 +146,6 @@ void Init(){
  ============================================
  */
 int Load_Data(){
-
-	// Temp Tab
-	//sNodeL4 tabData[SIZE_DATA];
 
 	int iIndex = Lib_Config_Load(FILE_XML, tabData);
 	if(iIndex > 0){
